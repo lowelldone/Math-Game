@@ -87,10 +87,39 @@ h1 {
 }
 
 .subtitle {
-  margin: 18px auto 28px;
-  max-width: 480px;
+  margin: 18px auto 12px;
+  max-width: 540px;
   font-size: 18px;
   line-height: 1.45;
+}
+
+.intro-panel {
+  width: min(520px, 100%);
+  margin: 0 auto 24px;
+  padding: 12px 14px;
+  border: 2px solid rgba(23, 50, 74, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 253, 246, 0.86);
+  box-shadow: 0 8px 22px rgba(23, 50, 74, 0.12);
+}
+
+.intro-panel p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.42;
+}
+
+@media (max-height: 620px) {
+  .intro-panel {
+    margin-bottom: 14px;
+    padding: 10px 12px;
+  }
+
+  .intro-panel p,
+  .subtitle {
+    font-size: 15px;
+  }
 }
 
 .primary-action,
@@ -411,12 +440,25 @@ h1 {
   border: 3px solid rgba(113, 73, 0, 0.18);
 }
 
+.reward-crown {
+  position: absolute;
+  width: 62px;
+  height: 28px;
+  top: 10px;
+  left: 21px;
+  clip-path: polygon(0 100%, 0 38%, 22% 70%, 36% 0, 50% 70%, 64% 0, 78% 70%, 100% 38%, 100% 100%);
+  background: linear-gradient(#fff2a8, #f6bd2f 62%, #c98412);
+  border-bottom: 3px solid rgba(113, 73, 0, 0.24);
+  z-index: 2;
+}
+
 .reward-badge strong {
   position: relative;
-  padding-top: 8px;
+  padding-top: 24px;
   color: #5d3b00;
   font-size: 24px;
   font-weight: 950;
+  z-index: 3;
 }
 
 .reward-copy span {
@@ -508,8 +550,16 @@ h1 {
     left: 17px;
   }
 
+  .reward-crown {
+    width: 48px;
+    height: 22px;
+    top: 8px;
+    left: 15px;
+  }
+
   .reward-badge strong {
     font-size: 18px;
+    padding-top: 18px;
   }
 
   .reward-copy h2 {

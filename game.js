@@ -13,7 +13,23 @@ const feedbackModal = document.getElementById("feedbackModal");
 const talkButton = document.getElementById("talkButton");
 const toast = document.getElementById("toast");
 
-if ("serviceWorker" in navigator) {
+function getSavedReward() {
+  try {
+    return localStorage.getItem("mathquestRewardUnlocked") === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function saveReward() {
+  try {
+    localStorage.setItem("mathquestRewardUnlocked", "true");
+  } catch (error) {
+    // Reward visuals still unlock for the current run if storage is unavailable.
+  }
+}
+
+if ("serviceWorker" in navigator && /^https?:$/.test(window.location.protocol)) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js").catch(() => {
       // The game still runs from plain files; offline install needs a browser-served copy.
@@ -21,76 +37,39 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-const quests = [
+const levelTemplates = [
   {
     npc: "Lina",
     icon: "!",
     color: "#ffdd57",
     x: 430,
     y: 320,
-    topic: "Addition",
-    goal: "Find Lina",
-    dialogue: "My garden signs blew away. Can you count how many flowers I planted before the festival starts?",
-    problem: "Lina planted 8 red flowers and 5 blue flowers. How many flowers did she plant in all?",
-    answers: [11, 12, 13, 15],
-    correct: 13,
-    hint: "Put 8 in your head, then count 5 more.",
+    levelName: "Easy Road",
+    difficulty: "easy",
+    goal: "Easy Road: Find Lina",
+    dialogue: "Welcome to the Easy Road. Help me solve one starter problem to open the next road.",
   },
   {
     npc: "Bo",
     icon: "!",
     color: "#65d6ff",
-    x: 720,
+    x: 850,
     y: 360,
-    topic: "Subtraction",
-    goal: "Find Bo",
-    dialogue: "I was stacking blocks for a bridge, but some rolled away. Help me figure out what is left.",
-    problem: "Bo had 24 blocks. He used 9 for the bridge. How many blocks are left?",
-    answers: [13, 14, 15, 16],
-    correct: 15,
-    hint: "Break 9 into 4 and 5: 24 - 4 - 5.",
+    levelName: "Medium Road",
+    difficulty: "medium",
+    goal: "Medium Road: Find Bo",
+    dialogue: "You reached the Medium Road. The numbers are growing, but I know you can handle them.",
   },
   {
     npc: "Mira",
     icon: "!",
     color: "#ff9ab3",
-    x: 1040,
-    y: 230,
-    topic: "Multiplication",
-    goal: "Find Mira",
-    dialogue: "My bakery trays are ready. I need a quick count before the hungry crowd arrives.",
-    problem: "Mira has 6 trays with 4 muffins on each tray. How many muffins are there?",
-    answers: [20, 22, 24, 28],
-    correct: 24,
-    hint: "Think of 6 groups of 4.",
-  },
-  {
-    npc: "Tavi",
-    icon: "!",
-    color: "#b390ff",
-    x: 1260,
+    x: 1280,
     y: 560,
-    topic: "Division",
-    goal: "Find Tavi",
-    dialogue: "I found shiny crystals and want every teammate to get the same amount.",
-    problem: "Tavi has 45 crystals to share equally among 5 friends. How many crystals does each friend get?",
-    answers: [8, 9, 10, 11],
-    correct: 9,
-    hint: "Find the number that times 5 makes 45.",
-  },
-  {
-    npc: "Nia",
-    icon: "!",
-    color: "#70e4ad",
-    x: 1560,
-    y: 430,
-    topic: "Multi-Step",
-    goal: "Find Nia",
-    dialogue: "My shop orders came in batches. Can you help me check the final total?",
-    problem: "Nia packed 3 boxes with 12 apples each, then sold 7 apples. How many apples remain?",
-    answers: [27, 29, 31, 36],
-    correct: 29,
-    hint: "First multiply the boxes, then subtract the sold apples.",
+    levelName: "Hard Road",
+    difficulty: "hard",
+    goal: "Hard Road: Find Mira",
+    dialogue: "This is the Hard Road. These quests need more than one step, so take your time.",
   },
   {
     npc: "Orin",
@@ -98,15 +77,177 @@ const quests = [
     color: "#ff8c42",
     x: 1820,
     y: 250,
-    topic: "Challenge",
-    goal: "Find Orin",
-    dialogue: "The final gate needs a math code. Solve it, and the whole village opens for celebration.",
-    problem: "The gate code is double 18 plus half of 14. What is the code?",
-    answers: [40, 43, 46, 50],
-    correct: 43,
-    hint: "Double 18 first. Half of 14 is a smaller add-on.",
+    levelName: "Advanced Road",
+    difficulty: "advanced",
+    goal: "Advanced Road: Find Orin",
+    dialogue: "The Advanced Road guards the final treasure. Solve this one to earn the cape and crown.",
   },
 ];
+
+let quests = [];
+
+const problemBank = buildProblemBank();
+
+function buildProblemBank() {
+  return {
+    easy: buildEasyProblems(),
+    medium: buildMediumProblems(),
+    hard: buildHardProblems(),
+    advanced: buildAdvancedProblems(),
+  };
+}
+
+function buildEasyProblems() {
+  const problems = [];
+  for (let i = 0; i < 15; i += 1) {
+    const a = 6 + i;
+    const b = 3 + (i % 8);
+    const correct = a + b;
+    problems.push(makeProblem(
+      "Easy Addition",
+      `A villager collected ${a} berries and found ${b} more near the path. How many berries are there in all?`,
+      correct,
+      `Add the two groups: start at ${a}, then count ${b} more.`,
+      [correct - 2, correct - 1, correct + 1]
+    ));
+  }
+  for (let i = 0; i < 15; i += 1) {
+    const a = 18 + i;
+    const b = 4 + (i % 9);
+    const correct = a - b;
+    problems.push(makeProblem(
+      "Easy Subtraction",
+      `There were ${a} lanterns on the road. ${b} were taken to the festival gate. How many lanterns are left?`,
+      correct,
+      `Start with ${a}, then count backward ${b}.`,
+      [correct - 2, correct + 1, correct + 3]
+    ));
+  }
+  return problems;
+}
+
+function buildMediumProblems() {
+  const problems = [];
+  for (let i = 0; i < 15; i += 1) {
+    const groups = 3 + (i % 7);
+    const each = 4 + (i % 8);
+    const correct = groups * each;
+    problems.push(makeProblem(
+      "Medium Multiplication",
+      `Bo has ${groups} crates with ${each} blocks in each crate. How many blocks are there?`,
+      correct,
+      `Think of ${groups} equal groups of ${each}.`,
+      [correct - each, correct + groups, correct + each]
+    ));
+  }
+  for (let i = 0; i < 15; i += 1) {
+    const each = 4 + (i % 8);
+    const groups = 3 + (i % 7);
+    const total = each * groups;
+    problems.push(makeProblem(
+      "Medium Division",
+      `${total} gems are shared equally into ${groups} bags. How many gems go in each bag?`,
+      each,
+      `Find the number that times ${groups} makes ${total}.`,
+      [each - 2, each + 1, each + 3]
+    ));
+  }
+  return problems;
+}
+
+function buildHardProblems() {
+  const problems = [];
+  for (let i = 0; i < 15; i += 1) {
+    const boxes = 3 + (i % 6);
+    const each = 8 + (i % 9);
+    const used = 5 + (i % 10);
+    const correct = boxes * each - used;
+    problems.push(makeProblem(
+      "Hard Multi-Step",
+      `Mira packed ${boxes} boxes with ${each} apples each, then sold ${used} apples. How many apples remain?`,
+      correct,
+      `First multiply ${boxes} x ${each}, then subtract ${used}.`,
+      [correct - boxes, correct + used, correct + each]
+    ));
+  }
+  for (let i = 0; i < 15; i += 1) {
+    const start = 24 + i * 2;
+    const add = 9 + (i % 8);
+    const split = 3 + (i % 4);
+    const total = start + add;
+    const correct = total / split;
+    const adjustedTotal = correct % 1 === 0 ? total : split * Math.round(total / split);
+    const adjustedCorrect = adjustedTotal / split;
+    problems.push(makeProblem(
+      "Hard Multi-Step",
+      `A team gathered ${adjustedTotal - add} crystals, then found ${add} more. They split them equally among ${split} carts. How many crystals go in each cart?`,
+      adjustedCorrect,
+      `Add first, then divide the total by ${split}.`,
+      [adjustedCorrect - 2, adjustedCorrect + 2, adjustedCorrect + split]
+    ));
+  }
+  return problems;
+}
+
+function buildAdvancedProblems() {
+  const problems = [];
+  for (let i = 0; i < 15; i += 1) {
+    const a = 12 + i;
+    const b = 4 + (i % 7);
+    const c = 2 + (i % 5);
+    const correct = a + b * c;
+    problems.push(makeProblem(
+      "Advanced Order",
+      `The gate code is ${a} plus ${b} times ${c}. What is the code?`,
+      correct,
+      `Use multiplication before addition: solve ${b} x ${c} first.`,
+      [correct - c, correct + b, (a + b) * c]
+    ));
+  }
+  for (let i = 0; i < 15; i += 1) {
+    const total = 40 + i * 4;
+    const percent = i % 2 === 0 ? 25 : 50;
+    const correct = percent === 25 ? total / 4 : total / 2;
+    problems.push(makeProblem(
+      "Advanced Fractions",
+      `Orin needs ${percent}% of ${total} magic tiles for the crown platform. How many tiles is that?`,
+      correct,
+      percent === 25 ? `25% means one fourth, so divide ${total} by 4.` : `50% means half, so divide ${total} by 2.`,
+      [correct - 4, correct + 5, total - correct]
+    ));
+  }
+  return problems;
+}
+
+function makeProblem(topic, problem, correct, hint, distractors) {
+  const answers = shuffle([...new Set([correct, ...distractors.filter((value) => value !== correct && value >= 0)])]).slice(0, 4);
+  let offset = 2;
+  while (answers.length < 4) {
+    const next = correct + offset;
+    if (!answers.includes(next)) answers.push(next);
+    offset += 1;
+  }
+  return { topic, problem, correct, hint, answers: shuffle(answers) };
+}
+
+function createQuestRun() {
+  return levelTemplates.map((template) => {
+    const bank = problemBank[template.difficulty];
+    const problem = bank[Math.floor(Math.random() * bank.length)];
+    return { ...template, ...problem };
+  });
+}
+
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+quests = createQuestRun();
 
 const world = {
   width: 2100,
@@ -134,7 +275,7 @@ const state = {
   completed: 0,
   activeNpc: null,
   lastTime: 0,
-  rewardUnlocked: localStorage.getItem("mathquestRewardUnlocked") === "true",
+  rewardUnlocked: getSavedReward(),
 };
 
 const keys = new Set();
@@ -165,6 +306,7 @@ function showScreen(name) {
 }
 
 function resetGame() {
+  quests = createQuestRun();
   player.x = 220;
   player.y = 410;
   state.questIndex = 0;
@@ -182,7 +324,7 @@ function startGame() {
   resetGame();
   state.started = true;
   showScreen("game");
-  showToast(state.rewardUnlocked ? "Golden Scholar Cape equipped. Find Lina!" : "Find Lina. NPCs with ! have quests.");
+  showToast(state.rewardUnlocked ? "Cape and crown equipped. Start on the Easy Road!" : "Start on the Easy Road. NPCs with ! have quests.");
 }
 
 function getCamera() {
@@ -235,18 +377,35 @@ function drawWorld() {
 function drawPaths() {
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
-  ctx.strokeStyle = "#e7c475";
-  ctx.lineWidth = 58;
-  ctx.beginPath();
-  ctx.moveTo(80, 430);
-  ctx.bezierCurveTo(360, 300, 520, 470, 760, 370);
-  ctx.bezierCurveTo(1050, 245, 1190, 390, 1360, 560);
-  ctx.bezierCurveTo(1550, 720, 1690, 440, 2010, 310);
-  ctx.stroke();
+  const roads = [
+    { label: "Easy", color: "#f4dc91", points: [[80, 430], [350, 300], [520, 380]] },
+    { label: "Medium", color: "#d8c17c", points: [[520, 380], [750, 450], [920, 360]] },
+    { label: "Hard", color: "#c79b69", points: [[920, 360], [1120, 420], [1360, 560]] },
+    { label: "Advanced", color: "#b8865d", points: [[1360, 560], [1630, 450], [2010, 310]] },
+  ];
 
-  ctx.strokeStyle = "#f2d994";
-  ctx.lineWidth = 34;
-  ctx.stroke();
+  roads.forEach((road) => {
+    ctx.strokeStyle = "#d3a958";
+    ctx.lineWidth = 62;
+    ctx.beginPath();
+    ctx.moveTo(road.points[0][0], road.points[0][1]);
+    ctx.quadraticCurveTo(road.points[1][0], road.points[1][1], road.points[2][0], road.points[2][1]);
+    ctx.stroke();
+
+    ctx.strokeStyle = road.color;
+    ctx.lineWidth = 38;
+    ctx.stroke();
+
+    const labelX = (road.points[0][0] + road.points[2][0]) / 2;
+    const labelY = (road.points[0][1] + road.points[2][1]) / 2 - 38;
+    ctx.fillStyle = "rgba(255, 253, 246, 0.82)";
+    ctx.fillRect(labelX - 44, labelY - 16, 88, 28);
+    ctx.fillStyle = "#17324a";
+    ctx.font = "900 13px system-ui";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(road.label, labelX, labelY - 1);
+  });
 }
 
 function drawFlowers() {
@@ -343,9 +502,9 @@ function drawNpc(quest, index) {
     ctx.fillText(locked ? "•" : quest.icon, quest.x + 25, quest.y - 49);
   } else {
     ctx.fillStyle = "#21b26b";
-    ctx.font = "900 24px system-ui";
+    ctx.font = "900 16px system-ui";
     ctx.textAlign = "center";
-    ctx.fillText("✓", quest.x + 25, quest.y - 40);
+    ctx.fillText("OK", quest.x + 25, quest.y - 40);
   }
 
   ctx.fillStyle = "#17324a";
@@ -356,6 +515,8 @@ function drawNpc(quest, index) {
 }
 
 function drawPlayer() {
+  drawPlayerPointer();
+
   ctx.fillStyle = "rgba(0,0,0,0.18)";
   ctx.beginPath();
   ctx.ellipse(player.x, player.y + 22, 22, 8, 0, 0, Math.PI * 2);
@@ -383,11 +544,53 @@ function drawPlayer() {
   ctx.fill();
   ctx.fillStyle = "#51331e";
   ctx.fillRect(player.x - 16, player.y - 24, 32, 10);
+
+  if (state.rewardUnlocked) {
+    ctx.fillStyle = "#f6bd2f";
+    ctx.beginPath();
+    ctx.moveTo(player.x - 16, player.y - 30);
+    ctx.lineTo(player.x - 7, player.y - 43);
+    ctx.lineTo(player.x, player.y - 31);
+    ctx.lineTo(player.x + 7, player.y - 43);
+    ctx.lineTo(player.x + 16, player.y - 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#9b6500";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
   ctx.fillStyle = "#fff";
   ctx.beginPath();
   ctx.arc(player.x - 6, player.y - 12, 3, 0, Math.PI * 2);
   ctx.arc(player.x + 6, player.y - 12, 3, 0, Math.PI * 2);
   ctx.fill();
+}
+
+function drawPlayerPointer() {
+  const bob = Math.sin(performance.now() / 220) * 4;
+  const x = player.x;
+  const y = player.y - 76 + bob;
+
+  ctx.fillStyle = "rgba(23, 50, 74, 0.18)";
+  ctx.beginPath();
+  ctx.ellipse(x, y + 6, 18, 6, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#ffd43b";
+  ctx.strokeStyle = "#7a4a00";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x, y + 30);
+  ctx.lineTo(x - 20, y);
+  ctx.lineTo(x - 7, y);
+  ctx.lineTo(x - 7, y - 26);
+  ctx.lineTo(x + 7, y - 26);
+  ctx.lineTo(x + 7, y);
+  ctx.lineTo(x + 20, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
 }
 
 function movePlayer(delta) {
@@ -444,8 +647,8 @@ function closeDialogue() {
 function openChallenge() {
   dialogueModal.classList.add("hidden");
   const quest = quests[state.questIndex];
-  document.getElementById("challengeLevel").textContent = `Quest ${state.questIndex + 1}`;
-  document.getElementById("challengeTopic").textContent = quest.topic;
+  document.getElementById("challengeLevel").textContent = `Level ${state.questIndex + 1} of ${quests.length}`;
+  document.getElementById("challengeTopic").textContent = `${quest.levelName} - ${quest.topic}`;
   document.getElementById("problemText").textContent = quest.problem;
   document.getElementById("hintText").classList.add("hidden");
   document.getElementById("hintText").textContent = "";
@@ -467,9 +670,9 @@ function checkAnswer(answer) {
   const quest = quests[state.questIndex];
   if (answer === quest.correct) {
     state.correct += 1;
-    state.score += 100 + state.questIndex * 25;
+    state.score += 150 + state.questIndex * 75;
     pendingFeedback = "correct";
-    showFeedback("Correct!", `${quest.npc}'s quest is complete. Your next adventure is unlocked!`);
+    showFeedback("Correct!", `${quest.levelName} is complete. Your next road is unlocked!`);
   } else {
     state.incorrect += 1;
     state.score = Math.max(0, state.score - 10);
@@ -497,7 +700,7 @@ function continueFromFeedback() {
       return;
     }
     state.paused = false;
-    showToast(`Quest Complete! Now ${quests[state.questIndex].goal}.`);
+    showToast(`Level Complete! Now ${quests[state.questIndex].goal}.`);
     return;
   }
   pendingFeedback = null;
@@ -517,7 +720,7 @@ function showHint() {
 function showResults() {
   state.paused = true;
   state.rewardUnlocked = true;
-  localStorage.setItem("mathquestRewardUnlocked", "true");
+  saveReward();
   showScreen("results");
   const accuracy = state.correct + state.incorrect === 0 ? 0 : Math.round((state.correct / (state.correct + state.incorrect)) * 100);
   const achievement = accuracy >= 90 ? "Math Champion" : accuracy >= 75 ? "Quest Solver" : "Brave Learner";
