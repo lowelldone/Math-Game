@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathquest-village-v10";
+const CACHE_NAME = "mathquest-village-v12";
 const ASSETS = [
   "./",
   "./index.html",

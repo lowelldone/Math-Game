@@ -12,10 +12,11 @@ const challengeModal = document.getElementById("challengeModal");
 const feedbackModal = document.getElementById("feedbackModal");
 const talkButton = document.getElementById("talkButton");
 const toast = document.getElementById("toast");
+const REWARD_STORAGE_KEY = "mathquestRewardUnlocked_v2";
 
 function getSavedReward() {
   try {
-    return localStorage.getItem("mathquestRewardUnlocked") === "true";
+    return localStorage.getItem(REWARD_STORAGE_KEY) === "true";
   } catch (error) {
     return false;
   }
@@ -23,7 +24,7 @@ function getSavedReward() {
 
 function saveReward() {
   try {
-    localStorage.setItem("mathquestRewardUnlocked", "true");
+    localStorage.setItem(REWARD_STORAGE_KEY, "true");
   } catch (error) {
     // Reward visuals still unlock for the current run if storage is unavailable.
   }
