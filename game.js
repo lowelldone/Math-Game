@@ -134,6 +134,7 @@ const state = {
   completed: 0,
   activeNpc: null,
   lastTime: 0,
+  rewardUnlocked: localStorage.getItem("mathquestRewardUnlocked") === "true",
 };
 
 const keys = new Set();
@@ -181,7 +182,7 @@ function startGame() {
   resetGame();
   state.started = true;
   showScreen("game");
-  showToast("Find Lina. NPCs with ! have quests.");
+  showToast(state.rewardUnlocked ? "Golden Scholar Cape equipped. Find Lina!" : "Find Lina. NPCs with ! have quests.");
 }
 
 function getCamera() {
@@ -359,6 +360,21 @@ function drawPlayer() {
   ctx.beginPath();
   ctx.ellipse(player.x, player.y + 22, 22, 8, 0, 0, Math.PI * 2);
   ctx.fill();
+
+  if (state.rewardUnlocked) {
+    ctx.fillStyle = "#f6bd2f";
+    ctx.beginPath();
+    ctx.moveTo(player.x - 14, player.y + 5);
+    ctx.lineTo(player.x + 14, player.y + 5);
+    ctx.lineTo(player.x + 23, player.y + 43);
+    ctx.lineTo(player.x - 23, player.y + 43);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#b97700";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+
   ctx.fillStyle = "#2f80ed";
   ctx.fillRect(player.x - 14, player.y + 1, 28, 33);
   ctx.fillStyle = "#ffd5a5";
@@ -500,6 +516,8 @@ function showHint() {
 
 function showResults() {
   state.paused = true;
+  state.rewardUnlocked = true;
+  localStorage.setItem("mathquestRewardUnlocked", "true");
   showScreen("results");
   const accuracy = state.correct + state.incorrect === 0 ? 0 : Math.round((state.correct / (state.correct + state.incorrect)) * 100);
   const achievement = accuracy >= 90 ? "Math Champion" : accuracy >= 75 ? "Quest Solver" : "Brave Learner";
@@ -510,6 +528,7 @@ function showResults() {
   document.getElementById("finalHints").textContent = state.hints;
   document.getElementById("finalQuests").textContent = `${state.completed} / ${quests.length}`;
   document.getElementById("finalAchievement").textContent = `${accuracy}% Accuracy`;
+  document.getElementById("rewardCard").classList.remove("hidden");
 }
 
 function gameLoop(time) {
@@ -572,7 +591,7 @@ function setupJoystick() {
     const dx = event.clientX - centerX;
     const dy = event.clientY - centerY;
     const len = Math.hypot(dx, dy);
-    const max = 32;
+    const max = 42;
     const scale = len > max ? max / len : 1;
     const sx = dx * scale;
     const sy = dy * scale;
