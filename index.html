@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#38b66b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="MathQuest" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>MathQuest Village</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="app" class="app">
+    <section id="mainMenu" class="screen screen-menu">
+      <div class="title-block">
+        <p class="kicker">2D RPG Math Adventure</p>
+        <h1>MathQuest Village</h1>
+        <p class="subtitle">Explore, help neighbors, solve math quests, and unlock the whole village.</p>
+      </div>
+      <button id="startButton" class="primary-action">Start Adventure</button>
+    </section>
+
+    <section id="gameScreen" class="screen screen-game hidden" aria-label="MathQuest game">
+      <canvas id="gameCanvas" width="960" height="540" aria-label="Game world"></canvas>
+
+      <div class="hud">
+        <div>
+          <span class="hud-label">Quest</span>
+          <strong id="questText">1 / 6</strong>
+        </div>
+        <div>
+          <span class="hud-label">Score</span>
+          <strong id="scoreText">0</strong>
+        </div>
+        <div>
+          <span class="hud-label">Goal</span>
+          <strong id="goalText">Find Lina</strong>
+        </div>
+      </div>
+
+      <button id="talkButton" class="talk-button hidden">Talk</button>
+
+      <div id="toast" class="toast hidden" role="status"></div>
+
+      <div class="controls">
+        <div id="joystick" class="joystick" aria-label="Movement joystick">
+          <div id="stick" class="stick"></div>
+        </div>
+        <div class="dpad" aria-label="Directional controls">
+          <button data-dir="up" aria-label="Move up">U</button>
+          <button data-dir="left" aria-label="Move left">L</button>
+          <button data-dir="right" aria-label="Move right">R</button>
+          <button data-dir="down" aria-label="Move down">D</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="dialogueModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="panel dialogue-panel">
+        <div class="npc-portrait" id="dialoguePortrait">?</div>
+        <div class="dialogue-copy">
+          <h2 id="dialogueName">NPC</h2>
+          <p id="dialogueText"></p>
+          <div class="dialogue-actions">
+            <button id="helpButton" class="primary-action">Help</button>
+            <button id="laterButton" class="secondary-action">Maybe Later</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="challengeModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="panel challenge-panel">
+        <div class="challenge-topline">
+          <span id="challengeLevel">Quest 1</span>
+          <span id="challengeTopic">Addition</span>
+        </div>
+        <h2 id="problemText">Problem</h2>
+        <div id="answerGrid" class="answer-grid"></div>
+        <div class="challenge-actions">
+          <button id="hintButton" class="secondary-action">Hint</button>
+        </div>
+        <p id="hintText" class="hint hidden"></p>
+      </div>
+    </div>
+
+    <div id="feedbackModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="panel feedback-panel">
+        <h2 id="feedbackTitle">Correct!</h2>
+        <p id="feedbackText"></p>
+        <button id="feedbackButton" class="primary-action">Continue</button>
+      </div>
+    </div>
+
+    <section id="resultsScreen" class="screen screen-results hidden">
+      <div class="results-wrap">
+        <p class="kicker">Final Results</p>
+        <h1 id="resultTitle">Village Hero</h1>
+        <div class="result-grid">
+          <div><span>Total Score</span><strong id="finalScore">0</strong></div>
+          <div><span>Correct</span><strong id="finalCorrect">0</strong></div>
+          <div><span>Incorrect</span><strong id="finalIncorrect">0</strong></div>
+          <div><span>Hints Used</span><strong id="finalHints">0</strong></div>
+          <div><span>Quests Complete</span><strong id="finalQuests">0 / 6</strong></div>
+          <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
+        </div>
+        <div class="result-actions">
+          <button id="playAgainButton" class="primary-action">Play Again</button>
+          <button id="menuButton" class="secondary-action">Main Menu</button>
+          <button id="exitButton" class="secondary-action">Exit Game</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

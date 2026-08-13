@@ -1,0 +1,20 @@
+{
+  "name": "MathQuest Village",
+  "short_name": "MathQuest",
+  "description": "A colorful offline 2D RPG math adventure for mobile learners.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#8ad7ff",
+  "theme_color": "#38b66b",
+  "categories": ["education", "games"],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
