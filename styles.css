@@ -56,6 +56,20 @@ button {
   background-position: center;
 }
 
+.screen-menu {
+  align-items: start;
+  overflow-y: auto;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+}
+
+.menu-content {
+  width: min(560px, 94vw);
+  min-height: calc(100dvh - 36px);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+}
+
 .screen-results {
   align-items: start;
   overflow-y: auto;
@@ -134,6 +148,10 @@ h1 {
 .primary-action {
   background: var(--gold);
   color: #3a2700;
+}
+
+.start-action {
+  margin-top: 0;
 }
 
 .secondary-action {
@@ -511,6 +529,46 @@ h1 {
 }
 
 @media (max-width: 620px) {
+  .screen-menu {
+    padding: max(10px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .menu-content {
+    min-height: calc(100dvh - 22px);
+    align-content: start;
+    padding-top: 8px;
+  }
+
+  .screen-menu h1 {
+    font-size: clamp(36px, 12vw, 52px);
+  }
+
+  .screen-menu .kicker {
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+
+  .subtitle {
+    margin: 10px auto 8px;
+    font-size: 15px;
+    line-height: 1.32;
+  }
+
+  .intro-panel {
+    margin-bottom: 12px;
+    padding: 10px;
+  }
+
+  .intro-panel p {
+    font-size: 14px;
+    line-height: 1.32;
+  }
+
+  .start-action {
+    width: min(280px, 88vw);
+    min-height: 46px;
+  }
+
   .hud {
     grid-template-columns: 1fr 0.8fr;
   }
