@@ -410,6 +410,7 @@ function updateInteraction() {
 function openDialogue() {
   if (!state.activeNpc) return;
   state.paused = true;
+  talkButton.classList.add("hidden");
   const quest = state.activeNpc;
   document.getElementById("dialogueName").textContent = quest.npc;
   document.getElementById("dialoguePortrait").textContent = quest.npc.slice(0, 1);
@@ -421,6 +422,7 @@ function openDialogue() {
 function closeDialogue() {
   dialogueModal.classList.add("hidden");
   state.paused = false;
+  updateInteraction();
 }
 
 function openChallenge() {
@@ -525,6 +527,8 @@ function setupJoystick() {
   const joystick = document.getElementById("joystick");
   const stick = document.getElementById("stick");
   let activePointer = null;
+  let centerX = 0;
+  let centerY = 0;
 
   const reset = () => {
     activePointer = null;
@@ -534,24 +538,39 @@ function setupJoystick() {
   };
 
   joystick.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
     activePointer = event.pointerId;
-    joystick.setPointerCapture(activePointer);
+    const rect = joystick.getBoundingClientRect();
+    centerX = rect.left + rect.width / 2;
+    centerY = rect.top + rect.height / 2;
+    stick.style.transition = "none";
+    if (joystick.setPointerCapture) joystick.setPointerCapture(activePointer);
     updateStick(event);
   });
 
   joystick.addEventListener("pointermove", (event) => {
+    event.preventDefault();
     if (event.pointerId === activePointer) updateStick(event);
   });
 
-  joystick.addEventListener("pointerup", reset);
-  joystick.addEventListener("pointercancel", reset);
+  joystick.addEventListener("pointerup", (event) => {
+    event.preventDefault();
+    stick.style.transition = "transform 80ms ease-out";
+    reset();
+  });
+  joystick.addEventListener("pointercancel", (event) => {
+    event.preventDefault();
+    stick.style.transition = "transform 80ms ease-out";
+    reset();
+  });
+  joystick.addEventListener("lostpointercapture", () => {
+    stick.style.transition = "transform 80ms ease-out";
+    reset();
+  });
 
   function updateStick(event) {
-    const rect = joystick.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = event.clientX - cx;
-    const dy = event.clientY - cy;
+    const dx = event.clientX - centerX;
+    const dy = event.clientY - centerY;
     const len = Math.hypot(dx, dy);
     const max = 32;
     const scale = len > max ? max / len : 1;
@@ -561,34 +580,6 @@ function setupJoystick() {
     player.dirX = sx / max;
     player.dirY = sy / max;
   }
-}
-
-function setupDpad() {
-  const active = new Set();
-  const update = () => {
-    player.dirX = (active.has("right") ? 1 : 0) - (active.has("left") ? 1 : 0);
-    player.dirY = (active.has("down") ? 1 : 0) - (active.has("up") ? 1 : 0);
-  };
-
-  document.querySelectorAll(".dpad button").forEach((button) => {
-    const dir = button.dataset.dir;
-    button.addEventListener("pointerdown", () => {
-      active.add(dir);
-      update();
-    });
-    button.addEventListener("pointerup", () => {
-      active.delete(dir);
-      update();
-    });
-    button.addEventListener("pointercancel", () => {
-      active.delete(dir);
-      update();
-    });
-    button.addEventListener("pointerleave", () => {
-      active.delete(dir);
-      update();
-    });
-  });
 }
 
 document.getElementById("startButton").addEventListener("click", startGame);
@@ -615,6 +606,5 @@ window.addEventListener("resize", resizeCanvas);
 
 resizeCanvas();
 setupJoystick();
-setupDpad();
 updateHud();
 requestAnimationFrame(gameLoop);
