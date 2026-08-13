@@ -2,6 +2,8 @@
 
 MathQuest Village is a downloadable, offline-ready 2D RPG math adventure.
 
+The game includes 4 randomized roads: Easy, Medium, Hard, and Advanced. Each new playthrough chooses problems from a 120-question bank with matching hints. Completing all roads unlocks the Golden Scholar Cape and Crown for future playthroughs.
+
 ## Play On A Computer
 
 Open `index.html` in a browser.

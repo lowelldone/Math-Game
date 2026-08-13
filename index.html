@@ -20,7 +20,10 @@
       <div class="title-block">
         <p class="kicker">2D RPG Math Adventure</p>
         <h1>MathQuest Village</h1>
-        <p class="subtitle">Explore, help neighbors, solve math quests, and unlock the whole village.</p>
+        <p class="subtitle">Welcome, brave problem solver! MathQuest Village needs a smart explorer to travel four magical roads, help friendly villagers, and crack math challenges from easy to advanced.</p>
+        <div class="intro-panel" aria-label="Game introduction">
+          <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road. Finish the adventure to earn the Golden Scholar Cape and Crown.</p>
+        </div>
       </div>
       <button id="startButton" class="primary-action">Start Adventure</button>
     </section>
@@ -30,8 +33,8 @@
 
       <div class="hud">
         <div>
-          <span class="hud-label">Quest</span>
-          <strong id="questText">1 / 6</strong>
+          <span class="hud-label">Level</span>
+          <strong id="questText">1 / 4</strong>
         </div>
         <div>
           <span class="hud-label">Score</span>
@@ -71,7 +74,7 @@
     <div id="challengeModal" class="modal hidden" role="dialog" aria-modal="true">
       <div class="panel challenge-panel">
         <div class="challenge-topline">
-          <span id="challengeLevel">Quest 1</span>
+          <span id="challengeLevel">Level 1</span>
           <span id="challengeTopic">Addition</span>
         </div>
         <h2 id="problemText">Problem</h2>
@@ -100,7 +103,7 @@
           <div><span>Correct</span><strong id="finalCorrect">0</strong></div>
           <div><span>Incorrect</span><strong id="finalIncorrect">0</strong></div>
           <div><span>Hints Used</span><strong id="finalHints">0</strong></div>
-          <div><span>Quests Complete</span><strong id="finalQuests">0 / 6</strong></div>
+          <div><span>Levels Complete</span><strong id="finalQuests">0 / 4</strong></div>
           <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
         </div>
         <div id="rewardCard" class="reward-card hidden">
@@ -110,13 +113,14 @@
             <span></span>
           </div>
           <div class="reward-badge">
+            <div class="reward-crown"></div>
             <div class="reward-cape"></div>
             <strong>123</strong>
           </div>
           <div class="reward-copy">
             <span>Reward Unlocked</span>
-            <h2>Golden Scholar Cape</h2>
-            <p>Your hero can now wear the golden cape when you play again.</p>
+            <h2>Golden Scholar Cape + Crown</h2>
+            <p>Your hero can now wear both rewards when you play again.</p>
           </div>
         </div>
         <div class="result-actions">
