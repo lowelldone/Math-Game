@@ -21,7 +21,7 @@
         <div class="title-block">
           <p class="kicker">2D RPG Math Adventure</p>
           <h1>MathQuest Village</h1>
-          <p class="subtitle">Welcome, brave problem solver! Travel four magical roads, help friendly villagers, and crack math challenges from easy to advanced.</p>
+          <p class="subtitle">Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math challenges from easy to advanced.</p>
           <div class="intro-panel" aria-label="Game introduction">
             <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road. Finish the adventure to earn the Golden Scholar Cape and Crown.</p>
           </div>
@@ -36,11 +36,15 @@
       <div class="hud">
         <div>
           <span class="hud-label">Level</span>
-          <strong id="questText">1 / 4</strong>
+          <strong id="questText">1 / 5</strong>
         </div>
         <div>
           <span class="hud-label">Score</span>
           <strong id="scoreText">0</strong>
+        </div>
+        <div>
+          <span class="hud-label">Hints</span>
+          <strong id="hudHintText">2</strong>
         </div>
         <div>
           <span class="hud-label">Goal</span>
@@ -80,8 +84,13 @@
           <span id="challengeTopic">Addition</span>
         </div>
         <h2 id="problemText">Problem</h2>
+        <div class="challenge-status">
+          <span>Hints: <strong id="hintCountText">2</strong></span>
+          <span>Chances: <strong id="chanceText">2</strong></span>
+        </div>
         <div id="answerGrid" class="answer-grid"></div>
         <div class="challenge-actions">
+          <button id="backChallengeButton" class="secondary-action">Back</button>
           <button id="hintButton" class="secondary-action">Hint</button>
         </div>
         <p id="hintText" class="hint hidden"></p>
@@ -105,7 +114,7 @@
           <div><span>Correct</span><strong id="finalCorrect">0</strong></div>
           <div><span>Incorrect</span><strong id="finalIncorrect">0</strong></div>
           <div><span>Hints Used</span><strong id="finalHints">0</strong></div>
-          <div><span>Levels Complete</span><strong id="finalQuests">0 / 4</strong></div>
+          <div><span>Levels Complete</span><strong id="finalQuests">0 / 5</strong></div>
           <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
         </div>
         <div id="rewardCard" class="reward-card hidden">
