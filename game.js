@@ -13,12 +13,47 @@ const feedbackModal = document.getElementById("feedbackModal");
 const talkButton = document.getElementById("talkButton");
 const toast = document.getElementById("toast");
 const REWARD_STORAGE_KEY = "mathquestRewardUnlocked_v2";
+const POINTS_STORAGE_KEY = "mathquestPoints_v1";
+const HINTS_STORAGE_KEY = "mathquestHints_v1";
+const STARTING_HINTS = 2;
+const HINT_COST = 300;
+
+const praiseMessages = [
+  "Great job!",
+  "Amazing!",
+  "Excellent!",
+  "Fantastic work!",
+  "Brilliant solving!",
+  "You nailed it!",
+  "Super smart move!",
+  "Awesome thinking!",
+];
 
 function getSavedReward() {
   try {
     return localStorage.getItem(REWARD_STORAGE_KEY) === "true";
   } catch (error) {
     return false;
+  }
+}
+
+function getSavedNumber(key, fallback) {
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved === null) return fallback;
+    const value = Number(saved);
+    return Number.isFinite(value) ? value : fallback;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function saveProgress() {
+  try {
+    localStorage.setItem(POINTS_STORAGE_KEY, String(state.score));
+    localStorage.setItem(HINTS_STORAGE_KEY, String(state.hintsAvailable));
+  } catch (error) {
+    // Progress remains available for the current session if storage is unavailable.
   }
 }
 
@@ -67,21 +102,32 @@ const levelTemplates = [
     color: "#ff9ab3",
     x: 1280,
     y: 560,
-    levelName: "Hard Road",
-    difficulty: "hard",
-    goal: "Hard Road: Find Mira",
-    dialogue: "This is the Hard Road. These quests need more than one step, so take your time.",
+    levelName: "Intermediate Road",
+    difficulty: "intermediate",
+    goal: "Intermediate Road: Find Mira",
+    dialogue: "This is the Intermediate Road. These quests need more than one step, so take your time.",
   },
   {
     npc: "Orin",
     icon: "!",
     color: "#ff8c42",
-    x: 1820,
+    x: 1720,
     y: 250,
+    levelName: "Hard Road",
+    difficulty: "hard",
+    goal: "Hard Road: Find Orin",
+    dialogue: "The Hard Road is tricky. Solve carefully and the final road will appear.",
+  },
+  {
+    npc: "Zara",
+    icon: "!",
+    color: "#70e4ad",
+    x: 2260,
+    y: 500,
     levelName: "Advanced Road",
     difficulty: "advanced",
-    goal: "Advanced Road: Find Orin",
-    dialogue: "The Advanced Road guards the final treasure. Solve this one to earn the cape and crown.",
+    goal: "Advanced Road: Find Zara",
+    dialogue: "This is the final advanced road. Solve my challenge to earn the cape and crown.",
   },
 ];
 
@@ -93,131 +139,100 @@ function buildProblemBank() {
   return {
     easy: buildEasyProblems(),
     medium: buildMediumProblems(),
+    intermediate: buildIntermediateProblems(),
     hard: buildHardProblems(),
     advanced: buildAdvancedProblems(),
   };
 }
 
 function buildEasyProblems() {
-  const problems = [];
-  for (let i = 0; i < 15; i += 1) {
-    const a = 6 + i;
-    const b = 3 + (i % 8);
-    const correct = a + b;
-    problems.push(makeProblem(
-      "Easy Addition",
-      `A villager collected ${a} berries and found ${b} more near the path. How many berries are there in all?`,
-      correct,
-      `Add the two groups: start at ${a}, then count ${b} more.`,
-      [correct - 2, correct - 1, correct + 1]
-    ));
-  }
-  for (let i = 0; i < 15; i += 1) {
-    const a = 18 + i;
-    const b = 4 + (i % 9);
-    const correct = a - b;
-    problems.push(makeProblem(
-      "Easy Subtraction",
-      `There were ${a} lanterns on the road. ${b} were taken to the festival gate. How many lanterns are left?`,
-      correct,
-      `Start with ${a}, then count backward ${b}.`,
-      [correct - 2, correct + 1, correct + 3]
-    ));
-  }
-  return problems;
+  return expandPatterns([
+    (i) => storyProblem("Easy Addition", `Lina picks ${7 + i} sun apples and ${4 + i} moon apples. How many apples does she have?`, 11 + i * 2, `Add both groups of apples together.`, [-2, -1, 3]),
+    (i) => storyProblem("Easy Subtraction", `${19 + i * 2} paper boats float in the pond. ${6 + i} sail away. How many boats are left?`, 13 + i, `Take away the boats that sailed away.`, [-3, 2, 4]),
+    (i) => storyProblem("Easy Counting", `A path has ${5 + i} blue stones, ${3 + i} red stones, and 2 gold stones. How many stones are on the path?`, 10 + i * 2, `Add blue, red, and gold stones.`, [-2, 1, 3]),
+    (i) => storyProblem("Easy Missing Number", `A sign says 9 + ? = ${14 + i}. What number is missing?`, 5 + i, `Ask what you add to 9 to reach the total.`, [-2, 1, 3]),
+    (i) => storyProblem("Easy Comparison", `Bo has ${12 + i} blocks. Lina has ${8 + i} blocks. How many more blocks does Bo have?`, 4, `Find the difference between the two amounts.`, [2, 5, 6]),
+    (i) => storyProblem("Easy Skip Count", `There are ${3 + i} baskets with 2 oranges in each. How many oranges are there?`, (3 + i) * 2, `Count by twos for each basket.`, [-2, 2, 4]),
+    (i) => storyProblem("Easy Money", `A sticker costs ${6 + i} coins. A pencil costs ${5 + i} coins. How many coins are needed for both?`, 11 + i * 2, `Add the two prices.`, [-1, 2, 5]),
+    (i) => storyProblem("Easy Time", `The bell rings in ${10 + i} minutes. ${4 + i} minutes pass. How many minutes are left?`, 6, `Subtract the minutes that passed.`, [4, 7, 8]),
+    (i) => storyProblem("Easy Shapes", `A small bridge uses ${4 + i} triangle tiles and ${6 + i} square tiles. How many tiles are used?`, 10 + i * 2, `Add both kinds of tiles.`, [-2, 1, 4]),
+    (i) => storyProblem("Easy Equal Groups", `${16 + i * 2} shells are split equally between 2 friends. How many shells does each friend get?`, 8 + i, `Split the shells into two equal groups.`, [-2, 2, 4]),
+  ]);
 }
 
 function buildMediumProblems() {
-  const problems = [];
-  for (let i = 0; i < 15; i += 1) {
-    const groups = 3 + (i % 7);
-    const each = 4 + (i % 8);
-    const correct = groups * each;
-    problems.push(makeProblem(
-      "Medium Multiplication",
-      `Bo has ${groups} crates with ${each} blocks in each crate. How many blocks are there?`,
-      correct,
-      `Think of ${groups} equal groups of ${each}.`,
-      [correct - each, correct + groups, correct + each]
-    ));
-  }
-  for (let i = 0; i < 15; i += 1) {
-    const each = 4 + (i % 8);
-    const groups = 3 + (i % 7);
-    const total = each * groups;
-    problems.push(makeProblem(
-      "Medium Division",
-      `${total} gems are shared equally into ${groups} bags. How many gems go in each bag?`,
-      each,
-      `Find the number that times ${groups} makes ${total}.`,
-      [each - 2, each + 1, each + 3]
-    ));
-  }
-  return problems;
+  return expandPatterns([
+    (i) => storyProblem("Medium Multiplication", `${4 + i} gardens each have ${6 + i} flowers. How many flowers are there?`, (4 + i) * (6 + i), `Multiply the number of gardens by flowers in each garden.`, [-6, 4, 8]),
+    (i) => storyProblem("Medium Division", `${36 + i * 12} crystals are packed equally into ${4 + i} boxes. How many crystals per box?`, (36 + i * 12) / (4 + i), `Divide the total crystals by the number of boxes.`, [-2, 3, 6]),
+    (i) => storyProblem("Medium Perimeter", `A square animal pen has sides of ${7 + i} meters. What is its perimeter?`, (7 + i) * 4, `A square has 4 equal sides.`, [-4, 4, 8]),
+    (i) => storyProblem("Medium Money", `Mira buys ${3 + i} notebooks that cost ${8 + i} coins each. How many coins does she spend?`, (3 + i) * (8 + i), `Multiply items by cost each.`, [-5, 4, 9]),
+    (i) => storyProblem("Medium Remainder", `Bo has ${29 + i * 5} blocks. He builds towers with 5 blocks each. How many blocks are left over?`, (29 + i * 5) % 5, `Divide by 5 and look at the leftover blocks.`, [1, 3, 5]),
+    (i) => storyProblem("Medium Two-Step", `A cart starts with ${25 + i * 4} berries. Lina adds ${12 + i}, then Bo eats 8. How many berries remain?`, 29 + i * 5, `Add first, then subtract 8.`, [-4, 3, 8]),
+    (i) => storyProblem("Medium Fractions", `A ribbon has ${24 + i * 6} stars. One half are yellow. How many stars are yellow?`, (24 + i * 6) / 2, `One half means divide by 2.`, [-3, 3, 6]),
+    (i) => storyProblem("Medium Area", `A farm patch is ${5 + i} tiles long and ${4 + i} tiles wide. How many tiles cover it?`, (5 + i) * (4 + i), `Area is length times width.`, [-4, 5, 7]),
+    (i) => storyProblem("Medium Pattern", `The magic numbers go ${6 + i}, ${12 + i * 2}, ${18 + i * 3}, __. What comes next?`, 24 + i * 4, `The pattern adds the same amount each step.`, [-6, 3, 6]),
+    (i) => storyProblem("Medium Average", `Three scores are ${8 + i}, ${10 + i}, and ${12 + i}. What is the average score?`, 10 + i, `Add the scores, then divide by 3.`, [-2, 1, 3]),
+  ]);
 }
 
-function buildHardProblems() {
-  const problems = [];
-  for (let i = 0; i < 15; i += 1) {
-    const boxes = 3 + (i % 6);
-    const each = 8 + (i % 9);
-    const used = 5 + (i % 10);
-    const correct = boxes * each - used;
-    problems.push(makeProblem(
-      "Hard Multi-Step",
-      `Mira packed ${boxes} boxes with ${each} apples each, then sold ${used} apples. How many apples remain?`,
-      correct,
-      `First multiply ${boxes} x ${each}, then subtract ${used}.`,
-      [correct - boxes, correct + used, correct + each]
-    ));
-  }
-  for (let i = 0; i < 15; i += 1) {
-    const start = 24 + i * 2;
-    const add = 9 + (i % 8);
-    const split = 3 + (i % 4);
-    const total = start + add;
-    const correct = total / split;
-    const adjustedTotal = correct % 1 === 0 ? total : split * Math.round(total / split);
-    const adjustedCorrect = adjustedTotal / split;
-    problems.push(makeProblem(
-      "Hard Multi-Step",
-      `A team gathered ${adjustedTotal - add} crystals, then found ${add} more. They split them equally among ${split} carts. How many crystals go in each cart?`,
-      adjustedCorrect,
-      `Add first, then divide the total by ${split}.`,
-      [adjustedCorrect - 2, adjustedCorrect + 2, adjustedCorrect + split]
-    ));
-  }
-  return problems;
+function buildIntermediateProblems() {
+  return expandPatterns([
+    (i) => storyProblem("Intermediate Multi-Step", `${3 + i} crates hold ${12 + i} apples each. Mira sells ${9 + i}. How many apples are left?`, (3 + i) * (12 + i) - (9 + i), `Multiply crates by apples, then subtract sold apples.`, [-8, 6, 11]),
+    (i) => storyProblem("Intermediate Division", `${(6 + i) * (9 + i * 3)} tickets are shared by ${6 + i} teams. How many tickets per team?`, 9 + i * 3, `Divide tickets by teams.`, [-3, 2, 5]),
+    (i) => storyProblem("Intermediate Fraction", `A treasure map has ${48 + i * 12} squares. Three fourths are forest. How many squares are forest?`, ((48 + i * 12) / 4) * 3, `Find one fourth first, then multiply by 3.`, [-6, 4, 9]),
+    (i) => storyProblem("Intermediate Equation", `A mystery number plus ${17 + i} equals ${46 + i * 3}. What is the mystery number?`, 29 + i * 2, `Subtract the known addend from the total.`, [-4, 3, 7]),
+    (i) => storyProblem("Intermediate Measurement", `A rope is ${(5 + i) * (18 + i * 2)} cm long. It is cut into ${5 + i} equal pieces. How long is each piece?`, 18 + i * 2, `Divide total length by number of pieces.`, [-5, 5, 10]),
+    (i) => storyProblem("Intermediate Area", `A rectangular garden is ${9 + i} meters long and ${6 + i} meters wide. What is its area?`, (9 + i) * (6 + i), `Area is length times width.`, [-8, 7, 12]),
+    (i) => storyProblem("Intermediate Money", `A game pass costs ${15 + i * 2} coins. Zara buys ${4 + i} passes and has 20 coins left. How many coins did she start with?`, (15 + i * 2) * (4 + i) + 20, `Find total cost, then add the leftover coins.`, [-10, 8, 15]),
+    (i) => storyProblem("Intermediate Time", `A quest starts at ${2 + i}:15 and lasts ${90 + i * 15} minutes. How many minutes after the hour does it end?`, (15 + 90 + i * 15) % 60, `Add the minutes and find what remains after full hours.`, [0, 15, 45]),
+    (i) => storyProblem("Intermediate Pattern", `A crystal doubles each day. It starts with ${3 + i} crystals. How many are there after 3 days?`, (3 + i) * 8, `Doubling 3 times means multiply by 2 x 2 x 2.`, [-8, 4, 12]),
+    (i) => storyProblem("Intermediate Data", `Four scores are ${6 + i}, ${8 + i}, ${10 + i}, and ${12 + i}. What is their range?`, 6, `Range means biggest minus smallest.`, [4, 8, 10]),
+  ]);
 }
 
 function buildAdvancedProblems() {
-  const problems = [];
-  for (let i = 0; i < 15; i += 1) {
-    const a = 12 + i;
-    const b = 4 + (i % 7);
-    const c = 2 + (i % 5);
-    const correct = a + b * c;
-    problems.push(makeProblem(
-      "Advanced Order",
-      `The gate code is ${a} plus ${b} times ${c}. What is the code?`,
-      correct,
-      `Use multiplication before addition: solve ${b} x ${c} first.`,
-      [correct - c, correct + b, (a + b) * c]
-    ));
-  }
-  for (let i = 0; i < 15; i += 1) {
-    const total = 40 + i * 4;
-    const percent = i % 2 === 0 ? 25 : 50;
-    const correct = percent === 25 ? total / 4 : total / 2;
-    problems.push(makeProblem(
-      "Advanced Fractions",
-      `Orin needs ${percent}% of ${total} magic tiles for the crown platform. How many tiles is that?`,
-      correct,
-      percent === 25 ? `25% means one fourth, so divide ${total} by 4.` : `50% means half, so divide ${total} by 2.`,
-      [correct - 4, correct + 5, total - correct]
-    ));
-  }
-  return problems;
+  return expandPatterns([
+    (i) => storyProblem("Advanced Order", `The gate code is ${18 + i} + ${5 + i} x ${4 + i}. What is the code?`, 18 + i + (5 + i) * (4 + i), `Multiply before adding.`, [-9, 6, 12]),
+    (i) => storyProblem("Advanced Percent", `Zara needs 25% of ${120 + i * 40} tiles. How many tiles is that?`, (120 + i * 40) / 4, `25% is one fourth.`, [-10, 10, 20]),
+    (i) => storyProblem("Advanced Fraction", `Three fifths of ${100 + i * 25} gems glow. How many gems glow?`, ((100 + i * 25) / 5) * 3, `Find one fifth, then multiply by 3.`, [-15, 10, 25]),
+    (i) => storyProblem("Advanced Multi-Step", `${4 + i} chests have ${24 + i * 3} coins each. ${18 + i * 3} coins are spent, then the rest is split between 3 guards. How many coins per guard?`, (((4 + i) * (24 + i * 3)) - (18 + i * 3)) / 3, `Multiply, subtract, then divide by 3.`, [-12, 9, 18]),
+    (i) => storyProblem("Advanced Ratio", `A potion uses red and blue drops in a 2:3 ratio. If there are ${12 + i * 4} red drops, how many blue drops are needed?`, ((12 + i * 4) / 2) * 3, `If 2 parts equals the red drops, find 1 part, then 3 parts.`, [-6, 6, 12]),
+    (i) => storyProblem("Advanced Average", `Five race times are ${20 + i}, ${22 + i}, ${24 + i}, ${26 + i}, and ${28 + i}. What is the average?`, 24 + i, `The numbers are evenly spaced, so the middle value is the average.`, [-4, 2, 5]),
+    (i) => storyProblem("Advanced Geometry", `A rectangle has an area of ${72 + i * 24} square tiles and a width of ${6 + i * 2}. What is its length?`, (72 + i * 24) / (6 + i * 2), `Length equals area divided by width.`, [-3, 3, 6]),
+    (i) => storyProblem("Advanced Discount", `A magic shield costs ${80 + i * 20} coins. It is half price. How many coins does it cost now?`, (80 + i * 20) / 2, `Half price means divide by 2.`, [-10, 10, 30]),
+    (i) => storyProblem("Advanced Expression", `Solve (${8 + i} + ${4 + i}) x 3.`, ((8 + i) + (4 + i)) * 3, `Do the parentheses first, then multiply by 3.`, [-6, 6, 9]),
+    (i) => storyProblem("Advanced Logic", `A code is 4 more than twice ${11 + i}. What is the code?`, (11 + i) * 2 + 4, `Double the number, then add 4.`, [-4, 4, 8]),
+  ]);
+}
+
+function buildHardProblems() {
+  return expandPatterns([
+    (i) => storyProblem("Hard Multi-Step", `${4 + i} treasure bags hold ${20 + i * 4} coins each. Zara adds ${16 + i * 4} coins, then shares everything across 4 chests. How many coins per chest?`, ((4 + i) * (20 + i * 4) + (16 + i * 4)) / 4, `Multiply bags and coins, add bonus coins, then divide by 4.`, [-8, 6, 14]),
+    (i) => storyProblem("Hard Fractions", `The gate needs half of ${80 + i * 16}, plus one fourth of ${80 + i * 16}, then minus ${8 + i}. What number opens it?`, (80 + i * 16) / 2 + (80 + i * 16) / 4 - (8 + i), `Find half and one fourth, add them, then subtract.`, [-12, 10, 18]),
+    (i) => storyProblem("Hard Equation", `Three times a number minus ${9 + i} equals ${(17 + i * 4) * 3 - (9 + i)}. What is the number?`, 17 + i * 4, `Add back the subtracted amount, then divide by 3.`, [-3, 3, 6]),
+    (i) => storyProblem("Hard Percent", `A village goal is ${200 + i * 50} coins. The team has collected 40%. How many coins is that?`, (200 + i * 50) * 0.4, `40% means 4 tenths, or multiply by 0.4.`, [-20, 20, 40]),
+    (i) => storyProblem("Hard Ratio", `Roblox-style teams have a 3:5 ratio of builders to explorers. If there are ${15 + i * 6} builders, how many explorers are there?`, ((15 + i * 6) / 3) * 5, `Find one ratio part, then multiply by 5.`, [-10, 5, 15]),
+    (i) => storyProblem("Hard Volume", `A block chest is ${4 + i} blocks long, ${3 + i} blocks wide, and 5 blocks tall. How many blocks fit inside?`, (4 + i) * (3 + i) * 5, `Volume is length x width x height.`, [-15, 10, 20]),
+    (i) => storyProblem("Hard Speed", `A minecart travels ${90 + i * 30} meters in 3 minutes. How many meters per minute is that?`, (90 + i * 30) / 3, `Divide distance by time.`, [-10, 10, 30]),
+    (i) => storyProblem("Hard Mixed Numbers", `A recipe uses ${6 + i} cups of slime, then triples it and removes ${5 + i} cups. How many cups remain?`, (6 + i) * 3 - (5 + i), `Triple the cups, then subtract.`, [-4, 4, 8]),
+    (i) => storyProblem("Hard Coordinates", `A player moves from x=${3 + i} to x=${18 + i * 2}. How many spaces did the player move?`, 15 + i, `Subtract the starting coordinate from the ending coordinate.`, [-3, 3, 5]),
+    (i) => storyProblem("Hard Probability", `A bag has ${6 + i} red gems and ${(6 + i) * 3} total gems. In the simplified fraction, what is the denominator?`, 3, `The red gems are one third of the total, so the denominator is 3.`, [2, 4, 6]),
+  ]);
+}
+
+function expandPatterns(patterns) {
+  return patterns.flatMap((pattern) => [0, 1, 2].map(pattern));
+}
+
+function storyProblem(topic, problem, correct, hint, offsets) {
+  const roundedCorrect = Math.round(correct);
+  return makeProblem(
+    topic,
+    problem,
+    roundedCorrect,
+    hint,
+    offsets.map((offset) => roundedCorrect + offset)
+  );
 }
 
 function makeProblem(topic, problem, correct, hint, distractors) {
@@ -251,7 +266,7 @@ function shuffle(items) {
 quests = createQuestRun();
 
 const world = {
-  width: 2100,
+  width: 2550,
   height: 900,
   tile: 48,
 };
@@ -269,10 +284,12 @@ const state = {
   started: false,
   paused: false,
   questIndex: 0,
-  score: 0,
+  score: getSavedNumber(POINTS_STORAGE_KEY, 0),
   correct: 0,
   incorrect: 0,
-  hints: 0,
+  hintsUsed: 0,
+  hintsAvailable: getSavedNumber(HINTS_STORAGE_KEY, STARTING_HINTS),
+  chancesLeft: 2,
   completed: 0,
   activeNpc: null,
   lastTime: 0,
@@ -281,6 +298,7 @@ const state = {
 
 const keys = new Set();
 let toastTimer = 0;
+let feedbackTimer = 0;
 let pendingFeedback = null;
 
 const objects = [
@@ -288,9 +306,11 @@ const objects = [
   { type: "house", x: 610, y: 120, w: 145, h: 118, roof: "#7a61d1", wall: "#e7d5ff" },
   { type: "house", x: 1110, y: 105, w: 150, h: 120, roof: "#ef8a45", wall: "#ffd7a1" },
   { type: "house", x: 1580, y: 640, w: 150, h: 118, roof: "#3584cf", wall: "#bee7ff" },
+  { type: "house", x: 2190, y: 620, w: 150, h: 118, roof: "#24a36b", wall: "#c7f7d8" },
   { type: "tree", x: 90, y: 540 }, { type: "tree", x: 330, y: 660 }, { type: "tree", x: 560, y: 505 },
   { type: "tree", x: 920, y: 660 }, { type: "tree", x: 1390, y: 170 }, { type: "tree", x: 1710, y: 150 },
   { type: "tree", x: 1930, y: 620 }, { type: "tree", x: 1310, y: 735 }, { type: "tree", x: 810, y: 180 },
+  { type: "tree", x: 2340, y: 210 },
   { type: "well", x: 920, y: 390 }, { type: "crate", x: 500, y: 390 }, { type: "crate", x: 1460, y: 500 },
 ];
 
@@ -311,10 +331,10 @@ function resetGame() {
   player.x = 220;
   player.y = 410;
   state.questIndex = 0;
-  state.score = 0;
   state.correct = 0;
   state.incorrect = 0;
-  state.hints = 0;
+  state.hintsUsed = 0;
+  state.chancesLeft = 2;
   state.completed = 0;
   state.activeNpc = null;
   state.paused = false;
@@ -344,14 +364,45 @@ function clamp(value, min, max) {
 function updateHud() {
   document.getElementById("questText").textContent = `${Math.min(state.questIndex + 1, quests.length)} / ${quests.length}`;
   document.getElementById("scoreText").textContent = state.score;
+  document.getElementById("hudHintText").textContent = state.hintsAvailable;
   document.getElementById("goalText").textContent = state.questIndex < quests.length ? quests[state.questIndex].goal : "Final Results";
+}
+
+function updateChallengeStatus() {
+  const hintCount = document.getElementById("hintCountText");
+  const chanceCount = document.getElementById("chanceText");
+  const hintButton = document.getElementById("hintButton");
+  if (hintCount) hintCount.textContent = state.hintsAvailable;
+  if (chanceCount) chanceCount.textContent = state.chancesLeft;
+  if (hintButton) {
+    hintButton.textContent = state.hintsAvailable > 0 ? "Hint" : `Buy Hint (${HINT_COST})`;
+  }
+}
+
+function randomPraise() {
+  return praiseMessages[Math.floor(Math.random() * praiseMessages.length)];
+}
+
+function refreshCurrentQuestProblem() {
+  const current = quests[state.questIndex];
+  const bank = problemBank[current.difficulty];
+  const problem = bank[Math.floor(Math.random() * bank.length)];
+  quests[state.questIndex] = { ...current, ...problem };
 }
 
 function showToast(message) {
   toast.textContent = message;
   toast.classList.remove("hidden");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.add("hidden"), 2300);
+  toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
+}
+
+function playHintPurchaseAnimation() {
+  const burst = document.createElement("div");
+  burst.className = "hint-purchase-burst";
+  burst.textContent = "+1 Hint Bought";
+  document.getElementById("app").appendChild(burst);
+  setTimeout(() => burst.remove(), 1000);
 }
 
 function drawWorld() {
@@ -381,8 +432,9 @@ function drawPaths() {
   const roads = [
     { label: "Easy", color: "#f4dc91", points: [[80, 430], [350, 300], [520, 380]] },
     { label: "Medium", color: "#d8c17c", points: [[520, 380], [750, 450], [920, 360]] },
-    { label: "Hard", color: "#c79b69", points: [[920, 360], [1120, 420], [1360, 560]] },
-    { label: "Advanced", color: "#b8865d", points: [[1360, 560], [1630, 450], [2010, 310]] },
+    { label: "Intermediate", color: "#c79b69", points: [[920, 360], [1120, 420], [1360, 560]] },
+    { label: "Hard", color: "#b8865d", points: [[1360, 560], [1570, 350], [1840, 300]] },
+    { label: "Advanced", color: "#9b6d56", points: [[1840, 300], [2070, 360], [2380, 500]] },
   ];
 
   roads.forEach((road) => {
@@ -400,7 +452,8 @@ function drawPaths() {
     const labelX = (road.points[0][0] + road.points[2][0]) / 2;
     const labelY = (road.points[0][1] + road.points[2][1]) / 2 - 38;
     ctx.fillStyle = "rgba(255, 253, 246, 0.82)";
-    ctx.fillRect(labelX - 44, labelY - 16, 88, 28);
+    const labelWidth = road.label === "Intermediate" ? 118 : 88;
+    ctx.fillRect(labelX - labelWidth / 2, labelY - 16, labelWidth, 28);
     ctx.fillStyle = "#17324a";
     ctx.font = "900 13px system-ui";
     ctx.textAlign = "center";
@@ -502,10 +555,7 @@ function drawNpc(quest, index) {
     ctx.textBaseline = "middle";
     ctx.fillText(locked ? "•" : quest.icon, quest.x + 25, quest.y - 49);
   } else {
-    ctx.fillStyle = "#21b26b";
-    ctx.font = "900 16px system-ui";
-    ctx.textAlign = "center";
-    ctx.fillText("OK", quest.x + 25, quest.y - 40);
+    drawCheckIcon(quest.x + 25, quest.y - 40);
   }
 
   ctx.fillStyle = "#17324a";
@@ -513,6 +563,23 @@ function drawNpc(quest, index) {
   ctx.textAlign = "center";
   ctx.fillText(quest.npc, quest.x, quest.y + 65);
   ctx.globalAlpha = 1;
+}
+
+function drawCheckIcon(x, y) {
+  ctx.fillStyle = "#21b26b";
+  ctx.beginPath();
+  ctx.arc(x, y, 15, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 4;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(x - 7, y);
+  ctx.lineTo(x - 2, y + 6);
+  ctx.lineTo(x + 8, y - 7);
+  ctx.stroke();
 }
 
 function drawPlayer() {
@@ -648,49 +715,70 @@ function closeDialogue() {
 function openChallenge() {
   dialogueModal.classList.add("hidden");
   const quest = quests[state.questIndex];
+  state.chancesLeft = 2;
   document.getElementById("challengeLevel").textContent = `Level ${state.questIndex + 1} of ${quests.length}`;
   document.getElementById("challengeTopic").textContent = `${quest.levelName} - ${quest.topic}`;
   document.getElementById("problemText").textContent = quest.problem;
   document.getElementById("hintText").classList.add("hidden");
   document.getElementById("hintText").textContent = "";
+  updateChallengeStatus();
+  renderAnswers(quest);
 
+  state.paused = true;
+  challengeModal.classList.remove("hidden");
+}
+
+function renderAnswers(quest) {
   const grid = document.getElementById("answerGrid");
   grid.innerHTML = "";
-  quest.answers.forEach((answer) => {
+  shuffle(quest.answers).forEach((answer) => {
     const button = document.createElement("button");
     button.textContent = answer;
     button.addEventListener("click", () => checkAnswer(answer));
     grid.appendChild(button);
   });
-
-  state.paused = true;
-  challengeModal.classList.remove("hidden");
 }
 
 function checkAnswer(answer) {
   const quest = quests[state.questIndex];
   if (answer === quest.correct) {
     state.correct += 1;
-    state.score += 150 + state.questIndex * 75;
+    state.score += 100;
+    state.hintsAvailable += 1;
+    saveProgress();
     pendingFeedback = "correct";
-    showFeedback("Correct!", `${quest.levelName} is complete. Your next road is unlocked!`);
+    showFeedback("Correct!", `${randomPraise()} You earned 100 points and 1 hint. ${quest.levelName} is complete!`);
   } else {
+    state.chancesLeft -= 1;
+    updateChallengeStatus();
+    renderAnswers(quest);
+    if (state.chancesLeft > 0) {
+      pendingFeedback = "tryAgainSame";
+      showFeedback("Incorrect. Try Again!", "Good attempt. You have 1 chance left for this question.", true);
+      updateHud();
+      return;
+    }
+
     state.incorrect += 1;
-    state.score = Math.max(0, state.score - 10);
-    pendingFeedback = "incorrect";
-    showFeedback("Incorrect. Try Again!", "Good attempt. Recheck the question and try another answer.");
+    pendingFeedback = "retryNewQuestion";
+    showFeedback("Out of Chances", `${quest.npc} says: Talk to me again and I will give you a different question.`, true);
   }
   updateHud();
 }
 
-function showFeedback(title, text) {
+function showFeedback(title, text, autoDismiss = false) {
+  clearTimeout(feedbackTimer);
   challengeModal.classList.add("hidden");
   document.getElementById("feedbackTitle").textContent = title;
   document.getElementById("feedbackText").textContent = text;
   feedbackModal.classList.remove("hidden");
+  if (autoDismiss) {
+    feedbackTimer = setTimeout(continueFromFeedback, 3000);
+  }
 }
 
 function continueFromFeedback() {
+  clearTimeout(feedbackTimer);
   feedbackModal.classList.add("hidden");
   if (pendingFeedback === "correct") {
     state.completed += 1;
@@ -704,6 +792,24 @@ function continueFromFeedback() {
     showToast(`Level Complete! Now ${quests[state.questIndex].goal}.`);
     return;
   }
+
+  if (pendingFeedback === "tryAgainSame") {
+    pendingFeedback = null;
+    challengeModal.classList.remove("hidden");
+    state.paused = true;
+    return;
+  }
+
+  if (pendingFeedback === "retryNewQuestion") {
+    const npcName = quests[state.questIndex].npc;
+    pendingFeedback = null;
+    refreshCurrentQuestProblem();
+    state.paused = false;
+    updateInteraction();
+    showToast(`Talk to ${npcName} again to help with a new question.`);
+    return;
+  }
+
   pendingFeedback = null;
   openChallenge();
 }
@@ -712,7 +818,20 @@ function showHint() {
   const quest = quests[state.questIndex];
   const hint = document.getElementById("hintText");
   if (hint.classList.contains("hidden")) {
-    state.hints += 1;
+    if (state.hintsAvailable > 0) {
+      state.hintsAvailable -= 1;
+    } else if (state.score >= HINT_COST) {
+      state.score -= HINT_COST;
+      playHintPurchaseAnimation();
+      showToast(`Bought a hint for ${HINT_COST} points.`);
+    } else {
+      showToast(`Need ${HINT_COST} points to buy a hint.`);
+      return;
+    }
+    state.hintsUsed += 1;
+    saveProgress();
+    updateHud();
+    updateChallengeStatus();
     hint.textContent = quest.hint;
     hint.classList.remove("hidden");
   }
@@ -729,10 +848,17 @@ function showResults() {
   document.getElementById("finalScore").textContent = state.score;
   document.getElementById("finalCorrect").textContent = state.correct;
   document.getElementById("finalIncorrect").textContent = state.incorrect;
-  document.getElementById("finalHints").textContent = state.hints;
+  document.getElementById("finalHints").textContent = state.hintsUsed;
   document.getElementById("finalQuests").textContent = `${state.completed} / ${quests.length}`;
   document.getElementById("finalAchievement").textContent = `${accuracy}% Accuracy`;
   document.getElementById("rewardCard").classList.remove("hidden");
+}
+
+function closeChallenge() {
+  challengeModal.classList.add("hidden");
+  document.getElementById("hintText").classList.add("hidden");
+  state.paused = false;
+  updateInteraction();
 }
 
 function gameLoop(time) {
@@ -815,6 +941,7 @@ document.getElementById("exitButton").addEventListener("click", () => {
 talkButton.addEventListener("click", openDialogue);
 document.getElementById("laterButton").addEventListener("click", closeDialogue);
 document.getElementById("helpButton").addEventListener("click", openChallenge);
+document.getElementById("backChallengeButton").addEventListener("click", closeChallenge);
 document.getElementById("hintButton").addEventListener("click", showHint);
 document.getElementById("feedbackButton").addEventListener("click", continueFromFeedback);
 
