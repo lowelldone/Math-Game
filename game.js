@@ -146,78 +146,378 @@ function buildProblemBank() {
 }
 
 function buildEasyProblems() {
-  return expandPatterns([
-    (i) => storyProblem("Easy Addition", `Lina picks ${7 + i} sun apples and ${4 + i} moon apples. How many apples does she have?`, 11 + i * 2, `Add both groups of apples together.`, [-2, -1, 3]),
-    (i) => storyProblem("Easy Subtraction", `${19 + i * 2} paper boats float in the pond. ${6 + i} sail away. How many boats are left?`, 13 + i, `Take away the boats that sailed away.`, [-3, 2, 4]),
-    (i) => storyProblem("Easy Counting", `A path has ${5 + i} blue stones, ${3 + i} red stones, and 2 gold stones. How many stones are on the path?`, 10 + i * 2, `Add blue, red, and gold stones.`, [-2, 1, 3]),
-    (i) => storyProblem("Easy Missing Number", `A sign says 9 + ? = ${14 + i}. What number is missing?`, 5 + i, `Ask what you add to 9 to reach the total.`, [-2, 1, 3]),
-    (i) => storyProblem("Easy Comparison", `Bo has ${12 + i} blocks. Lina has ${8 + i} blocks. How many more blocks does Bo have?`, 4, `Find the difference between the two amounts.`, [2, 5, 6]),
-    (i) => storyProblem("Easy Skip Count", `There are ${3 + i} baskets with 2 oranges in each. How many oranges are there?`, (3 + i) * 2, `Count by twos for each basket.`, [-2, 2, 4]),
-    (i) => storyProblem("Easy Money", `A sticker costs ${6 + i} coins. A pencil costs ${5 + i} coins. How many coins are needed for both?`, 11 + i * 2, `Add the two prices.`, [-1, 2, 5]),
-    (i) => storyProblem("Easy Time", `The bell rings in ${10 + i} minutes. ${4 + i} minutes pass. How many minutes are left?`, 6, `Subtract the minutes that passed.`, [4, 7, 8]),
-    (i) => storyProblem("Easy Shapes", `A small bridge uses ${4 + i} triangle tiles and ${6 + i} square tiles. How many tiles are used?`, 10 + i * 2, `Add both kinds of tiles.`, [-2, 1, 4]),
-    (i) => storyProblem("Easy Equal Groups", `${16 + i * 2} shells are split equally between 2 friends. How many shells does each friend get?`, 8 + i, `Split the shells into two equal groups.`, [-2, 2, 4]),
-  ]);
+  return [
+    makeChoiceProblem(
+      "Easy Temperature",
+      "The highest temperature today was 8°C and the lowest was -3°C. What was the difference in temperature?",
+      "11°C",
+      "Difference means highest minus lowest. Going from a negative temperature up to a positive one means adding the two amounts: 8 − (−3) = 8 + 3.",
+      ["5°C", "11°C", "-11°C", "10°C"]
+    ),
+    makeChoiceProblem(
+      "Easy Subtraction",
+      "A store had 3,000 items in stock and sold 1,284 items during a sale. How many items remain?",
+      "1,716 items",
+      "Subtract the items sold from the items in stock: 3,000 − 1,284. Borrow carefully from the thousands.",
+      ["1,716 items", "1,826 items", "2,716 items", "1,684 items"]
+    ),
+    makeChoiceProblem(
+      "Easy Fractions",
+      "A water tank contained 5/6 of a liter of water. After using 1/2 liter, how much water is left?",
+      "1/3 liter",
+      "Subtract 1/2 from 5/6. Use 6 as a common denominator: 1/2 = 3/6, then 5/6 − 3/6. Simplify the result.",
+      ["1/3 liter", "2/3 liter", "1/2 liter", "1/6 liter"]
+    ),
+    makeChoiceProblem(
+      "Easy Money",
+      "A family has $250.00 budgeted for groceries and spends $178.65. How much money is left?",
+      "$71.35",
+      "Subtract $178.65 from $250.00. Line up the decimal points and subtract hundredths, tenths, then dollars.",
+      ["$71.35", "$72.35", "$81.35", "$70.35"]
+    ),
+    makeChoiceProblem(
+      "Easy Decimals",
+      "A ribbon is 7.5 m long. A tailor cuts off 2.85 m. How much ribbon is left?",
+      "4.65 m",
+      "Subtract 2.85 from 7.5. Write 7.5 as 7.50 so the hundredths place lines up, then subtract.",
+      ["4.75 m", "5.65 m", "4.65 m", "4.35 m"]
+    ),
+    makeChoiceProblem(
+      "Easy Addition",
+      "The library has 4,286 fiction books and 2,759 nonfiction books. How many books does the library have in total?",
+      "7,045",
+      "Add 4,286 and 2,759. Add ones, tens, hundreds, then thousands, and carry whenever a column is 10 or more.",
+      ["6,045", "7,045", "7,145", "6,935"]
+    ),
+    makeChoiceProblem(
+      "Easy Decimals",
+      "A cyclist rode 12.65 km on Monday and 8.9 km on Tuesday. How far did she ride altogether?",
+      "21.55 km",
+      "Add 12.65 and 8.9. Write 8.9 as 8.90 so the decimal points line up, then add.",
+      ["21.55 km", "20.55 km", "21.65 km", "22.45 km"]
+    ),
+    makeChoiceProblem(
+      "Easy Fractions",
+      "A recipe calls for 3/4 cup of milk and 2/3 cup of water. What is the total amount of liquid needed?",
+      "1 5/12 cups",
+      "Add 3/4 and 2/3. Use 12 as a common denominator: 3/4 = 9/12 and 2/3 = 8/12. Add the numerators, then write any improper fraction as a mixed number.",
+      ["5/7 cup", "1 5/12 cups", "1 1/4 cups", "5/12 cup"]
+    ),
+    makeChoiceProblem(
+      "Easy Addition",
+      "A farmer harvested 1,250 kg of corn, 875 kg of wheat, and 1,475 kg of rice. How many kilograms of grain did he harvest in all?",
+      "3,600 kg",
+      "Add all three harvests: 1,250 + 875 + 1,475. Add two amounts first, then add the third.",
+      ["3,500 kg", "3,600 kg", "2,600 kg", "3,700 kg"]
+    ),
+    makeChoiceProblem(
+      "Easy Money",
+      "My friend saved ₱245.75 from her allowance, ₱189.50 from selling snacks, and ₱320.25 from her birthday money. How much money does she have in total?",
+      "₱755.50",
+      "Add the three amounts. Line up the pesos and centavos, add the centavos first, then the pesos.",
+      ["₱745.50", "₱755.50", "₱755.00", "₱765.50"]
+    ),
+  ];
 }
 
 function buildMediumProblems() {
-  return expandPatterns([
-    (i) => storyProblem("Medium Multiplication", `${4 + i} gardens each have ${6 + i} flowers. How many flowers are there?`, (4 + i) * (6 + i), `Multiply the number of gardens by flowers in each garden.`, [-6, 4, 8]),
-    (i) => storyProblem("Medium Division", `${36 + i * 12} crystals are packed equally into ${4 + i} boxes. How many crystals per box?`, (36 + i * 12) / (4 + i), `Divide the total crystals by the number of boxes.`, [-2, 3, 6]),
-    (i) => storyProblem("Medium Perimeter", `A square animal pen has sides of ${7 + i} meters. What is its perimeter?`, (7 + i) * 4, `A square has 4 equal sides.`, [-4, 4, 8]),
-    (i) => storyProblem("Medium Money", `Mira buys ${3 + i} notebooks that cost ${8 + i} coins each. How many coins does she spend?`, (3 + i) * (8 + i), `Multiply items by cost each.`, [-5, 4, 9]),
-    (i) => storyProblem("Medium Remainder", `Bo has ${29 + i * 5} blocks. He builds towers with 5 blocks each. How many blocks are left over?`, (29 + i * 5) % 5, `Divide by 5 and look at the leftover blocks.`, [1, 3, 5]),
-    (i) => storyProblem("Medium Two-Step", `A cart starts with ${25 + i * 4} berries. Lina adds ${12 + i}, then Bo eats 8. How many berries remain?`, 29 + i * 5, `Add first, then subtract 8.`, [-4, 3, 8]),
-    (i) => storyProblem("Medium Fractions", `A ribbon has ${24 + i * 6} stars. One half are yellow. How many stars are yellow?`, (24 + i * 6) / 2, `One half means divide by 2.`, [-3, 3, 6]),
-    (i) => storyProblem("Medium Area", `A farm patch is ${5 + i} tiles long and ${4 + i} tiles wide. How many tiles cover it?`, (5 + i) * (4 + i), `Area is length times width.`, [-4, 5, 7]),
-    (i) => storyProblem("Medium Pattern", `The magic numbers go ${6 + i}, ${12 + i * 2}, ${18 + i * 3}, __. What comes next?`, 24 + i * 4, `The pattern adds the same amount each step.`, [-6, 3, 6]),
-    (i) => storyProblem("Medium Average", `Three scores are ${8 + i}, ${10 + i}, and ${12 + i}. What is the average score?`, 10 + i, `Add the scores, then divide by 3.`, [-2, 1, 3]),
-  ]);
+  return [
+    makeChoiceProblem(
+      "Medium Multiplication",
+      "My friend bought 4 notebooks. Each notebook costs ₱15. How much did my friend spend altogether?",
+      "60 pesos",
+      "Multiply the number of notebooks by the cost of one notebook: 4 × 15.",
+      ["55 pesos", "60 pesos", "45 pesos", "65 pesos"]
+    ),
+    makeChoiceProblem(
+      "Medium Division",
+      "My student has 24 erasers. He wants to put them equally into 6 boxes. How many erasers will be in each box?",
+      "4 erasers",
+      "Share 24 erasers equally among 6 boxes. Divide 24 by 6.",
+      ["4 erasers", "7 erasers", "5 erasers", "3 erasers"]
+    ),
+    makeChoiceProblem(
+      "Medium Multiplication",
+      "A teacher gives 5 pencils to each of her 6 students. How many pencils does she give in total?",
+      "30 pencils",
+      "Each of the 6 students gets 5 pencils, so multiply 6 × 5.",
+      ["20 pencils", "25 pencils", "15 pencils", "30 pencils"]
+    ),
+    makeChoiceProblem(
+      "Medium Division",
+      "There are 32 storybooks in the classroom. The teacher places them equally on 4 shelves. How many storybooks are on each shelf?",
+      "8 storybooks",
+      "Divide the 32 storybooks equally among 4 shelves: 32 ÷ 4.",
+      ["8 storybooks", "7 storybooks", "4 storybooks", "10 storybooks"]
+    ),
+    makeChoiceProblem(
+      "Medium Multiplication",
+      "I bought 3 packs of biscuits. Each pack contains 8 biscuits. How many biscuits do I have altogether?",
+      "24 biscuits",
+      "Multiply the number of packs by the biscuits in each pack: 3 × 8.",
+      ["20 biscuits", "16 biscuits", "24 biscuits", "32 biscuits"]
+    ),
+    makeChoiceProblem(
+      "Medium Multiplication",
+      "There are 7 rows of chairs in the classroom. Each row has 5 chairs. How many chairs are there altogether?",
+      "35 chairs",
+      "Multiply the number of rows by the chairs in each row: 7 × 5.",
+      ["30 chairs", "35 chairs", "40 chairs", "45 chairs"]
+    ),
+    makeChoiceProblem(
+      "Medium Multiplication",
+      "A library receives 6 boxes of books. Each box contains 7 books. How many books did the library receive?",
+      "42 books",
+      "Multiply the number of boxes by the books in each box: 6 × 7.",
+      ["40 books", "32 books", "42 books", "22 books"]
+    ),
+    makeChoiceProblem(
+      "Medium Multiplication",
+      "The teacher prepared 5 sets of school supplies for her students. Each set has 4 pencils. How many pencils did the teacher prepare altogether?",
+      "20 pencils",
+      "Multiply the number of sets by the pencils in each set: 5 × 4.",
+      ["15 pencils", "25 pencils", "30 pencils", "20 pencils"]
+    ),
+    makeChoiceProblem(
+      "Medium Multiplication",
+      "During a school activity, 7 students each received 3 sheets of paper. How many sheets of paper were given to the students altogether?",
+      "21 sheets of paper",
+      "Each of the 7 students got 3 sheets, so multiply 7 × 3.",
+      ["21 sheets of paper", "22 sheets of paper", "23 sheets of paper", "24 sheets of paper"]
+    ),
+    makeChoiceProblem(
+      "Medium Division",
+      "The classroom has 24 storybooks. The teacher wants to place them equally on 6 shelves. How many storybooks should be placed on each shelf?",
+      "4 storybooks per shelf",
+      "Share 24 storybooks equally across 6 shelves. Divide 24 by 6.",
+      ["3 storybooks per shelf", "5 storybooks per shelf", "6 storybooks per shelf", "4 storybooks per shelf"]
+    ),
+  ];
 }
 
 function buildIntermediateProblems() {
-  return expandPatterns([
-    (i) => storyProblem("Intermediate Multi-Step", `${3 + i} crates hold ${12 + i} apples each. Mira sells ${9 + i}. How many apples are left?`, (3 + i) * (12 + i) - (9 + i), `Multiply crates by apples, then subtract sold apples.`, [-8, 6, 11]),
-    (i) => storyProblem("Intermediate Division", `${(6 + i) * (9 + i * 3)} tickets are shared by ${6 + i} teams. How many tickets per team?`, 9 + i * 3, `Divide tickets by teams.`, [-3, 2, 5]),
-    (i) => storyProblem("Intermediate Fraction", `A treasure map has ${48 + i * 12} squares. Three fourths are forest. How many squares are forest?`, ((48 + i * 12) / 4) * 3, `Find one fourth first, then multiply by 3.`, [-6, 4, 9]),
-    (i) => storyProblem("Intermediate Equation", `A mystery number plus ${17 + i} equals ${46 + i * 3}. What is the mystery number?`, 29 + i * 2, `Subtract the known addend from the total.`, [-4, 3, 7]),
-    (i) => storyProblem("Intermediate Measurement", `A rope is ${(5 + i) * (18 + i * 2)} cm long. It is cut into ${5 + i} equal pieces. How long is each piece?`, 18 + i * 2, `Divide total length by number of pieces.`, [-5, 5, 10]),
-    (i) => storyProblem("Intermediate Area", `A rectangular garden is ${9 + i} meters long and ${6 + i} meters wide. What is its area?`, (9 + i) * (6 + i), `Area is length times width.`, [-8, 7, 12]),
-    (i) => storyProblem("Intermediate Money", `A game pass costs ${15 + i * 2} coins. Zara buys ${4 + i} passes and has 20 coins left. How many coins did she start with?`, (15 + i * 2) * (4 + i) + 20, `Find total cost, then add the leftover coins.`, [-10, 8, 15]),
-    (i) => storyProblem("Intermediate Time", `A quest starts at ${2 + i}:15 and lasts ${90 + i * 15} minutes. How many minutes after the hour does it end?`, (15 + 90 + i * 15) % 60, `Add the minutes and find what remains after full hours.`, [0, 15, 45]),
-    (i) => storyProblem("Intermediate Pattern", `A crystal doubles each day. It starts with ${3 + i} crystals. How many are there after 3 days?`, (3 + i) * 8, `Doubling 3 times means multiply by 2 x 2 x 2.`, [-8, 4, 12]),
-    (i) => storyProblem("Intermediate Data", `Four scores are ${6 + i}, ${8 + i}, ${10 + i}, and ${12 + i}. What is their range?`, 6, `Range means biggest minus smallest.`, [4, 8, 10]),
-  ]);
+  return [
+    makeChoiceProblem(
+      "Intermediate Money",
+      "My friends and I put together 10 pesos each, giving us 30 pesos in total. We bought gummy bears for 10 pesos, sour strips for 15 pesos, and cola gummies for 5 pesos. How much did we spend on candies altogether?",
+      "₱30",
+      "Add the three candy prices: 10 + 15 + 5.",
+      ["₱30", "₱40", "₱50", "₱60"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Money",
+      "My brother has 150 pesos. He buys a sandwich for 65 pesos and two juice boxes for 20 pesos each. How much money does he have left?",
+      "₱45",
+      "Find the cost of two juice boxes (20 × 2), add the sandwich, then subtract that total from 150.",
+      ["₱25", "₱35", "₱45", "₱55"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Multi-Step",
+      "I bought 4 packs of highlighters with 6 highlighters in each pack. I shared 9 highlighters with my classmates. How many highlighters do I have left?",
+      "15 highlighters",
+      "Multiply packs by highlighters per pack (4 × 6), then subtract the 9 you shared.",
+      ["5 highlighters", "10 highlighters", "15 highlighters", "20 highlighters"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Multi-Step",
+      "Our school athlete ran 8 laps on Thursday and 12 laps on Friday. On Saturday, she ran 5 more laps than Friday. How many laps did she run altogether?",
+      "37 laps",
+      "Saturday is Friday plus 5 (12 + 5). Then add Thursday, Friday, and Saturday.",
+      ["37 laps", "47 laps", "57 laps", "67 laps"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Division",
+      "A teacher has 72 sheets of colored paper. She puts 8 sheets into each folder for an art activity. How many folders can she prepare?",
+      "9 folders",
+      "Divide the total sheets by the sheets in each folder: 72 ÷ 8.",
+      ["8 folders", "9 folders", "10 folders", "11 folders"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Money",
+      "My friend has ₱200. She buys a notebook for ₱45 and two pens for ₱15 each. How much money does she have left?",
+      "₱125",
+      "Two pens cost 15 × 2. Add the notebook, then subtract that total from ₱200.",
+      ["₱115", "₱120", "₱125", "₱130"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Multi-Step",
+      "I bought 3 packs of stickers with 12 stickers in each pack. I gave 8 stickers to my friend. How many stickers do I have left?",
+      "28 stickers",
+      "Multiply packs by stickers per pack (3 × 12), then subtract the 8 you gave away.",
+      ["24 stickers", "28 stickers", "30 stickers", "32 stickers"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Multi-Step",
+      "My student read 15 pages on Monday and 20 pages on Tuesday. On Wednesday, the student read 10 more pages than Tuesday. How many pages did the student read altogether?",
+      "65 pages",
+      "Wednesday is Tuesday plus 10 (20 + 10). Then add Monday, Tuesday, and Wednesday.",
+      ["55 pages", "60 pages", "65 pages", "70 pages"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Division",
+      "I have 48 candies. I put 6 candies in each small bag. After filling as many bags as possible, how many bags can I make?",
+      "8 bags",
+      "Divide the candies equally into groups of 6: 48 ÷ 6.",
+      ["6 bags", "7 bags", "8 bags", "9 bags"]
+    ),
+    makeChoiceProblem(
+      "Intermediate Multi-Step",
+      "My co-worker bought 4 boxes of pencils. Each box has 24 pencils. She gave 15 pencils to her students and kept the rest. How many pencils does she have left?",
+      "81 pencils",
+      "Multiply boxes by pencils per box (4 × 24), then subtract the 15 she gave away.",
+      ["81 pencils", "96 pencils", "66 pencils", "79 pencils"]
+    ),
+  ];
 }
 
 function buildAdvancedProblems() {
-  return expandPatterns([
-    (i) => storyProblem("Advanced Order", `The gate code is ${18 + i} + ${5 + i} x ${4 + i}. What is the code?`, 18 + i + (5 + i) * (4 + i), `Multiply before adding.`, [-9, 6, 12]),
-    (i) => storyProblem("Advanced Percent", `Zara needs 25% of ${120 + i * 40} tiles. How many tiles is that?`, (120 + i * 40) / 4, `25% is one fourth.`, [-10, 10, 20]),
-    (i) => storyProblem("Advanced Fraction", `Three fifths of ${100 + i * 25} gems glow. How many gems glow?`, ((100 + i * 25) / 5) * 3, `Find one fifth, then multiply by 3.`, [-15, 10, 25]),
-    (i) => storyProblem("Advanced Multi-Step", `${4 + i} chests have ${24 + i * 3} coins each. ${18 + i * 3} coins are spent, then the rest is split between 3 guards. How many coins per guard?`, (((4 + i) * (24 + i * 3)) - (18 + i * 3)) / 3, `Multiply, subtract, then divide by 3.`, [-12, 9, 18]),
-    (i) => storyProblem("Advanced Ratio", `A potion uses red and blue drops in a 2:3 ratio. If there are ${12 + i * 4} red drops, how many blue drops are needed?`, ((12 + i * 4) / 2) * 3, `If 2 parts equals the red drops, find 1 part, then 3 parts.`, [-6, 6, 12]),
-    (i) => storyProblem("Advanced Average", `Five race times are ${20 + i}, ${22 + i}, ${24 + i}, ${26 + i}, and ${28 + i}. What is the average?`, 24 + i, `The numbers are evenly spaced, so the middle value is the average.`, [-4, 2, 5]),
-    (i) => storyProblem("Advanced Geometry", `A rectangle has an area of ${72 + i * 24} square tiles and a width of ${6 + i * 2}. What is its length?`, (72 + i * 24) / (6 + i * 2), `Length equals area divided by width.`, [-3, 3, 6]),
-    (i) => storyProblem("Advanced Discount", `A magic shield costs ${80 + i * 20} coins. It is half price. How many coins does it cost now?`, (80 + i * 20) / 2, `Half price means divide by 2.`, [-10, 10, 30]),
-    (i) => storyProblem("Advanced Expression", `Solve (${8 + i} + ${4 + i}) x 3.`, ((8 + i) + (4 + i)) * 3, `Do the parentheses first, then multiply by 3.`, [-6, 6, 9]),
-    (i) => storyProblem("Advanced Logic", `A code is 4 more than twice ${11 + i}. What is the code?`, (11 + i) * 2 + 4, `Double the number, then add 4.`, [-4, 4, 8]),
-  ]);
+  return [
+    makeChoiceProblem(
+      "Advanced Multi-Step",
+      "A Grade 6 class is preparing school supply kits for a community project. They have 144 pencils, 96 notebooks, and 72 erasers. Each kit must contain 4 pencils, 3 notebooks, and 2 erasers. The class wants to make as many complete kits as possible and divide them equally among 6 groups. How many complete kits will each group receive?",
+      "5 kits",
+      "Find how many complete kits the supplies allow: 144 ÷ 4, 96 ÷ 3, and 72 ÷ 2. The smallest of those three amounts is the maximum number of kits. Then divide that many kits equally among 6 groups, counting only complete kits for each group.",
+      ["4 kits", "5 kits", "6 kits", "8 kits"]
+    ),
+    makeChoiceProblem(
+      "Advanced Multi-Step",
+      "A school canteen prepared 180 sandwiches for a school event. In the morning, 65 sandwiches were sold. During lunch, they sold 2 times as many sandwiches as they sold in the morning. The remaining sandwiches were packed equally into 5 boxes. How many sandwiches were placed in each box?",
+      "10 sandwiches",
+      "Lunch sales are twice the morning sales (2 × 65). Subtract morning and lunch sales from 180, then divide what is left by 5. If those two sales add up to more than 180, the numbers in the problem need to be checked.",
+      ["8 sandwiches", "10 sandwiches", "12 sandwiches", "15 sandwiches"]
+    ),
+    makeChoiceProblem(
+      "Advanced Perimeter",
+      "A rectangular school garden is 18 meters long and 10 meters wide. The class wants to divide the garden into 6 equal sections. Each section will be planted with a different vegetable. They also want to put a fence around the entire garden. If each meter of fencing costs ₱45, how much will the fencing cost?",
+      "₱2,520",
+      "The fence goes around the whole garden, so use perimeter: 2 × (length + width). Then multiply that length by ₱45. Splitting the garden into sections does not change the outer fence.",
+      ["₱1,890", "₱2,250", "₱2,520", "₱2,700"]
+    ),
+    makeChoiceProblem(
+      "Advanced Money",
+      "The Grade 6 class is organizing a reading fair. They have ₱5,000 as their starting budget. They spend ₱1,250 on decorations and ₱850 on books. During the fair, they sell 75 tickets for ₱40 each. However, they give 15 free tickets to teachers. After the event, they use ₱1,200 to buy additional books. The remaining money is divided equally among 4 groups for their next classroom activity. How much money does each group receive?",
+      "₱1,175",
+      "Subtract decorations and the first book cost from ₱5,000. Add ticket sales of 75 × ₱40 (the 15 free tickets bring in no money). Subtract ₱1,200, then divide by 4.",
+      ["₱725", "₱1,175", "₱775", "₱800"]
+    ),
+    makeChoiceProblem(
+      "Advanced Multi-Step",
+      "Maria saved ₱1,500 for a school project. She spent ₱375 on art materials and ₱240 on printing. Her teacher then gave her ₱500 to help with the project. Maria used 1/3 of the money she had at that point to buy snacks for the group. How much money did she have left?",
+      "₱923.33",
+      "Subtract the two purchases from ₱1,500, then add ₱500. She spends one third of that amount, so two thirds remain.",
+      ["₱890", "₱920", "₱923.33", "₱940"]
+    ),
+    makeChoiceProblem(
+      "Advanced Multi-Step",
+      "The school library ordered 12 boxes of books for the annual book fair, with each box containing 25 books. On the first day, students bought 140 books. On the second day, the library received an extra delivery of 45 books, but students bought another 85 books. The librarian wants to divide the remaining books equally onto 4 display tables. How many books will be placed on each display table?",
+      "30 books per display table",
+      "Multiply boxes by books per box. Subtract the first day's sales, add the extra delivery, subtract the second day's sales, then divide equally by 4 tables.",
+      ["10 books per display table", "20 books per display table", "30 books per display table", "40 books per display table"]
+    ),
+    makeChoiceProblem(
+      "Advanced Multi-Step",
+      "The cafeteria staff made fresh juice using 8 jugs of apple juice and 6 jugs of orange juice, where each jug contained 500mL. Before serving, the staff poured out 200mL for a taste test. They then added 400mL of sparkling water to the total mixture. Finally, they divided the entire mixture equally into 8 large serving pitchers. How many milliliters of juice mixture are in each pitcher?",
+      "900mL in each pitcher",
+      "Add the jugs, multiply by 500 mL, subtract 200 mL, add 400 mL, then divide by 8 pitchers.",
+      ["900mL in each pitcher", "1000 mL in each pitcher", "1,200 mL in each pitcher", "2,000 mL in each pitcher"]
+    ),
+    makeChoiceProblem(
+      "Advanced Money",
+      "The school organized a field trip for 135 students and teachers. Each bus can hold up to 45 passengers. The rental cost for each bus is ₱1200. To help pay for the trip, the school applied a discount coupon that took ₱600 off the total bus rental cost. If the remaining total cost was split equally among all 135 passengers, how much did each passenger pay for their bus seat?",
+      "22.2 per passenger",
+      "Divide 135 passengers by 45 to find how many buses are needed. Multiply by ₱1200, subtract the ₱600 discount, then divide by 135.",
+      ["20.2 per passenger", "21.2 per passenger", "22.2 per passenger", "23.2 per passenger"]
+    ),
+    makeChoiceProblem(
+      "Advanced Money",
+      "Grade 6 pupils raised money for their annual science fair by selling school merchandise. They sold 15 customized water bottles for ₱8 each and 20 notebooks for ₱5 each. Out of the total money raised, they spent ₱40 on art supplies for posters. They split the remaining money equally among 4 science project groups to buy specialized materials. How much money did each group receive?",
+      "₱45 per group",
+      "Find bottle sales and notebook sales, add them, subtract ₱40, then divide by 4 groups.",
+      ["₱35 per group", "₱45 per group", "₱55 per group", "₱65 per group"]
+    ),
+    makeChoiceProblem(
+      "Advanced Multi-Step",
+      "The physical education department bought 5 rolls of blue ribbon and 4 rolls of red ribbon to make award medals. Each roll contains 30 cm of ribbon. The coaches cut off 50 cm of damaged ribbon and discarded it. They then bought an additional 20cm of gold ribbon. If they cut all the remaining ribbons into equal pieces that are 8cm long, how many complete ribbons can they make?",
+      "30 complete ribbons",
+      "Add the blue and red rolls, multiply by 30 cm, subtract 50 cm, add 20 cm of gold, then divide by 8 cm. Count only complete pieces.",
+      ["30 complete ribbons", "40 complete ribbons", "50 complete ribbons", "60 complete ribbons"]
+    ),
+  ];
 }
 
 function buildHardProblems() {
-  return expandPatterns([
-    (i) => storyProblem("Hard Multi-Step", `${4 + i} treasure bags hold ${20 + i * 4} coins each. Zara adds ${16 + i * 4} coins, then shares everything across 4 chests. How many coins per chest?`, ((4 + i) * (20 + i * 4) + (16 + i * 4)) / 4, `Multiply bags and coins, add bonus coins, then divide by 4.`, [-8, 6, 14]),
-    (i) => storyProblem("Hard Fractions", `The gate needs half of ${80 + i * 16}, plus one fourth of ${80 + i * 16}, then minus ${8 + i}. What number opens it?`, (80 + i * 16) / 2 + (80 + i * 16) / 4 - (8 + i), `Find half and one fourth, add them, then subtract.`, [-12, 10, 18]),
-    (i) => storyProblem("Hard Equation", `Three times a number minus ${9 + i} equals ${(17 + i * 4) * 3 - (9 + i)}. What is the number?`, 17 + i * 4, `Add back the subtracted amount, then divide by 3.`, [-3, 3, 6]),
-    (i) => storyProblem("Hard Percent", `A village goal is ${200 + i * 50} coins. The team has collected 40%. How many coins is that?`, (200 + i * 50) * 0.4, `40% means 4 tenths, or multiply by 0.4.`, [-20, 20, 40]),
-    (i) => storyProblem("Hard Ratio", `Roblox-style teams have a 3:5 ratio of builders to explorers. If there are ${15 + i * 6} builders, how many explorers are there?`, ((15 + i * 6) / 3) * 5, `Find one ratio part, then multiply by 5.`, [-10, 5, 15]),
-    (i) => storyProblem("Hard Volume", `A block chest is ${4 + i} blocks long, ${3 + i} blocks wide, and 5 blocks tall. How many blocks fit inside?`, (4 + i) * (3 + i) * 5, `Volume is length x width x height.`, [-15, 10, 20]),
-    (i) => storyProblem("Hard Speed", `A minecart travels ${90 + i * 30} meters in 3 minutes. How many meters per minute is that?`, (90 + i * 30) / 3, `Divide distance by time.`, [-10, 10, 30]),
-    (i) => storyProblem("Hard Mixed Numbers", `A recipe uses ${6 + i} cups of slime, then triples it and removes ${5 + i} cups. How many cups remain?`, (6 + i) * 3 - (5 + i), `Triple the cups, then subtract.`, [-4, 4, 8]),
-    (i) => storyProblem("Hard Coordinates", `A player moves from x=${3 + i} to x=${18 + i * 2}. How many spaces did the player move?`, 15 + i, `Subtract the starting coordinate from the ending coordinate.`, [-3, 3, 5]),
-    (i) => storyProblem("Hard Probability", `A bag has ${6 + i} red gems and ${(6 + i) * 3} total gems. In the simplified fraction, what is the denominator?`, 3, `The red gems are one third of the total, so the denominator is 3.`, [2, 4, 6]),
-  ]);
+  return [
+    makeChoiceProblem(
+      "Hard Multi-Step",
+      "A sixth-grade class has 120 pencils, 90 notebooks, and 60 erasers. They plan to assemble identical school supply packages that contain 2 pencils, 1 notebook, and 1 eraser in each package, and share the packages evenly among 3 elementary schools. What is the maximum number of full packages that can be created for each school?",
+      "20 packages per school",
+      "Find how many complete packages the supplies allow: divide pencils by 2, notebooks by 1, and erasers by 1. The limiting supply is the smallest of those three amounts. Then divide that number of packages equally among 3 schools.",
+      ["15 packages per school", "18 packages per school", "20 packages per school", "10 packages per school"]
+    ),
+    makeChoiceProblem(
+      "Hard Multi-Step",
+      "Joshua read 18 pages on Monday, 25 pages on Tuesday, and 32 pages on Wednesday. His book has 120 pages. How many pages does Joshua still need to read?",
+      "45 pages",
+      "Add the pages already read, then subtract that total from 120.",
+      ["24 pages", "45 pages", "30 pages", "32 pages"]
+    ),
+    makeChoiceProblem(
+      "Hard Area",
+      "A rectangular school garden is 15 meters long and 8 meters wide. The teacher wants to divide it equally into 4 sections for different plants. What is the area of each section?",
+      "30 m² per section",
+      "Area of a rectangle is length times width. After you have the whole garden area, divide it equally by 4.",
+      ["24 m² per section", "30 m² per section", "35 m² per section", "32 m² per section"]
+    ),
+    makeChoiceProblem(
+      "Hard Money",
+      "A Grade 6 class sold 75 tickets for ₱20 each. They used ₱650 of the money to buy materials for their project. The remaining money was divided equally among 5 groups. How much money did each group receive?",
+      "₱170 per group",
+      "Multiply tickets sold by ₱20, subtract ₱650 for materials, then divide what is left by 5 groups.",
+      ["₱150 per group", "₱110 per group", "₱160 per group", "₱170 per group"]
+    ),
+    makeChoiceProblem(
+      "Hard Multi-Step",
+      "A classroom has 6 rows with 8 chairs in each row. The teacher removes 5 broken chairs and brings in 12 new chairs. How many usable chairs are there now?",
+      "55 usable chairs",
+      "Multiply rows by chairs per row, subtract the 5 broken chairs, then add the 12 new chairs.",
+      ["55 usable chairs", "45 usable chairs", "30 usable chairs", "32 usable chairs"]
+    ),
+    makeChoiceProblem(
+      "Hard Multi-Step",
+      "A teacher bought 96 biscuits for her class. She gave 18 biscuits to each of 4 groups. How many biscuits were left?",
+      "24 biscuits",
+      "Find how many biscuits were given away (18 × 4), then subtract that from 96.",
+      ["24 biscuits", "30 biscuits", "20 biscuits", "22 biscuits"]
+    ),
+    makeChoiceProblem(
+      "Hard Money",
+      "I bought 3 notebooks for ₱35 each and a pencil case for ₱85. If I paid ₱250, how much change did I receive?",
+      "₱60",
+      "Multiply 3 by ₱35, add the pencil case, then subtract the total cost from ₱250.",
+      ["₱65", "₱60", "₱56", "₱50"]
+    ),
+    makeChoiceProblem(
+      "Hard Multi-Step",
+      "A school garden has 8 rows of plants with 15 plants in each row. If 23 plants died, how many plants are still growing?",
+      "97 plants",
+      "Multiply rows by plants per row, then subtract the 23 plants that died.",
+      ["67 plants", "100 plants", "95 plants", "97 plants"]
+    ),
+    makeChoiceProblem(
+      "Hard Multi-Step",
+      "A fruit seller had 125 mangoes. In the morning, she sold 48 mangoes. In the afternoon, she sold 37 more. She packed the remaining mangoes equally into 4 baskets. How many mangoes were in each basket?",
+      "10 mangoes per basket",
+      "Add the mangoes sold, subtract that from 125, then divide the remainder equally by 4.",
+      ["17 mangoes per basket", "15 mangoes per basket", "18 mangoes per basket", "10 mangoes per basket"]
+    ),
+    makeChoiceProblem(
+      "Hard Multi-Step",
+      "A family used 18 liters of water for cooking and 25 liters for cleaning in one day. They used 12 liters less for washing clothes than for cleaning. How many liters of water did they use altogether?",
+      "56 liters",
+      "Washing clothes is 12 liters less than cleaning. Add cooking, cleaning, and washing clothes.",
+      ["56 liters", "65 liters", "60 liters", "55 liters"]
+    ),
+  ];
 }
 
 function expandPatterns(patterns) {
@@ -233,6 +533,10 @@ function storyProblem(topic, problem, correct, hint, offsets) {
     hint,
     offsets.map((offset) => roundedCorrect + offset)
   );
+}
+
+function makeChoiceProblem(topic, problem, correct, hint, answers) {
+  return { topic, problem, correct, hint, answers: shuffle([...answers]) };
 }
 
 function makeProblem(topic, problem, correct, hint, distractors) {
