@@ -1,11 +1,13 @@
-const CACHE_NAME = "mathquest-village-v32";
+const CACHE_NAME = "mathquest-village-v33";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./game.js",
   "./manifest.webmanifest",
-  "./icon.svg"
+  "./icon.svg",
+  "./Audio/TownTheme.mp3",
+  "./Audio/confetti.mp3"
 ];
 
 self.addEventListener("install", (event) => {

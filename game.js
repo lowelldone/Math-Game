@@ -15,6 +15,7 @@ const toast = document.getElementById("toast");
 const REWARD_STORAGE_KEY = "mathquestRewardUnlocked_v2";
 const POINTS_STORAGE_KEY = "mathquestPoints_v1";
 const HINTS_STORAGE_KEY = "mathquestHints_v1";
+const AUDIO_STORAGE_KEY = "mathquestAudioOn_v1";
 const STARTING_HINTS = 2;
 const HINT_COST = 300;
 
@@ -649,6 +650,7 @@ function startGame() {
   resetGame();
   state.started = true;
   showScreen("game");
+  syncTownTheme();
   showToast(state.rewardUnlocked ? "Cape and crown equipped. Start on the Easy Road!" : "Start on the Easy Road. NPCs with ! have quests.");
 }
 
@@ -701,7 +703,77 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
 }
 
+// ==================== AUDIO SYSTEM ====================
+// START: Audio implementation
+
+const townTheme = new Audio("Audio/TownTheme.mp3");
+townTheme.loop = true;
+townTheme.preload = "auto";
+townTheme.volume = 0.42;
+
+const confettiSound = new Audio("Audio/confetti.mp3");
+confettiSound.preload = "auto";
+confettiSound.volume = 0.75;
+
+let audioOn = getSavedNumber(AUDIO_STORAGE_KEY, 1) !== 0;
+
+function saveAudioPreference() {
+  try {
+    localStorage.setItem(AUDIO_STORAGE_KEY, audioOn ? "1" : "0");
+  } catch (error) {
+    // Preference still applies for the current session if storage is unavailable.
+  }
+}
+
+function updateAudioToggle() {
+  const toggle = document.getElementById("audioToggle");
+  if (!toggle) return;
+
+  toggle.textContent = audioOn ? "Audio ON" : "Audio OFF";
+  toggle.setAttribute("aria-pressed", audioOn ? "true" : "false");
+  toggle.setAttribute(
+    "aria-label",
+    audioOn ? "Turn audio off" : "Turn audio on"
+  );
+}
+
+function syncTownTheme() {
+  // The music NEVER pauses and NEVER resets.
+  // When audio is OFF, it continues playing silently.
+  townTheme.volume = audioOn ? 0.42 : 0;
+
+  const playPromise = townTheme.play();
+
+  if (playPromise) {
+    playPromise.catch(() => {});
+  }
+}
+
+function toggleAudio() {
+  audioOn = !audioOn;
+
+  saveAudioPreference();
+  updateAudioToggle();
+  syncTownTheme();
+}
+
+function playConfettiSound() {
+  if (!audioOn) return;
+
+  confettiSound.currentTime = 0;
+
+  const playPromise = confettiSound.play();
+
+  if (playPromise) {
+    playPromise.catch(() => {});
+  }
+}
+
+// END: Audio implementation
+// =====================================================
+
 function playConfetti() {
+  playConfettiSound();
   const layer = document.getElementById("confettiLayer");
   if (!layer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -1304,6 +1376,7 @@ function setupJoystick() {
   }
 }
 
+document.getElementById("audioToggle").addEventListener("click", toggleAudio);
 document.getElementById("startButton").addEventListener("click", startGame);
 document.getElementById("playAgainButton").addEventListener("click", startGame);
 document.getElementById("menuButton").addEventListener("click", () => showScreen("menu"));
@@ -1330,4 +1403,5 @@ window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 setupJoystick();
 updateHud();
+updateAudioToggle();
 requestAnimationFrame(gameLoop);
