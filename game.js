@@ -149,10 +149,10 @@ function buildEasyProblems() {
   return [
     makeChoiceProblem(
       "Easy Temperature",
-      "The highest temperature today was 8°C and the lowest was -3°C. What was the difference in temperature?",
-      "11°C",
-      "Difference means highest minus lowest. Going from a negative temperature up to a positive one means adding the two amounts: 8 − (−3) = 8 + 3.",
-      ["5°C", "11°C", "-11°C", "10°C"]
+      "The highest temperature today was 30°C, and the lowest was 26°C. What was the difference in temperature?",
+      "4°C",
+      "Difference means highest minus lowest: 30 − 26 = 4.",
+      ["5°C", "4°C", "3°C", "2°C"]
     ),
     makeChoiceProblem(
       "Easy Subtraction",
@@ -162,25 +162,25 @@ function buildEasyProblems() {
       ["1,716 items", "1,826 items", "2,716 items", "1,684 items"]
     ),
     makeChoiceProblem(
-      "Easy Fractions",
-      "A water tank contained 5/6 of a liter of water. After using 1/2 liter, how much water is left?",
-      "1/3 liter",
-      "Subtract 1/2 from 5/6. Use 6 as a common denominator: 1/2 = 3/6, then 5/6 − 3/6. Simplify the result.",
-      ["1/3 liter", "2/3 liter", "1/2 liter", "1/6 liter"]
+      "Easy Subtraction",
+      "A school bakery baked 1,500 pieces of pandesal in the morning. By noon, they sold 850 pieces. How many pieces of pandesal are left?",
+      "650 pieces",
+      "Subtract the pieces sold from the pieces baked: 1,500 − 850.",
+      ["750 pieces", "650 pieces", "600 pieces", "550 pieces"]
     ),
     makeChoiceProblem(
       "Easy Money",
-      "A family has $250.00 budgeted for groceries and spends $178.65. How much money is left?",
-      "$71.35",
-      "Subtract $178.65 from $250.00. Line up the decimal points and subtract hundredths, tenths, then dollars.",
-      ["$71.35", "$72.35", "$81.35", "$70.35"]
+      "A family has ₱250 budgeted for groceries and spends ₱178. How much money is left?",
+      "₱72",
+      "Subtract ₱178 from ₱250.",
+      ["₱72", "₱75", "₱80", "₱70"]
     ),
     makeChoiceProblem(
-      "Easy Decimals",
-      "A ribbon is 7.5 m long. A tailor cuts off 2.85 m. How much ribbon is left?",
-      "4.65 m",
-      "Subtract 2.85 from 7.5. Write 7.5 as 7.50 so the hundredths place lines up, then subtract.",
-      ["4.75 m", "5.65 m", "4.65 m", "4.35 m"]
+      "Easy Subtraction",
+      "A ribbon is 7 m long. A tailor cuts off 2 m. How much ribbon is left?",
+      "5",
+      "Subtract the length cut off from the original length: 7 − 2.",
+      ["3", "4", "5", "6"]
     ),
     makeChoiceProblem(
       "Easy Addition",
@@ -190,32 +190,32 @@ function buildEasyProblems() {
       ["6,045", "7,045", "7,145", "6,935"]
     ),
     makeChoiceProblem(
-      "Easy Decimals",
-      "A cyclist rode 12.65 km on Monday and 8.9 km on Tuesday. How far did she ride altogether?",
-      "21.55 km",
-      "Add 12.65 and 8.9. Write 8.9 as 8.90 so the decimal points line up, then add.",
-      ["21.55 km", "20.55 km", "21.65 km", "22.45 km"]
-    ),
-    makeChoiceProblem(
-      "Easy Fractions",
-      "A recipe calls for 3/4 cup of milk and 2/3 cup of water. What is the total amount of liquid needed?",
-      "1 5/12 cups",
-      "Add 3/4 and 2/3. Use 12 as a common denominator: 3/4 = 9/12 and 2/3 = 8/12. Add the numerators, then write any improper fraction as a mixed number.",
-      ["5/7 cup", "1 5/12 cups", "1 1/4 cups", "5/12 cup"]
+      "Easy Addition",
+      "A cyclist rode 12 km on Monday and 8 km on Tuesday. How far did she ride altogether?",
+      "20",
+      "Add Monday and Tuesday: 12 + 8.",
+      ["20", "30", "40", "50"]
     ),
     makeChoiceProblem(
       "Easy Addition",
-      "A farmer harvested 1,250 kg of corn, 875 kg of wheat, and 1,475 kg of rice. How many kilograms of grain did he harvest in all?",
-      "3,600 kg",
-      "Add all three harvests: 1,250 + 875 + 1,475. Add two amounts first, then add the third.",
-      ["3,500 kg", "3,600 kg", "2,600 kg", "3,700 kg"]
+      "A barangay planted 1,230 mangrove seedlings on Saturday and 1,140 seedlings on Sunday. How many mangrove seedlings did they plant in total?",
+      "2,370 seedlings",
+      "Add Saturday and Sunday: 1,230 + 1,140.",
+      ["2,270 seedlings", "2,370 seedlings", "2,470 seedlings", "2,350 seedlings"]
+    ),
+    makeChoiceProblem(
+      "Easy Addition",
+      "A farmer harvested 1,000 kg of corn, 500 kg of wheat, and 800 kg of rice. How many kilograms of grain did he harvest in all?",
+      "2,300 kg",
+      "Add all three harvests: 1,000 + 500 + 800.",
+      ["2,000 kg", "2,300 kg", "2,600 kg", "2,900 kg"]
     ),
     makeChoiceProblem(
       "Easy Money",
-      "My friend saved ₱245.75 from her allowance, ₱189.50 from selling snacks, and ₱320.25 from her birthday money. How much money does she have in total?",
-      "₱755.50",
-      "Add the three amounts. Line up the pesos and centavos, add the centavos first, then the pesos.",
-      ["₱745.50", "₱755.50", "₱755.00", "₱765.50"]
+      "My friend saved ₱200 from her allowance, ₱100 from selling snacks, and ₱300 from her birthday money. How much money does she have in total?",
+      "₱600",
+      "Add the three amounts: ₱200 + ₱100 + ₱300.",
+      ["₱500", "₱600", "₱700", "₱800"]
     ),
   ];
 }
@@ -259,38 +259,38 @@ function buildMediumProblems() {
     ),
     makeChoiceProblem(
       "Medium Multiplication",
-      "There are 7 rows of chairs in the classroom. Each row has 5 chairs. How many chairs are there altogether?",
-      "35 chairs",
-      "Multiply the number of rows by the chairs in each row: 7 × 5.",
-      ["30 chairs", "35 chairs", "40 chairs", "45 chairs"]
+      "There are 125 rows of chairs in the auditorium. Each row has 16 chairs. How many chairs are there altogether?",
+      "2,000",
+      "Multiply the number of rows by the chairs in each row: 125 × 16.",
+      ["1,800", "2,000", "2,200", "2,250"]
     ),
     makeChoiceProblem(
       "Medium Multiplication",
-      "A library receives 6 boxes of books. Each box contains 7 books. How many books did the library receive?",
-      "42 books",
-      "Multiply the number of boxes by the books in each box: 6 × 7.",
-      ["40 books", "32 books", "42 books", "22 books"]
+      "A library receives 125 boxes of books. Each box contains 48 books. How many books did the library receive in total?",
+      "6,000",
+      "Multiply the number of boxes by the books in each box: 125 × 48.",
+      ["5,800", "6,000", "6,200", "6,250"]
     ),
     makeChoiceProblem(
       "Medium Multiplication",
-      "The teacher prepared 5 sets of school supplies for her students. Each set has 4 pencils. How many pencils did the teacher prepare altogether?",
-      "20 pencils",
-      "Multiply the number of sets by the pencils in each set: 5 × 4.",
-      ["15 pencils", "25 pencils", "30 pencils", "20 pencils"]
-    ),
-    makeChoiceProblem(
-      "Medium Multiplication",
-      "During a school activity, 7 students each received 3 sheets of paper. How many sheets of paper were given to the students altogether?",
-      "21 sheets of paper",
-      "Each of the 7 students got 3 sheets, so multiply 7 × 3.",
-      ["21 sheets of paper", "22 sheets of paper", "23 sheets of paper", "24 sheets of paper"]
+      "The teacher prepared 18 sets of school supplies for her students. Each set has 24 pencils. How many pencils did the teacher prepare altogether?",
+      "432",
+      "Multiply the number of sets by the pencils in each set: 18 × 24.",
+      ["392", "412", "432", "452"]
     ),
     makeChoiceProblem(
       "Medium Division",
-      "The classroom has 24 storybooks. The teacher wants to place them equally on 6 shelves. How many storybooks should be placed on each shelf?",
-      "4 storybooks per shelf",
-      "Share 24 storybooks equally across 6 shelves. Divide 24 by 6.",
-      ["3 storybooks per shelf", "5 storybooks per shelf", "6 storybooks per shelf", "4 storybooks per shelf"]
+      "During a school activity, 420 sheets of paper were distributed equally among 15 students. How many sheets of paper did each student receive?",
+      "28",
+      "Share 420 sheets equally among 15 students. Divide 420 by 15.",
+      ["24", "28", "32", "35"]
+    ),
+    makeChoiceProblem(
+      "Medium Division",
+      "A library has 384 storybooks. The teacher wants to place them equally on 16 shelves. How many storybooks should be placed on each shelf?",
+      "24",
+      "Share 384 storybooks equally across 16 shelves. Divide 384 by 16.",
+      ["18", "24", "26", "32"]
     ),
   ];
 }
@@ -374,38 +374,38 @@ function buildAdvancedProblems() {
   return [
     makeChoiceProblem(
       "Advanced Multi-Step",
-      "A Grade 6 class is preparing school supply kits for a community project. They have 144 pencils, 96 notebooks, and 72 erasers. Each kit must contain 4 pencils, 3 notebooks, and 2 erasers. The class wants to make as many complete kits as possible and divide them equally among 6 groups. How many complete kits will each group receive?",
-      "5 kits",
-      "Find how many complete kits the supplies allow: 144 ÷ 4, 96 ÷ 3, and 72 ÷ 2. The smallest of those three amounts is the maximum number of kits. Then divide that many kits equally among 6 groups, counting only complete kits for each group.",
-      ["4 kits", "5 kits", "6 kits", "8 kits"]
+      "A Grade 6 class is preparing school supply kits for a community project. They have 144 pencils, 108 notebooks, and 72 erasers. Each kit must contain 4 pencils, 3 notebooks, and 2 erasers. The class wants to make as many complete kits as possible and divide them equally among 6 groups. How many complete kits will each group receive?",
+      "6 kits",
+      "Find how many complete kits the supplies allow: 144 ÷ 4, 108 ÷ 3, and 72 ÷ 2. The smallest of those three amounts is the maximum number of kits. Then divide that many kits equally among 6 groups, counting only complete kits for each group.",
+      ["4 kits", "6 kits", "8 kits", "12 kits"]
     ),
     makeChoiceProblem(
       "Advanced Multi-Step",
       "A school canteen prepared 180 sandwiches for a school event. In the morning, 65 sandwiches were sold. During lunch, they sold 2 times as many sandwiches as they sold in the morning. The remaining sandwiches were packed equally into 5 boxes. How many sandwiches were placed in each box?",
-      "10 sandwiches",
-      "Lunch sales are twice the morning sales (2 × 65). Subtract morning and lunch sales from 180, then divide what is left by 5. If those two sales add up to more than 180, the numbers in the problem need to be checked.",
-      ["8 sandwiches", "10 sandwiches", "12 sandwiches", "15 sandwiches"]
-    ),
-    makeChoiceProblem(
-      "Advanced Perimeter",
-      "A rectangular school garden is 18 meters long and 10 meters wide. The class wants to divide the garden into 6 equal sections. Each section will be planted with a different vegetable. They also want to put a fence around the entire garden. If each meter of fencing costs ₱45, how much will the fencing cost?",
-      "₱2,520",
-      "The fence goes around the whole garden, so use perimeter: 2 × (length + width). Then multiply that length by ₱45. Splitting the garden into sections does not change the outer fence.",
-      ["₱1,890", "₱2,250", "₱2,520", "₱2,700"]
+      "9 sandwiches",
+      "Lunch sales are twice the morning sales (2 × 65). Subtract morning and lunch sales from 180, then divide what is left by 5.",
+      ["8 sandwiches", "9 sandwiches", "12 sandwiches", "15 sandwiches"]
     ),
     makeChoiceProblem(
       "Advanced Money",
-      "The Grade 6 class is organizing a reading fair. They have ₱5,000 as their starting budget. They spend ₱1,250 on decorations and ₱850 on books. During the fair, they sell 75 tickets for ₱40 each. However, they give 15 free tickets to teachers. After the event, they use ₱1,200 to buy additional books. The remaining money is divided equally among 4 groups for their next classroom activity. How much money does each group receive?",
-      "₱1,175",
-      "Subtract decorations and the first book cost from ₱5,000. Add ticket sales of 75 × ₱40 (the 15 free tickets bring in no money). Subtract ₱1,200, then divide by 4.",
-      ["₱725", "₱1,175", "₱775", "₱800"]
+      "A local community foundation received a grant of ₱15,000.00 to purchase fish seedlings for a coastal livelihood project. They bought 2,500 tilapia fingerlings at ₱3.50 each and 1,800 milkfish (bangus) fingerlings at ₱2.50 each. The remaining money from the grant will be used to buy bags of fish feed priced at ₱350.00 per bag. How many full bags of feed can they buy with the remaining grant?",
+      "5 bags",
+      "Tilapia cost 2,500 × ₱3.50 and bangus cost 1,800 × ₱2.50. Subtract both from ₱15,000.00, then divide what is left by ₱350.00. Count only full bags.",
+      ["3 bags", "4 bags", "5 bags", "6 bags"]
+    ),
+    makeChoiceProblem(
+      "Advanced Money",
+      "The Grade 6 class is organizing a reading fair. They start with a budget of ₱5,000.00. They spend ₱1,250.50 on decorations and ₱849.50 on books. During the fair, they sold 75 tickets for ₱40.00 each. They also gave 15 free tickets to teachers. After the event, they spent ₱1,200.00 to buy additional books. The remaining money is divided equally among 4 groups for their next classroom activity. How much money does each group receive?",
+      "₱1,175.00",
+      "Subtract decorations and the first book cost from ₱5,000.00. Add ticket sales of 75 × ₱40.00 (the 15 free tickets bring in no money). Subtract ₱1,200.00, then divide by 4.",
+      ["₱675.00", "₱825.00", "₱1,175.00", "₱2,700.00"]
     ),
     makeChoiceProblem(
       "Advanced Multi-Step",
-      "Maria saved ₱1,500 for a school project. She spent ₱375 on art materials and ₱240 on printing. Her teacher then gave her ₱500 to help with the project. Maria used 1/3 of the money she had at that point to buy snacks for the group. How much money did she have left?",
-      "₱923.33",
-      "Subtract the two purchases from ₱1,500, then add ₱500. She spends one third of that amount, so two thirds remain.",
-      ["₱890", "₱920", "₱923.33", "₱940"]
+      "A school club hosted a tree-planting project to help protect their local watershed. On the first day, 45 volunteers planted 12 trees each. On the second day, 30 volunteers planted 15 trees each. At the end of the project, 85 planted trees were found damaged by heavy rain and needed to be replaced. How many healthy planted trees remained?",
+      "905 trees",
+      "Multiply volunteers by trees each day, add both days, then subtract the 85 damaged trees.",
+      ["905 trees", "910 trees", "905 trees", "990 trees"]
     ),
     makeChoiceProblem(
       "Advanced Multi-Step",
@@ -423,10 +423,10 @@ function buildAdvancedProblems() {
     ),
     makeChoiceProblem(
       "Advanced Money",
-      "The school organized a field trip for 135 students and teachers. Each bus can hold up to 45 passengers. The rental cost for each bus is ₱1200. To help pay for the trip, the school applied a discount coupon that took ₱600 off the total bus rental cost. If the remaining total cost was split equally among all 135 passengers, how much did each passenger pay for their bus seat?",
-      "22.2 per passenger",
-      "Divide 135 passengers by 45 to find how many buses are needed. Multiply by ₱1200, subtract the ₱600 discount, then divide by 135.",
-      ["20.2 per passenger", "21.2 per passenger", "22.2 per passenger", "23.2 per passenger"]
+      "The school organized a field trip for 135 students and teachers. Each bus can hold up to 45 passengers. The rental cost for each bus is ₱2,000. To help pay for the trip, the school applied a discount coupon that took ₱600 off the total bus rental cost. If the remaining total cost was split equally among all 135 passengers, how much did each passenger pay for their bus seat?",
+      "₱40.00",
+      "Divide 135 passengers by 45 to find how many buses are needed. Multiply by ₱2,000, subtract the ₱600 discount, then divide by 135.",
+      ["₱35.00", "₱40.00", "₱44.00", "₱45.00"]
     ),
     makeChoiceProblem(
       "Advanced Money",
@@ -456,9 +456,9 @@ function buildHardProblems() {
     ),
     makeChoiceProblem(
       "Hard Multi-Step",
-      "Joshua read 18 pages on Monday, 25 pages on Tuesday, and 32 pages on Wednesday. His book has 120 pages. How many pages does Joshua still need to read?",
+      "A bookworm student read 18 pages on Monday, 25 pages on Tuesday, and 32 pages on Wednesday. The student’s book has 120 pages. How many pages does the student still need to read?",
       "45 pages",
-      "Add the pages already read, then subtract that total from 120.",
+      "Pages read: 18 + 25 + 32 = 75 pages. Pages remaining: 120 − 75 = 45 pages.",
       ["24 pages", "45 pages", "30 pages", "32 pages"]
     ),
     makeChoiceProblem(
@@ -699,6 +699,74 @@ function showToast(message) {
   toast.classList.remove("hidden");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
+}
+
+function playConfetti() {
+  const layer = document.getElementById("confettiLayer");
+  if (!layer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  clearTimeout(playConfetti.timer);
+  clearInterval(playConfetti.wave);
+  layer.innerHTML = "";
+
+  const colors = ["#f6bd2f", "#38b66b", "#2f80ed", "#f05d5e", "#ff9ab3", "#fff07a", "#65d6ff", "#ffffff"];
+  const startedAt = performance.now();
+  const partyMs = 2000;
+
+  function spawnPiece(kind) {
+    const piece = document.createElement("span");
+    const size = 7 + Math.random() * 10;
+    const shape = Math.random();
+    piece.className = "confetti-piece";
+    if (shape > 0.72) piece.classList.add("round");
+    else if (shape > 0.45) piece.classList.add("ribbon");
+    piece.style.setProperty("--w", `${size}px`);
+    piece.style.setProperty("--h", `${shape > 0.45 && shape <= 0.72 ? size * 2.2 : 5 + Math.random() * 10}px`);
+    piece.style.setProperty("--c", colors[Math.floor(Math.random() * colors.length)]);
+    piece.style.setProperty("--dur", `${1200 + Math.random() * 900}ms`);
+    piece.style.setProperty("--delay", `${Math.random() * 80}ms`);
+    piece.style.setProperty("--spin", `${(Math.random() > 0.5 ? 1 : -1) * (480 + Math.random() * 720)}deg`);
+
+    if (kind === "fall") {
+      piece.style.setProperty("--x", `${Math.random() * 100}%`);
+      piece.style.setProperty("--dx", `${(Math.random() - 0.5) * 220}px`);
+    } else {
+      piece.classList.add("burst");
+      piece.style.setProperty("--x", `${kind.x}%`);
+      piece.style.setProperty("--y", `${kind.y}%`);
+      piece.style.setProperty("--dx", `${(Math.random() - 0.5) * window.innerWidth * 0.9}px`);
+      piece.style.setProperty("--up", `${-40 - Math.random() * 140}px`);
+      piece.style.setProperty("--dy", `${80 + Math.random() * window.innerHeight * 0.7}px`);
+    }
+
+    piece.addEventListener("animationend", () => piece.remove());
+    layer.appendChild(piece);
+  }
+
+  function spawnWave() {
+    for (let i = 0; i < 42; i += 1) spawnPiece("fall");
+    [
+      { x: 50, y: 38 },
+      { x: 8, y: 58 },
+      { x: 92, y: 58 },
+    ].forEach((cannon) => {
+      for (let i = 0; i < 18; i += 1) spawnPiece(cannon);
+    });
+  }
+
+  spawnWave();
+  playConfetti.wave = setInterval(() => {
+    if (performance.now() - startedAt >= partyMs) {
+      clearInterval(playConfetti.wave);
+      return;
+    }
+    spawnWave();
+  }, 160);
+
+  playConfetti.timer = setTimeout(() => {
+    clearInterval(playConfetti.wave);
+    layer.innerHTML = "";
+  }, 4200);
 }
 
 function playHintPurchaseAnimation() {
@@ -1051,6 +1119,7 @@ function checkAnswer(answer) {
     state.hintsAvailable += 1;
     saveProgress();
     pendingFeedback = "correct";
+    playConfetti();
     showFeedback("Correct!", `${randomPraise()} You earned 100 points and 1 hint. ${quest.levelName} is complete!`);
   } else {
     state.chancesLeft -= 1;
