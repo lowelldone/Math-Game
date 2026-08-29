@@ -136,6 +136,28 @@ let quests = [];
 
 const problemBank = buildProblemBank();
 
+// Images are mapped by question number in bank order:
+// Questions 1-10 = Easy, 11-20 = Medium, 21-30 = Intermediate.
+function attachQuestionImages() {
+  const orderedBanks = [
+    problemBank.easy,
+    problemBank.medium,
+    problemBank.intermediate,
+  ];
+  let questionNumber = 1;
+
+  orderedBanks.forEach((bank) => {
+    bank.forEach((problem) => {
+      if (questionNumber <= 30) {
+        problem.image = `Images/question-${String(questionNumber).padStart(2, "0")}.jpg`;
+      }
+      questionNumber += 1;
+    });
+  });
+}
+
+attachQuestionImages();
+
 function buildProblemBank() {
   return {
     easy: buildEasyProblems(),
@@ -1158,10 +1180,30 @@ function closeDialogue() {
 
 function openChallenge() {
   dialogueModal.classList.add("hidden");
+  document.getElementById("audioToggle").classList.add("hidden");
   const quest = quests[state.questIndex];
   state.chancesLeft = 2;
   document.getElementById("challengeLevel").textContent = `Level ${state.questIndex + 1} of ${quests.length}`;
   document.getElementById("challengeTopic").textContent = `${quest.levelName} - ${quest.topic}`;
+
+  const questionImage = document.getElementById("questionImage");
+  if (questionImage) {
+    questionImage.onerror = () => {
+      questionImage.classList.add("hidden");
+      questionImage.removeAttribute("src");
+    };
+
+    if (quest.image) {
+      questionImage.src = quest.image;
+      questionImage.alt = `Illustration for ${quest.topic}`;
+      questionImage.classList.remove("hidden");
+    } else {
+      questionImage.classList.add("hidden");
+      questionImage.removeAttribute("src");
+      questionImage.alt = "";
+    }
+  }
+
   document.getElementById("problemText").textContent = quest.problem;
   document.getElementById("hintText").classList.add("hidden");
   document.getElementById("hintText").textContent = "";
@@ -1226,6 +1268,7 @@ function continueFromFeedback() {
   clearTimeout(feedbackTimer);
   feedbackModal.classList.add("hidden");
   if (pendingFeedback === "correct") {
+    document.getElementById("audioToggle").classList.remove("hidden");
     state.completed += 1;
     state.questIndex += 1;
     updateHud();
@@ -1246,6 +1289,7 @@ function continueFromFeedback() {
   }
 
   if (pendingFeedback === "retryNewQuestion") {
+    document.getElementById("audioToggle").classList.remove("hidden");
     const npcName = quests[state.questIndex].npc;
     pendingFeedback = null;
     refreshCurrentQuestProblem();
@@ -1301,6 +1345,7 @@ function showResults() {
 
 function closeChallenge() {
   challengeModal.classList.add("hidden");
+  document.getElementById("audioToggle").classList.remove("hidden");
   document.getElementById("hintText").classList.add("hidden");
   state.paused = false;
   updateInteraction();
