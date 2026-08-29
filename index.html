@@ -34,32 +34,16 @@
       <canvas id="gameCanvas" width="960" height="540" aria-label="Game world"></canvas>
 
       <div class="hud">
-        <div>
-          <span class="hud-label">Level</span>
-          <strong id="questText">1 / 5</strong>
-        </div>
-        <div>
-          <span class="hud-label">Score</span>
-          <strong id="scoreText">0</strong>
-        </div>
-        <div>
-          <span class="hud-label">Hints</span>
-          <strong id="hudHintText">2</strong>
-        </div>
-        <div>
-          <span class="hud-label">Goal</span>
-          <strong id="goalText">Find Lina</strong>
-        </div>
+        <div><span class="hud-label">Level</span><strong id="questText">1 / 5</strong></div>
+        <div><span class="hud-label">Score</span><strong id="scoreText">0</strong></div>
+        <div><span class="hud-label">Hints</span><strong id="hudHintText">2</strong></div>
+        <div><span class="hud-label">Goal</span><strong id="goalText">Find Lina</strong></div>
       </div>
 
       <button id="talkButton" class="talk-button hidden">Talk</button>
-
       <div id="toast" class="toast hidden" role="status"></div>
-
       <div class="controls">
-        <div id="joystick" class="joystick" aria-label="Movement joystick">
-          <div id="stick" class="stick"></div>
-        </div>
+        <div id="joystick" class="joystick" aria-label="Movement joystick"><div id="stick" class="stick"></div></div>
       </div>
     </section>
 
@@ -83,6 +67,7 @@
           <span id="challengeLevel">Level 1</span>
           <span id="challengeTopic">Addition</span>
         </div>
+        <img id="questionImage" class="question-image hidden" alt="" />
         <h2 id="problemText">Problem</h2>
         <div class="challenge-status">
           <span>Hints: <strong id="hintCountText">2</strong></span>
@@ -121,21 +106,9 @@
           <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
         </div>
         <div id="rewardCard" class="reward-card hidden">
-          <div class="reward-sparkles">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="reward-badge">
-            <div class="reward-crown"></div>
-            <div class="reward-cape"></div>
-            <strong>123</strong>
-          </div>
-          <div class="reward-copy">
-            <span>Reward Unlocked</span>
-            <h2>Golden Scholar Cape + Crown</h2>
-            <p>Your hero can now wear both rewards when you play again.</p>
-          </div>
+          <div class="reward-sparkles"><span></span><span></span><span></span></div>
+          <div class="reward-badge"><div class="reward-crown"></div><div class="reward-cape"></div><strong>123</strong></div>
+          <div class="reward-copy"><span>Reward Unlocked</span><h2>Golden Scholar Cape + Crown</h2><p>Your hero can now wear both rewards when you play again.</p></div>
         </div>
         <div class="result-actions">
           <button id="playAgainButton" class="primary-action">Play Again</button>
@@ -145,7 +118,6 @@
       </div>
     </section>
   </main>
-
   <script src="game.js"></script>
 </body>
 </html>
