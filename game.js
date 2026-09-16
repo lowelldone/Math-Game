@@ -2,6 +2,7 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 const screens = {
+  loading: document.getElementById("loadingScreen"),
   menu: document.getElementById("mainMenu"),
   game: document.getElementById("gameScreen"),
   results: document.getElementById("resultsScreen"),
@@ -10,6 +11,7 @@ const screens = {
 const dialogueModal = document.getElementById("dialogueModal");
 const challengeModal = document.getElementById("challengeModal");
 const feedbackModal = document.getElementById("feedbackModal");
+const settingsModal = document.getElementById("settingsModal");
 const talkButton = document.getElementById("talkButton");
 const toast = document.getElementById("toast");
 const REWARD_STORAGE_KEY = "mathquestRewardUnlocked_v2";
@@ -651,6 +653,11 @@ function resizeCanvas() {
 function showScreen(name) {
   Object.values(screens).forEach((screen) => screen.classList.add("hidden"));
   screens[name].classList.remove("hidden");
+  if (settingsModal) settingsModal.classList.add("hidden");
+  const audioToggle = document.getElementById("audioToggle");
+  if (audioToggle) {
+    audioToggle.classList.toggle("hidden", name === "loading");
+  }
 }
 
 function resetGame() {
@@ -749,14 +756,19 @@ function saveAudioPreference() {
 
 function updateAudioToggle() {
   const toggle = document.getElementById("audioToggle");
+  const settingsAudioButton = document.getElementById("settingsAudioButton");
   if (!toggle) return;
 
-  toggle.textContent = audioOn ? "Audio ON" : "Audio OFF";
+  toggle.textContent = audioOn ? "Sound On" : "Sound Off";
   toggle.setAttribute("aria-pressed", audioOn ? "true" : "false");
   toggle.setAttribute(
     "aria-label",
     audioOn ? "Turn audio off" : "Turn audio on"
   );
+  if (settingsAudioButton) {
+    settingsAudioButton.textContent = audioOn ? "Sound On" : "Sound Off";
+    settingsAudioButton.setAttribute("aria-pressed", audioOn ? "true" : "false");
+  }
 }
 
 function syncTownTheme() {
@@ -777,6 +789,32 @@ function toggleAudio() {
   saveAudioPreference();
   updateAudioToggle();
   syncTownTheme();
+}
+
+function openSettings() {
+  if (!settingsModal) return;
+  settingsModal.classList.remove("hidden");
+}
+
+function closeSettings() {
+  if (!settingsModal) return;
+  settingsModal.classList.add("hidden");
+}
+
+function resetSavedProgress() {
+  try {
+    localStorage.removeItem(POINTS_STORAGE_KEY);
+    localStorage.removeItem(HINTS_STORAGE_KEY);
+    localStorage.removeItem(REWARD_STORAGE_KEY);
+  } catch (error) {
+    // The current session can still reset even when browser storage is blocked.
+  }
+  state.score = 0;
+  state.hintsAvailable = STARTING_HINTS;
+  state.rewardUnlocked = false;
+  updateHud();
+  showToast("Saved points, hints, and reward were reset.");
+  closeSettings();
 }
 
 function playConfettiSound() {
@@ -880,70 +918,176 @@ function drawWorld() {
   ctx.save();
   ctx.translate(-cam.x, -cam.y);
 
-  ctx.fillStyle = "#75d56f";
+  const sky = ctx.createLinearGradient(0, 0, 0, world.height);
+  sky.addColorStop(0, "#72d9ff");
+  sky.addColorStop(0.45, "#d8f7ff");
+  sky.addColorStop(0.68, "#fff0a7");
+  sky.addColorStop(1, "#69d95f");
+  ctx.fillStyle = sky;
   ctx.fillRect(0, 0, world.width, world.height);
 
+  drawBackdrop();
   drawPaths();
   drawFlowers();
   objects.forEach(drawObject);
-  quests.forEach((quest, index) => drawNpc(quest, index));
-  drawPlayer();
+  quests.forEach((quest, index) => drawNpcPolished(quest, index));
+  drawPlayerPolished();
 
   ctx.restore();
+}
+
+function drawBackdrop() {
+  ctx.fillStyle = "rgba(255,255,255,0.82)";
+  [
+    [130, 90, 90, 32],
+    [205, 82, 64, 26],
+    [780, 110, 120, 38],
+    [890, 106, 86, 31],
+    [1670, 94, 130, 40],
+    [1780, 104, 96, 34],
+  ].forEach(([x, y, w, h]) => {
+    ctx.beginPath();
+    ctx.ellipse(x, y, w, h, 0, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.fillStyle = "rgba(95, 182, 226, 0.55)";
+  ctx.beginPath();
+  ctx.moveTo(0, 285);
+  ctx.bezierCurveTo(240, 160, 330, 265, 540, 185);
+  ctx.bezierCurveTo(710, 120, 830, 265, 1040, 190);
+  ctx.bezierCurveTo(1260, 110, 1450, 250, 1660, 180);
+  ctx.bezierCurveTo(1890, 105, 2070, 235, 2550, 165);
+  ctx.lineTo(world.width, 380);
+  ctx.lineTo(0, 380);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = "#7ddf66";
+  ctx.beginPath();
+  ctx.moveTo(0, 315);
+  ctx.bezierCurveTo(250, 255, 460, 325, 710, 282);
+  ctx.bezierCurveTo(1000, 230, 1180, 332, 1480, 275);
+  ctx.bezierCurveTo(1790, 216, 2100, 325, 2550, 252);
+  ctx.lineTo(world.width, world.height);
+  ctx.lineTo(0, world.height);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = "#51c756";
+  ctx.beginPath();
+  ctx.moveTo(0, 560);
+  ctx.bezierCurveTo(440, 500, 780, 590, 1210, 535);
+  ctx.bezierCurveTo(1660, 476, 2050, 575, 2550, 500);
+  ctx.lineTo(world.width, world.height);
+  ctx.lineTo(0, world.height);
+  ctx.closePath();
+  ctx.fill();
+
+  const lake = ctx.createLinearGradient(0, 250, 0, 455);
+  lake.addColorStop(0, "rgba(59, 194, 239, 0.76)");
+  lake.addColorStop(1, "rgba(27, 143, 218, 0.62)");
+  ctx.fillStyle = lake;
+  ctx.beginPath();
+  ctx.ellipse(1980, 380, 380, 86, -0.08, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(255,255,255,0.62)";
+  ctx.lineWidth = 5;
+  for (let i = 0; i < 4; i += 1) {
+    ctx.beginPath();
+    ctx.moveTo(1670 + i * 150, 360 + i * 11);
+    ctx.quadraticCurveTo(1740 + i * 150, 345 + i * 10, 1820 + i * 150, 360 + i * 9);
+    ctx.stroke();
+  }
 }
 
 function drawPaths() {
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   const roads = [
-    { label: "Easy", color: "#f4dc91", points: [[80, 430], [350, 300], [520, 380]] },
-    { label: "Medium", color: "#d8c17c", points: [[520, 380], [750, 450], [920, 360]] },
-    { label: "Intermediate", color: "#c79b69", points: [[920, 360], [1120, 420], [1360, 560]] },
-    { label: "Hard", color: "#b8865d", points: [[1360, 560], [1570, 350], [1840, 300]] },
-    { label: "Advanced", color: "#9b6d56", points: [[1840, 300], [2070, 360], [2380, 500]] },
+    { label: "Easy", color: "#ffe7a1", points: [[80, 430], [350, 300], [520, 380]] },
+    { label: "Medium", color: "#ffd47a", points: [[520, 380], [750, 450], [920, 360]] },
+    { label: "Intermediate", color: "#ffc06f", points: [[920, 360], [1120, 420], [1360, 560]] },
+    { label: "Hard", color: "#f3a867", points: [[1360, 560], [1570, 350], [1840, 300]] },
+    { label: "Advanced", color: "#e99261", points: [[1840, 300], [2070, 360], [2380, 500]] },
   ];
 
   roads.forEach((road) => {
-    ctx.strokeStyle = "#d3a958";
-    ctx.lineWidth = 62;
+    ctx.strokeStyle = "rgba(131, 92, 31, 0.24)";
+    ctx.lineWidth = 76;
     ctx.beginPath();
     ctx.moveTo(road.points[0][0], road.points[0][1]);
     ctx.quadraticCurveTo(road.points[1][0], road.points[1][1], road.points[2][0], road.points[2][1]);
     ctx.stroke();
 
-    ctx.strokeStyle = road.color;
-    ctx.lineWidth = 38;
+    ctx.strokeStyle = "#c99041";
+    ctx.lineWidth = 62;
     ctx.stroke();
 
+    ctx.strokeStyle = road.color;
+    ctx.lineWidth = 42;
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(255,255,255,0.44)";
+    ctx.lineWidth = 5;
+    ctx.setLineDash([24, 20]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
     const labelX = (road.points[0][0] + road.points[2][0]) / 2;
-    const labelY = (road.points[0][1] + road.points[2][1]) / 2 - 38;
-    ctx.fillStyle = "rgba(255, 253, 246, 0.82)";
-    const labelWidth = road.label === "Intermediate" ? 118 : 88;
-    ctx.fillRect(labelX - labelWidth / 2, labelY - 16, labelWidth, 28);
-    ctx.fillStyle = "#17324a";
-    ctx.font = "900 13px system-ui";
+    const labelY = (road.points[0][1] + road.points[2][1]) / 2 - 42;
+    const labelWidth = road.label === "Intermediate" ? 134 : 96;
+    ctx.fillStyle = "rgba(255,255,255,0.92)";
+    ctx.strokeStyle = "rgba(21, 91, 153, 0.28)";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(labelX - labelWidth / 2, labelY - 18, labelWidth, 34, 17);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#16466f";
+    ctx.font = "950 14px Trebuchet MS, system-ui";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(road.label, labelX, labelY - 1);
+    ctx.fillText(road.label, labelX, labelY);
   });
 }
 
 function drawFlowers() {
-  for (let i = 0; i < 42; i += 1) {
-    const x = 80 + ((i * 173) % 1930);
+  for (let i = 0; i < 96; i += 1) {
+    const x = 70 + ((i * 173) % 2380);
     const y = 80 + ((i * 97) % 730);
     if (Math.abs(y - 430) < 42) continue;
-    ctx.fillStyle = i % 2 ? "#ff6d8d" : "#fff07a";
+    const petal = i % 3 === 0 ? "#ff6d9f" : i % 3 === 1 ? "#fff06a" : "#ffffff";
+    ctx.fillStyle = petal;
     ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.arc(x - 4, y, 4, 0, Math.PI * 2);
+    ctx.arc(x + 4, y, 4, 0, Math.PI * 2);
+    ctx.arc(x, y - 4, 4, 0, Math.PI * 2);
+    ctx.arc(x, y + 4, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffd43b";
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
     ctx.fill();
   }
 }
 
 function drawObject(obj) {
   if (obj.type === "house") {
+    ctx.fillStyle = "rgba(21, 61, 63, 0.18)";
+    ctx.beginPath();
+    ctx.ellipse(obj.x + obj.w / 2, obj.y + obj.h + 8, obj.w * 0.58, 16, 0, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.fillStyle = obj.wall;
-    ctx.fillRect(obj.x, obj.y + 38, obj.w, obj.h - 38);
+    ctx.beginPath();
+    ctx.roundRect(obj.x, obj.y + 38, obj.w, obj.h - 38, 12);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(92, 61, 43, 0.18)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
     ctx.fillStyle = obj.roof;
     ctx.beginPath();
     ctx.moveTo(obj.x - 12, obj.y + 44);
@@ -951,42 +1095,91 @@ function drawObject(obj) {
     ctx.lineTo(obj.x + obj.w + 12, obj.y + 44);
     ctx.closePath();
     ctx.fill();
+    ctx.strokeStyle = "rgba(91, 49, 36, 0.24)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
     ctx.fillStyle = "#7a5136";
-    ctx.fillRect(obj.x + obj.w / 2 - 14, obj.y + obj.h - 38, 28, 38);
+    ctx.beginPath();
+    ctx.roundRect(obj.x + obj.w / 2 - 15, obj.y + obj.h - 42, 30, 42, 8);
+    ctx.fill();
+
     ctx.fillStyle = "#87cffd";
-    ctx.fillRect(obj.x + 18, obj.y + 58, 28, 24);
-    ctx.fillRect(obj.x + obj.w - 46, obj.y + 58, 28, 24);
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 3;
+    [obj.x + 18, obj.x + obj.w - 48].forEach((wx) => {
+      ctx.beginPath();
+      ctx.roundRect(wx, obj.y + 60, 30, 26, 6);
+      ctx.fill();
+      ctx.stroke();
+    });
     return;
   }
 
   if (obj.type === "tree") {
-    ctx.fillStyle = "#8a5a35";
-    ctx.fillRect(obj.x - 8, obj.y + 14, 16, 36);
-    ctx.fillStyle = "#267c45";
+    ctx.fillStyle = "rgba(21, 61, 63, 0.14)";
     ctx.beginPath();
-    ctx.arc(obj.x, obj.y, 32, 0, Math.PI * 2);
+    ctx.ellipse(obj.x, obj.y + 56, 42, 12, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#38a857";
+
+    ctx.fillStyle = "#8a5a35";
+    ctx.beginPath();
+    ctx.roundRect(obj.x - 9, obj.y + 12, 18, 44, 8);
+    ctx.fill();
+
+    ctx.fillStyle = "#257f43";
+    ctx.beginPath();
+    ctx.arc(obj.x, obj.y, 34, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#39b957";
     ctx.beginPath();
     ctx.arc(obj.x - 17, obj.y + 4, 20, 0, Math.PI * 2);
     ctx.arc(obj.x + 18, obj.y - 2, 22, 0, Math.PI * 2);
+    ctx.arc(obj.x + 2, obj.y - 18, 22, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(255,255,255,0.18)";
+    ctx.beginPath();
+    ctx.arc(obj.x - 15, obj.y - 10, 8, 0, Math.PI * 2);
     ctx.fill();
     return;
   }
 
   if (obj.type === "well") {
-    ctx.fillStyle = "#8ba0ad";
-    ctx.fillRect(obj.x - 26, obj.y - 14, 52, 34);
-    ctx.fillStyle = "#596c78";
-    ctx.fillRect(obj.x - 30, obj.y - 22, 60, 12);
+    ctx.fillStyle = "rgba(21, 61, 63, 0.16)";
+    ctx.beginPath();
+    ctx.ellipse(obj.x, obj.y + 24, 40, 12, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#a7b7c4";
+    ctx.beginPath();
+    ctx.roundRect(obj.x - 28, obj.y - 13, 56, 38, 8);
+    ctx.fill();
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = "#667d8d";
+    ctx.beginPath();
+    ctx.roundRect(obj.x - 34, obj.y - 25, 68, 14, 7);
+    ctx.fill();
+    ctx.fillStyle = "#39c7ff";
+    ctx.beginPath();
+    ctx.ellipse(obj.x, obj.y - 3, 19, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
     return;
   }
 
   ctx.fillStyle = "#b9773e";
-  ctx.fillRect(obj.x - 20, obj.y - 18, 40, 36);
+  ctx.beginPath();
+  ctx.roundRect(obj.x - 22, obj.y - 18, 44, 38, 6);
+  ctx.fill();
   ctx.strokeStyle = "#7a4a2c";
   ctx.lineWidth = 3;
-  ctx.strokeRect(obj.x - 20, obj.y - 18, 40, 36);
+  ctx.stroke();
+  ctx.strokeStyle = "rgba(255,255,255,0.32)";
+  ctx.beginPath();
+  ctx.moveTo(obj.x - 17, obj.y - 5);
+  ctx.lineTo(obj.x + 17, obj.y - 5);
+  ctx.stroke();
 }
 
 function drawNpc(quest, index) {
@@ -1124,6 +1317,209 @@ function drawPlayerPointer() {
   ctx.lineTo(x + 20, y);
   ctx.closePath();
   ctx.fill();
+  ctx.stroke();
+}
+
+function drawNpcPolished(quest, index) {
+  const locked = index > state.questIndex;
+  const completed = index < state.questIndex;
+  const bob = Math.sin(performance.now() / 360 + index) * 3;
+  const x = quest.x;
+  const y = quest.y + bob;
+  ctx.globalAlpha = locked ? 0.38 : 1;
+
+  ctx.fillStyle = "rgba(17,54,63,0.16)";
+  ctx.beginPath();
+  ctx.ellipse(x, quest.y + 27, 28, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = quest.color;
+  ctx.beginPath();
+  ctx.arc(x, y - 9, 22, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.24)";
+  ctx.beginPath();
+  ctx.arc(x - 8, y - 17, 7, 0, Math.PI * 2);
+  ctx.fill();
+
+  const bodyGradient = ctx.createLinearGradient(x, y + 10, x, y + 50);
+  bodyGradient.addColorStop(0, "#315e90");
+  bodyGradient.addColorStop(1, "#173e68");
+  ctx.fillStyle = bodyGradient;
+  ctx.beginPath();
+  ctx.roundRect(x - 18, y + 12, 36, 36, 10);
+  ctx.fill();
+
+  ctx.fillStyle = "#fff";
+  ctx.beginPath();
+  ctx.arc(x - 7, y - 12, 4, 0, Math.PI * 2);
+  ctx.arc(x + 7, y - 12, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#16345c";
+  ctx.beginPath();
+  ctx.arc(x - 6, y - 12, 2, 0, Math.PI * 2);
+  ctx.arc(x + 8, y - 12, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (!completed) {
+    ctx.fillStyle = locked ? "#7f91a2" : "#ffd83d";
+    ctx.beginPath();
+    ctx.arc(x + 28, y - 52, 17, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.78)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.fillStyle = locked ? "#dbe4ea" : "#573400";
+    ctx.font = "950 23px Trebuchet MS, system-ui";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(locked ? "?" : quest.icon, x + 28, y - 53);
+  } else {
+    drawCheckIconPolished(x + 28, y - 44);
+  }
+
+  ctx.fillStyle = "rgba(255,255,255,0.86)";
+  ctx.beginPath();
+  ctx.roundRect(x - 42, y + 52, 84, 25, 13);
+  ctx.fill();
+  ctx.fillStyle = "#17324a";
+  ctx.font = "950 15px Trebuchet MS, system-ui";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(quest.npc, x, y + 65);
+  ctx.globalAlpha = 1;
+}
+
+function drawCheckIconPolished(x, y) {
+  ctx.fillStyle = "#21b26b";
+  ctx.beginPath();
+  ctx.arc(x, y, 15, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(255,255,255,0.78)";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 4;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(x - 7, y);
+  ctx.lineTo(x - 2, y + 6);
+  ctx.lineTo(x + 8, y - 7);
+  ctx.stroke();
+}
+
+function drawPlayerPolished() {
+  drawPlayerPointerPolished();
+  const step = Math.sin(performance.now() / 120) * 2;
+
+  ctx.fillStyle = "rgba(17,54,63,0.18)";
+  ctx.beginPath();
+  ctx.ellipse(player.x, player.y + 22, 24, 9, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (state.rewardUnlocked) {
+    ctx.fillStyle = "#ffd33d";
+    ctx.beginPath();
+    ctx.moveTo(player.x - 14, player.y + 5);
+    ctx.lineTo(player.x + 14, player.y + 5);
+    ctx.lineTo(player.x + 23, player.y + 43);
+    ctx.lineTo(player.x - 23, player.y + 43);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#b97700";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+
+  const shirt = ctx.createLinearGradient(player.x, player.y, player.x, player.y + 38);
+  shirt.addColorStop(0, "#34caff");
+  shirt.addColorStop(1, "#176fd4");
+  ctx.fillStyle = shirt;
+  ctx.beginPath();
+  ctx.roundRect(player.x - 15, player.y + 1, 30, 34, 9);
+  ctx.fill();
+
+  ctx.fillStyle = "#ffd5a5";
+  ctx.beginPath();
+  ctx.arc(player.x, player.y - 12, 17, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#51331e";
+  ctx.beginPath();
+  ctx.roundRect(player.x - 17, player.y - 25, 34, 12, 6);
+  ctx.fill();
+
+  if (state.rewardUnlocked) {
+    ctx.fillStyle = "#ffd33d";
+    ctx.beginPath();
+    ctx.moveTo(player.x - 16, player.y - 30);
+    ctx.lineTo(player.x - 7, player.y - 43);
+    ctx.lineTo(player.x, player.y - 31);
+    ctx.lineTo(player.x + 7, player.y - 43);
+    ctx.lineTo(player.x + 16, player.y - 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#9b6500";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "#fff";
+  ctx.beginPath();
+  ctx.arc(player.x - 6, player.y - 12, 3, 0, Math.PI * 2);
+  ctx.arc(player.x + 6, player.y - 12, 3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#16345c";
+  ctx.beginPath();
+  ctx.arc(player.x - 5, player.y - 12, 1.5, 0, Math.PI * 2);
+  ctx.arc(player.x + 7, player.y - 12, 1.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "#16345c";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(player.x + 1, player.y - 7, 5, 0.15, Math.PI - 0.15);
+  ctx.stroke();
+
+  ctx.strokeStyle = "#16466f";
+  ctx.lineWidth = 5;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(player.x - 8, player.y + 33);
+  ctx.lineTo(player.x - 12, player.y + 46 + step);
+  ctx.moveTo(player.x + 8, player.y + 33);
+  ctx.lineTo(player.x + 12, player.y + 46 - step);
+  ctx.stroke();
+}
+
+function drawPlayerPointerPolished() {
+  const bob = Math.sin(performance.now() / 220) * 4;
+  const x = player.x;
+  const y = player.y - 76 + bob;
+
+  ctx.fillStyle = "rgba(23, 50, 74, 0.16)";
+  ctx.beginPath();
+  ctx.ellipse(x, y + 6, 18, 6, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#ffd83d";
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x, y + 30);
+  ctx.lineTo(x - 20, y);
+  ctx.lineTo(x - 7, y);
+  ctx.lineTo(x - 7, y - 26);
+  ctx.lineTo(x + 7, y - 26);
+  ctx.lineTo(x + 7, y);
+  ctx.lineTo(x + 20, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = "#9b6500";
+  ctx.lineWidth = 2;
   ctx.stroke();
 }
 
@@ -1423,6 +1819,10 @@ function setupJoystick() {
 
 document.getElementById("audioToggle").addEventListener("click", toggleAudio);
 document.getElementById("startButton").addEventListener("click", startGame);
+document.getElementById("settingsButton").addEventListener("click", openSettings);
+document.getElementById("settingsCloseButton").addEventListener("click", closeSettings);
+document.getElementById("settingsAudioButton").addEventListener("click", toggleAudio);
+document.getElementById("settingsResetButton").addEventListener("click", resetSavedProgress);
 document.getElementById("playAgainButton").addEventListener("click", startGame);
 document.getElementById("menuButton").addEventListener("click", () => showScreen("menu"));
 document.getElementById("exitButton").addEventListener("click", () => {
@@ -1444,9 +1844,17 @@ window.addEventListener("keydown", (event) => {
 });
 window.addEventListener("keyup", (event) => keys.delete(event.key));
 window.addEventListener("resize", resizeCanvas);
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    if (!state.started && !screens.loading.classList.contains("hidden")) {
+      showScreen("menu");
+    }
+  }, 900);
+});
 
 resizeCanvas();
 setupJoystick();
 updateHud();
 updateAudioToggle();
+showScreen("loading");
 requestAnimationFrame(gameLoop);

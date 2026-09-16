@@ -16,17 +16,41 @@
 </head>
 <body>
   <main id="app" class="app">
-    <section id="mainMenu" class="screen screen-menu">
+    <section id="loadingScreen" class="screen screen-loading" aria-label="Loading MathQuest Village">
+      <div class="loading-decoration star-one"></div>
+      <div class="loading-decoration star-two"></div>
+      <div class="loading-decoration rainbow"></div>
+      <div class="loading-decoration balloon"></div>
+      <div class="loading-decoration lollipop"></div>
+      <div class="loading-card">
+        <div class="gamepad-badge" aria-hidden="true">
+          <span></span>
+        </div>
+        <h1>Get Ready To Play</h1>
+        <p>Loading your games...</p>
+        <div class="loading-bar" aria-hidden="true"><span></span></div>
+        <strong id="loadingPercent">100%</strong>
+      </div>
+    </section>
+
+    <section id="mainMenu" class="screen screen-menu hidden">
+      <div class="menu-orb orb-fish" aria-hidden="true"><span></span></div>
+      <div class="menu-orb orb-balloon" aria-hidden="true"><span></span></div>
+      <div class="menu-orb orb-butterfly" aria-hidden="true"><span></span></div>
+      <div class="menu-orb orb-tree" aria-hidden="true"><span></span></div>
+      <div class="menu-orb orb-cards" aria-hidden="true"><span></span></div>
+      <div class="menu-orb orb-math" aria-hidden="true"><span></span></div>
       <div class="menu-content">
         <div class="title-block">
           <p class="kicker">2D RPG Math Adventure</p>
-          <h1>MathQuest Village</h1>
+          <h1><span>MathQuest</span><span>Village</span></h1>
           <p class="subtitle">Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math challenges from easy to advanced.</p>
           <div class="intro-panel" aria-label="Game introduction">
             <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road. Finish the adventure to earn the Golden Scholar Cape and Crown.</p>
           </div>
         </div>
-        <button id="startButton" class="primary-action start-action">Start Adventure</button>
+        <button id="startButton" class="primary-action start-action">Play</button>
+        <button id="settingsButton" class="secondary-action settings-action" type="button">Settings</button>
       </div>
     </section>
 
@@ -84,6 +108,30 @@
 
     <div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
     <button id="audioToggle" class="audio-toggle" type="button" aria-pressed="true">Audio ON</button>
+
+    <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="panel settings-panel">
+        <div class="modal-top">
+          <p class="kicker">Settings</p>
+          <button id="settingsCloseButton" class="icon-button" type="button" aria-label="Close settings">x</button>
+        </div>
+        <h2>Game Options</h2>
+        <div class="setting-row">
+          <div>
+            <strong>Music and Effects</strong>
+            <span>Turn game audio on or off.</span>
+          </div>
+          <button id="settingsAudioButton" class="primary-action" type="button">Audio ON</button>
+        </div>
+        <div class="setting-row">
+          <div>
+            <strong>Progress</strong>
+            <span>Keep your earned points, hints, and reward between visits.</span>
+          </div>
+          <button id="settingsResetButton" class="secondary-action" type="button">Reset Save</button>
+        </div>
+      </div>
+    </div>
 
     <div id="feedbackModal" class="modal hidden" role="dialog" aria-modal="true">
       <div class="panel feedback-panel">
