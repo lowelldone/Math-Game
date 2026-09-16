@@ -2191,6 +2191,38 @@ h1 {
 }
 
 @media (max-height: 480px) and (orientation: landscape) {
+  .screen-loading {
+    padding: 6px 8px;
+  }
+
+  .loading-card {
+    width: min(92vw, 520px);
+    margin-top: 0;
+    transform: scale(clamp(0.62, calc(100dvh / 520), 0.82));
+    transform-origin: center;
+  }
+
+  .loading-portal {
+    top: 38%;
+    width: min(30vw, 160px);
+    height: min(30vw, 160px);
+  }
+
+  .screen-loading h1 {
+    font-size: clamp(28px, 7.5vw, 52px);
+  }
+
+  .screen-loading p {
+    margin: 10px 0 8px;
+    font-size: clamp(15px, 3.2vw, 24px);
+  }
+
+  .loading-bar {
+    width: min(68vw, 360px) !important;
+    height: 22px !important;
+    margin-top: 8px !important;
+  }
+
   .screen-menu {
     padding-top: 6px;
     padding-bottom: 6px;
