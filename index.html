@@ -54,7 +54,7 @@
           <h1><span>MathQuest</span><span>Village</span></h1>
           <p class="subtitle">Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math challenges from easy to advanced.</p>
           <div class="intro-panel" aria-label="Game introduction">
-            <p>Talk to each villager, choose the best answer, and use hints when you need a clue to unlock the next road.</p>
+            <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road. Finish the adventure to earn the Golden Scholar Cape and Crown.</p>
           </div>
         </div>
         <button id="startButton" class="primary-action start-action">Play</button>
@@ -161,7 +161,7 @@
         <div class="setting-row">
           <div>
             <strong>Progress</strong>
-            <span>Keep your earned points and hints between visits.</span>
+            <span>Keep your earned points, hints, and reward between visits.</span>
           </div>
           <button id="settingsResetButton" class="secondary-action" type="button">Reset Save</button>
         </div>
@@ -187,6 +187,11 @@
           <div><span>Hints Used</span><strong id="finalHints">0</strong></div>
           <div><span>Levels Complete</span><strong id="finalQuests">0 / 5</strong></div>
           <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
+        </div>
+        <div id="rewardCard" class="reward-card hidden">
+          <div class="reward-sparkles"><span></span><span></span><span></span></div>
+          <div class="reward-badge"><div class="reward-crown"></div><div class="reward-cape"></div><strong>123</strong></div>
+          <div class="reward-copy"><span>Reward Unlocked</span><h2>Golden Scholar Cape + Crown</h2><p>Your hero can now wear both rewards when you play again.</p></div>
         </div>
         <div class="result-actions">
           <button id="playAgainButton" class="primary-action">Play Again</button>

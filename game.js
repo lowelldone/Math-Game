@@ -17,6 +17,7 @@ const talkButton = document.getElementById("talkButton");
 const toast = document.getElementById("toast");
 const loadingFill = document.getElementById("loadingFill");
 const loadingPercent = document.getElementById("loadingPercent");
+const REWARD_STORAGE_KEY = "mathquestRewardUnlocked_v2";
 const POINTS_STORAGE_KEY = "mathquestPoints_v1";
 const HINTS_STORAGE_KEY = "mathquestHints_v1";
 const AUDIO_STORAGE_KEY = "mathquestAudioOn_v1";
@@ -63,6 +64,14 @@ const praiseMessages = [
   "Super smart move!",
   "Awesome thinking!",
 ];
+
+function getSavedReward() {
+  try {
+    return localStorage.getItem(REWARD_STORAGE_KEY) === "true";
+  } catch (error) {
+    return false;
+  }
+}
 
 function getSavedNumber(key, fallback) {
   try {
@@ -116,6 +125,14 @@ function saveProgress() {
     localStorage.setItem(HINTS_STORAGE_KEY, String(state.hintsAvailable));
   } catch (error) {
     // Progress remains available for the current session if storage is unavailable.
+  }
+}
+
+function saveReward() {
+  try {
+    localStorage.setItem(REWARD_STORAGE_KEY, "true");
+  } catch (error) {
+    // Reward visuals still unlock for the current run if storage is unavailable.
   }
 }
 
@@ -195,7 +212,7 @@ const levelTemplates = [
     levelName: "Advanced Road",
     difficulty: "advanced",
     goal: "Advanced Road: Find Zara",
-    dialogue: "This is the final advanced road. Solve my challenge to become a MathQuest champion.",
+    dialogue: "This is the final advanced road. Solve my challenge to earn the cape and crown.",
     assetIndex: 4,
   },
 ];
@@ -689,6 +706,7 @@ const state = {
   completed: 0,
   activeNpc: null,
   lastTime: 0,
+  rewardUnlocked: getSavedReward(),
 };
 
 const keys = new Set();
@@ -720,7 +738,7 @@ const objects = [
 ];
 
 function getSolidBounds() {
-  const bounds = [{ shape: "ellipse", x: 1980, y: 380, rx: 380, ry: 86 }];
+  const bounds = [];
   objects.forEach((obj) => {
     if (obj.type === "house") bounds.push({ x: obj.x - 8, y: obj.y + 28, w: obj.w + 16, h: obj.h - 20 });
     if (obj.type === "tree") bounds.push({ x: obj.x - 30, y: obj.y - 28, w: 60, h: 88 });
@@ -749,11 +767,6 @@ function getSolidBounds() {
 const solidBounds = getSolidBounds();
 
 function circleHitsRect(x, y, radius, rect) {
-  if (rect.shape === "ellipse") {
-    const expandedX = Math.max(1, rect.rx + radius);
-    const expandedY = Math.max(1, rect.ry + radius);
-    return ((x - rect.x) ** 2) / (expandedX ** 2) + ((y - rect.y) ** 2) / (expandedY ** 2) < 1;
-  }
   const closestX = clamp(x, rect.x, rect.x + rect.w);
   const closestY = clamp(y, rect.y, rect.y + rect.h);
   return Math.hypot(x - closestX, y - closestY) < radius;
@@ -855,7 +868,7 @@ function startGame() {
   state.started = true;
   showScreen("game");
   syncTownTheme();
-  showToast("Start on the Easy Road. NPCs with ! have quests.");
+  showToast(state.rewardUnlocked ? "Cape and crown equipped. Start on the Easy Road!" : "Start on the Easy Road. NPCs with ! have quests.");
 }
 
 function getCamera() {
@@ -988,15 +1001,17 @@ function resetSavedProgress() {
   try {
     localStorage.removeItem(POINTS_STORAGE_KEY);
     localStorage.removeItem(HINTS_STORAGE_KEY);
+    localStorage.removeItem(REWARD_STORAGE_KEY);
     localStorage.removeItem(CHARACTER_STORAGE_KEY);
   } catch (error) {
     // The current session can still reset even when browser storage is blocked.
   }
   state.score = 0;
   state.hintsAvailable = STARTING_HINTS;
+  state.rewardUnlocked = false;
   player.character = null;
   updateHud();
-  showToast("Saved points and hints were reset.");
+  showToast("Saved points, hints, and reward were reset.");
   closeSettings();
 }
 
@@ -1693,6 +1708,20 @@ function drawPlayer() {
   ctx.ellipse(player.x, player.y + 22, 22, 8, 0, 0, Math.PI * 2);
   ctx.fill();
 
+  if (state.rewardUnlocked) {
+    ctx.fillStyle = "#f6bd2f";
+    ctx.beginPath();
+    ctx.moveTo(player.x - 14, player.y + 5);
+    ctx.lineTo(player.x + 14, player.y + 5);
+    ctx.lineTo(player.x + 23, player.y + 43);
+    ctx.lineTo(player.x - 23, player.y + 43);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#b97700";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+
   ctx.fillStyle = "#2f80ed";
   ctx.fillRect(player.x - 14, player.y + 1, 28, 33);
   ctx.fillStyle = "#ffd5a5";
@@ -1701,6 +1730,21 @@ function drawPlayer() {
   ctx.fill();
   ctx.fillStyle = "#51331e";
   ctx.fillRect(player.x - 16, player.y - 24, 32, 10);
+
+  if (state.rewardUnlocked) {
+    ctx.fillStyle = "#f6bd2f";
+    ctx.beginPath();
+    ctx.moveTo(player.x - 16, player.y - 30);
+    ctx.lineTo(player.x - 7, player.y - 43);
+    ctx.lineTo(player.x, player.y - 31);
+    ctx.lineTo(player.x + 7, player.y - 43);
+    ctx.lineTo(player.x + 16, player.y - 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#9b6500";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
 
   ctx.fillStyle = "#fff";
   ctx.beginPath();
@@ -1902,6 +1946,14 @@ function drawPlayerPolished() {
   ctx.lineTo(heroX + 12, heroY + 47 - step);
   ctx.stroke();
 
+  if (state.rewardUnlocked) {
+    drawFacet([
+      [heroX - 19, heroY + 3], [heroX + 17, heroY + 3],
+      [heroX + 26, heroY + 44], [heroX - 25, heroY + 44]
+    ], "#ffd33d", "#b97700");
+    drawFacet([[heroX - 19, heroY + 3], [heroX - 4, heroY + 10], [heroX - 25, heroY + 44]], "#fff083");
+  }
+
   const shirt = ctx.createLinearGradient(heroX - 16, heroY, heroX + 18, heroY + 38);
   shirt.addColorStop(0, isGirl ? "#ff9dcb" : "#55e2f5");
   shirt.addColorStop(0.55, isGirl ? "#ff5ca8" : "#21a8f6");
@@ -2003,6 +2055,9 @@ function drawPlayerPolished() {
     ctx.stroke();
   }
 
+  if (state.rewardUnlocked) {
+    drawFacet([[heroX - 18, heroY - 29], [heroX - 8, heroY - 43], [heroX, heroY - 31], [heroX + 8, heroY - 43], [heroX + 17, heroY - 29]], "#ffd33d", "#9b6500");
+  }
 }
 
 function drawPlayerPointerPolished() {
@@ -2237,6 +2292,8 @@ function showHint() {
 
 function showResults() {
   state.paused = true;
+  state.rewardUnlocked = true;
+  saveReward();
   showScreen("results");
   const accuracy = state.correct + state.incorrect === 0 ? 0 : Math.round((state.correct / (state.correct + state.incorrect)) * 100);
   const achievement = accuracy >= 90 ? "Math Champion" : accuracy >= 75 ? "Quest Solver" : "Brave Learner";
@@ -2247,6 +2304,7 @@ function showResults() {
   document.getElementById("finalHints").textContent = state.hintsUsed;
   document.getElementById("finalQuests").textContent = `${state.completed} / ${quests.length}`;
   document.getElementById("finalAchievement").textContent = `${accuracy}% Accuracy`;
+  document.getElementById("rewardCard").classList.remove("hidden");
 }
 
 function closeChallenge() {
