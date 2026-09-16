@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathquest-village-v35";
+const CACHE_NAME = "mathquest-village-v36";
 
 const ASSETS = [
   "./",
@@ -9,6 +9,14 @@ const ASSETS = [
   "./icon.svg",
   "./Audio/TownTheme.mp3",
   "./Audio/confetti.mp3",
+  "./Images/npc/teacher happy.png",
+  "./Images/npc/girl smile.png",
+  "./Images/npc/girl smile 1.png",
+  "./Images/npc/girl smile 2.png",
+  "./Images/npc/girl happy.png",
+  "./Images/Assets/grass_tiles.png",
+  "./Images/Assets/water_v01.png",
+  "./Images/Assets/ground_textures/dirt_ground_v3.png",
   "./Images/question-01.jpg",
   "./Images/question-02.jpg",
   "./Images/question-03.jpg",

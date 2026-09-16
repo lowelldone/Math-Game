@@ -54,11 +54,34 @@
           <h1><span>MathQuest</span><span>Village</span></h1>
           <p class="subtitle">Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math challenges from easy to advanced.</p>
           <div class="intro-panel" aria-label="Game introduction">
-            <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road. Finish the adventure to earn the Golden Scholar Cape and Crown.</p>
+            <p>Talk to each villager, choose the best answer, and use hints when you need a clue to unlock the next road.</p>
           </div>
         </div>
         <button id="startButton" class="primary-action start-action">Play</button>
         <button id="settingsButton" class="secondary-action settings-action" type="button">Settings</button>
+      </div>
+    </section>
+
+    <section id="characterScreen" class="screen screen-character hidden" aria-label="Choose your MathQuest character">
+      <div class="character-stars" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="character-content">
+        <p class="kicker">Your adventure begins here</p>
+        <h1>Choose Your Hero</h1>
+        <p class="character-subtitle">Pick a brave problem solver to lead the journey through MathQuest Village.</p>
+        <div class="character-options" role="radiogroup" aria-label="Character choices">
+          <button class="character-option character-girl" type="button" data-character="girl" role="radio" aria-checked="false">
+            <span class="character-stage" aria-hidden="true"><span class="character-shadow"></span><span class="hero-preview"><img class="character-sprite-preview" alt="" /><i class="hero-hair"></i><i class="hero-face"></i><i class="hero-features"></i><i class="hero-body"></i><i class="hero-book"></i></span></span>
+            <strong>GIRL</strong>
+            <small>Bright thinker</small>
+          </button>
+          <button class="character-option character-boy" type="button" data-character="boy" role="radio" aria-checked="false">
+            <span class="character-stage" aria-hidden="true"><span class="character-shadow"></span><span class="hero-preview"><img class="character-sprite-preview" alt="" /><i class="hero-hair"></i><i class="hero-face"></i><i class="hero-features"></i><i class="hero-body"></i><i class="hero-book"></i></span></span>
+            <strong>BOY</strong>
+            <small>Bold explorer</small>
+          </button>
+        </div>
+        <button id="beginAdventureButton" class="primary-action begin-adventure" type="button" disabled>Choose a Hero</button>
+        <button id="characterBackButton" class="secondary-action character-back" type="button">Back</button>
       </div>
     </section>
 
@@ -138,7 +161,7 @@
         <div class="setting-row">
           <div>
             <strong>Progress</strong>
-            <span>Keep your earned points, hints, and reward between visits.</span>
+            <span>Keep your earned points and hints between visits.</span>
           </div>
           <button id="settingsResetButton" class="secondary-action" type="button">Reset Save</button>
         </div>
@@ -164,11 +187,6 @@
           <div><span>Hints Used</span><strong id="finalHints">0</strong></div>
           <div><span>Levels Complete</span><strong id="finalQuests">0 / 5</strong></div>
           <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
-        </div>
-        <div id="rewardCard" class="reward-card hidden">
-          <div class="reward-sparkles"><span></span><span></span><span></span></div>
-          <div class="reward-badge"><div class="reward-crown"></div><div class="reward-cape"></div><strong>123</strong></div>
-          <div class="reward-copy"><span>Reward Unlocked</span><h2>Golden Scholar Cape + Crown</h2><p>Your hero can now wear both rewards when you play again.</p></div>
         </div>
         <div class="result-actions">
           <button id="playAgainButton" class="primary-action">Play Again</button>
