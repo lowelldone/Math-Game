@@ -277,6 +277,168 @@ button:focus-visible {
   color: #0d4b73;
 }
 
+@media (max-width: 480px) {
+  .screen-loading {
+    padding: 16px 10px 18px;
+  }
+
+  .screen-loading::before {
+    inset: 8% 7% auto 7%;
+    height: 15%;
+  }
+
+  .screen-loading::after {
+    left: -10%;
+    right: -10%;
+    bottom: -12%;
+    height: 30%;
+  }
+
+  .loading-card {
+    width: min(100%, 340px);
+  }
+
+  .loading-portal {
+    top: 40%;
+    width: 180px;
+    height: 180px;
+  }
+
+  .gamepad-badge {
+    width: 112px;
+    height: 112px;
+    margin-bottom: 12px;
+    border-width: 5px;
+    box-shadow: inset 0 0 0 6px rgba(255, 255, 255, 0.12), 0 14px 22px rgba(15, 73, 109, 0.18);
+  }
+
+  .gamepad-badge::before,
+  .gamepad-badge::after {
+    width: 22px;
+    height: 22px;
+    font-size: 15px;
+  }
+
+  .gamepad-badge::before {
+    right: 6px;
+    top: 14px;
+  }
+
+  .gamepad-badge::after {
+    left: 8px;
+    bottom: 12px;
+  }
+
+  .gamepad-badge span {
+    width: 58px;
+    height: 58px;
+    box-shadow: inset 0 -6px 0 rgba(17, 78, 112, 0.2), 0 10px 18px rgba(13, 67, 109, 0.2);
+  }
+
+  .gamepad-badge span::before {
+    width: 32px;
+    height: 32px;
+    border-width: 5px;
+  }
+
+  .gamepad-badge span::after {
+    width: 10px;
+    height: 10px;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2);
+  }
+
+  .screen-loading h1 {
+    font-size: clamp(28px, 8vw, 52px);
+    letter-spacing: -0.05em;
+  }
+
+  .screen-loading p {
+    margin: 14px 0 10px;
+    font-size: clamp(18px, 5vw, 27px);
+  }
+
+  .loading-bar {
+    width: min(78vw, 360px);
+    height: 22px;
+    border-width: 3px;
+  }
+
+  .loading-card strong {
+    margin-top: 10px;
+    font-size: clamp(18px, 5vw, 24px);
+  }
+
+  .loading-decoration {
+    transform: scale(0.72);
+    transform-origin: center;
+  }
+
+  .star-one {
+    left: 6%;
+    top: 8%;
+  }
+
+  .star-two {
+    left: 10%;
+    top: 62%;
+  }
+
+  .rainbow {
+    left: 23%;
+    top: 22%;
+    width: 54px;
+    height: 54px;
+  }
+
+  .balloon {
+    right: 8%;
+    top: 12%;
+    width: 28px;
+    height: 36px;
+  }
+
+  .balloon::after {
+    left: 13px;
+    top: 34px;
+    height: 24px;
+  }
+
+  .lollipop {
+    right: 13%;
+    bottom: 17%;
+    width: 42px;
+    height: 42px;
+    border-width: 4px;
+  }
+
+  .lollipop::after {
+    right: -7px;
+    bottom: -22px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 360px) {
+  .loading-portal {
+    top: 42%;
+    width: 156px;
+    height: 156px;
+  }
+
+  .screen-loading h1 {
+    font-size: clamp(24px, 7.4vw, 42px);
+  }
+
+  .screen-loading p {
+    font-size: clamp(16px, 4.8vw, 22px);
+  }
+
+  .loading-bar {
+    width: min(80vw, 300px);
+    height: 20px;
+  }
+}
+
 .loading-decoration {
   position: absolute;
   opacity: 0.72;
