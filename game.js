@@ -676,6 +676,10 @@ function requestImmersiveMode() {
   }
 }
 
+document.addEventListener("pointerdown", () => {
+  if (!screens.loading.classList.contains("hidden")) requestImmersiveMode();
+}, { capture: true, passive: true });
+
 function resetGame() {
   quests = createQuestRun();
   player.x = 220;
