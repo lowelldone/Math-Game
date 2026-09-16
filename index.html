@@ -22,14 +22,20 @@
       <div class="loading-decoration rainbow"></div>
       <div class="loading-decoration balloon"></div>
       <div class="loading-decoration lollipop"></div>
+      <div class="loading-portal" aria-hidden="true">
+        <span class="portal-core"></span>
+        <span class="portal-orbit orbit-one"></span>
+        <span class="portal-orbit orbit-two"></span>
+        <span class="portal-orbit orbit-three"></span>
+      </div>
       <div class="loading-card">
         <div class="gamepad-badge" aria-hidden="true">
           <span></span>
         </div>
         <h1>Get Ready To Play</h1>
-        <p>Loading your games...</p>
-        <div class="loading-bar" aria-hidden="true"><span></span></div>
-        <strong id="loadingPercent">100%</strong>
+        <p>Loading your world...</p>
+        <div class="loading-bar" aria-hidden="true"><span id="loadingFill"></span></div>
+        <strong id="loadingPercent">0%</strong>
       </div>
     </section>
 
@@ -58,11 +64,15 @@
       <canvas id="gameCanvas" width="960" height="540" aria-label="Game world"></canvas>
 
       <div class="hud">
-        <div><span class="hud-label">Level</span><strong id="questText">1 / 5</strong></div>
+        <div class="hud-stat hud-level-stat">
+          <span class="hud-label">Level</span>
+          <strong id="questText">1 / 5</strong>
+        </div>
         <div><span class="hud-label">Score</span><strong id="scoreText">0</strong></div>
         <div><span class="hud-label">Hints</span><strong id="hudHintText">2</strong></div>
         <div><span class="hud-label">Goal</span><strong id="goalText">Find Lina</strong></div>
       </div>
+      <button id="backToMenuButton" class="hud-back-button" type="button">Back</button>
 
       <button id="talkButton" class="talk-button hidden">Talk</button>
       <div id="toast" class="toast hidden" role="status"></div>
