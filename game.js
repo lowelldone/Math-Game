@@ -14,6 +14,8 @@ const feedbackModal = document.getElementById("feedbackModal");
 const settingsModal = document.getElementById("settingsModal");
 const talkButton = document.getElementById("talkButton");
 const toast = document.getElementById("toast");
+const loadingFill = document.getElementById("loadingFill");
+const loadingPercent = document.getElementById("loadingPercent");
 const REWARD_STORAGE_KEY = "mathquestRewardUnlocked_v2";
 const POINTS_STORAGE_KEY = "mathquestPoints_v1";
 const HINTS_STORAGE_KEY = "mathquestHints_v1";
@@ -1824,6 +1826,11 @@ document.getElementById("settingsCloseButton").addEventListener("click", closeSe
 document.getElementById("settingsAudioButton").addEventListener("click", toggleAudio);
 document.getElementById("settingsResetButton").addEventListener("click", resetSavedProgress);
 document.getElementById("playAgainButton").addEventListener("click", startGame);
+document.getElementById("backToMenuButton").addEventListener("click", () => {
+  state.started = false;
+  showScreen("menu");
+  showToast("Returned to the main menu.");
+});
 document.getElementById("menuButton").addEventListener("click", () => showScreen("menu"));
 document.getElementById("exitButton").addEventListener("click", () => {
   showScreen("menu");
@@ -1845,11 +1852,36 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => keys.delete(event.key));
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
-  setTimeout(() => {
-    if (!state.started && !screens.loading.classList.contains("hidden")) {
-      showScreen("menu");
-    }
-  }, 900);
+  if (loadingFill && loadingPercent) {
+    let progress = 0;
+    const totalSteps = 100;
+    const stepMs = 55;
+
+    const tick = () => {
+      progress += 1;
+      loadingFill.style.width = `${progress}%`;
+      loadingPercent.textContent = `${progress}%`;
+
+      if (progress < totalSteps) {
+        setTimeout(tick, stepMs);
+        return;
+      }
+
+      setTimeout(() => {
+        if (!state.started && !screens.loading.classList.contains("hidden")) {
+          showScreen("menu");
+        }
+      }, 300);
+    };
+
+    setTimeout(tick, 140);
+  } else {
+    setTimeout(() => {
+      if (!state.started && !screens.loading.classList.contains("hidden")) {
+        showScreen("menu");
+      }
+    }, 900);
+  }
 });
 
 resizeCanvas();
