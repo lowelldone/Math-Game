@@ -662,6 +662,20 @@ function showScreen(name) {
   }
 }
 
+function requestImmersiveMode() {
+  if (document.fullscreenElement || !document.documentElement.requestFullscreen) return;
+
+  document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch(() => {
+    // Fullscreen is optional and may be blocked outside a user gesture or in an embedded browser.
+  });
+
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock("landscape").catch(() => {
+      // Orientation locking is optional and unsupported on some mobile browsers.
+    });
+  }
+}
+
 function resetGame() {
   quests = createQuestRun();
   player.x = 220;
@@ -678,6 +692,7 @@ function resetGame() {
 }
 
 function startGame() {
+  requestImmersiveMode();
   resetGame();
   state.started = true;
   showScreen("game");
