@@ -41,32 +41,34 @@
       </div>
     </section>
 
-    <section id="mainMenu" class="screen screen-menu hidden">
-      <div class="menu-orb orb-fish" aria-hidden="true"><span></span></div>
-      <div class="menu-orb orb-balloon" aria-hidden="true"><span></span></div>
-      <div class="menu-orb orb-butterfly" aria-hidden="true"><span></span></div>
-      <div class="menu-orb orb-tree" aria-hidden="true"><span></span></div>
-      <div class="menu-orb orb-cards" aria-hidden="true"><span></span></div>
-      <div class="menu-orb orb-math" aria-hidden="true"><span></span></div>
+    <section id="mainMenu" class="screen screen-menu hidden" aria-label="MathQuest Village Main Menu">
+      <div class="menu-bg" aria-hidden="true"></div>
       <div class="menu-content">
         <div class="title-block">
           <p class="kicker">2D RPG Math Adventure</p>
           <h1><span>MathQuest</span><span>Village</span></h1>
-          <p class="subtitle">Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math challenges from easy to advanced.</p>
-          <div class="intro-panel" aria-label="Game introduction">
-            <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road.</p>
+          <div class="wooden-sign" aria-label="Game welcome message">
+            <div class="wooden-sign-inner">
+              <span class="sign-deco" aria-hidden="true">✦</span>
+              <p>Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math challenges&nbsp; from easy to advanced.</p>
+              <span class="sign-deco" aria-hidden="true">✦</span>
+            </div>
+          </div>
+          <div class="parchment-scroll" aria-label="Game instructions">
+            <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road. Finish all challenges to complete your MathQuest adventure!</p>
           </div>
         </div>
-        <button id="startButton" class="primary-action start-action">Play</button>
-        <button id="settingsButton" class="secondary-action settings-action" type="button">Settings</button>
+        <button id="startButton" class="start-adventure-btn" type="button">⚔ Start Adventure</button>
       </div>
     </section>
 
     <section id="characterScreen" class="screen screen-character hidden" aria-label="Choose your MathQuest character">
-      <div class="character-stars" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="menu-bg" aria-hidden="true"></div>
       <div class="character-content">
-        <p class="kicker">Your adventure begins here</p>
-        <h1>Choose Your Hero</h1>
+        <div class="char-header-plaque">
+          <p class="char-kicker">Your adventure begins here</p>
+          <h1>Choose Your Hero</h1>
+        </div>
         <p class="character-subtitle">Pick a brave problem solver to lead the journey through MathQuest Village.</p>
         <div class="character-options" role="radiogroup" aria-label="Character choices">
           <button class="character-option character-girl" type="button" data-character="girl" role="radio" aria-checked="false">
@@ -80,8 +82,10 @@
             <small>Bold explorer</small>
           </button>
         </div>
-        <button id="beginAdventureButton" class="primary-action begin-adventure" type="button" disabled>Choose a Hero</button>
-        <button id="characterBackButton" class="secondary-action character-back" type="button">Back</button>
+        <div class="char-action-row">
+          <button id="characterBackButton" class="char-back-btn" type="button">← Back</button>
+          <button id="beginAdventureButton" class="start-adventure-btn begin-adventure" type="button" disabled>Choose a Hero</button>
+        </div>
       </div>
     </section>
 
@@ -142,7 +146,10 @@
     </div>
 
     <div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
-    <button id="audioToggle" class="audio-toggle" type="button" aria-pressed="true">Audio ON</button>
+    <button id="audioToggle" class="audio-toggle" type="button" aria-pressed="true">
+      <span class="audio-icon" aria-hidden="true">🔊</span>
+      <span class="audio-label">Audio ON</span>
+    </button>
 
     <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Settings">
       <div class="panel settings-panel">
@@ -161,7 +168,7 @@
         <div class="setting-row">
           <div>
             <strong>Progress</strong>
-            <span>Keep your earned points, hints, and reward between visits.</span>
+            <span>Keep your earned points and hints between visits.</span>
           </div>
           <button id="settingsResetButton" class="secondary-action" type="button">Reset Save</button>
         </div>
@@ -177,26 +184,38 @@
     </div>
 
     <section id="resultsScreen" class="screen screen-results hidden">
-      <div class="results-wrap">
-        <p class="kicker">Final Results</p>
-        <h1 id="resultTitle">Village Hero</h1>
-        <div class="result-grid">
-          <div><span>Total Score</span><strong id="finalScore">0</strong></div>
-          <div><span>Correct</span><strong id="finalCorrect">0</strong></div>
-          <div><span>Incorrect</span><strong id="finalIncorrect">0</strong></div>
-          <div><span>Hints Used</span><strong id="finalHints">0</strong></div>
-          <div><span>Levels Complete</span><strong id="finalQuests">0 / 5</strong></div>
-          <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
+      <div class="results-container">
+        <div class="victory-showcase">
+          <div class="victory-frame">
+            <img id="victoryImage" src="Images/victory-boy.jpg" alt="Job Well Done! Victory celebration" class="victory-image" />
+            <div class="victory-sparkles" aria-hidden="true">
+              <span class="v-sparkle s1">✦</span>
+              <span class="v-sparkle s2">★</span>
+              <span class="v-sparkle s3">✦</span>
+              <span class="v-sparkle s4">★</span>
+              <span class="v-sparkle s5">✦</span>
+            </div>
+          </div>
         </div>
-        <div id="rewardCard" class="reward-card hidden">
-          <div class="reward-sparkles"><span></span><span></span><span></span></div>
-          <div class="reward-badge"><div class="reward-crown"></div><div class="reward-cape"></div><strong>123</strong></div>
-          <div class="reward-copy"><span>Reward Unlocked</span><h2>Golden Scholar Cape + Crown</h2><p>Your hero can now wear both rewards when you play again.</p></div>
-        </div>
-        <div class="result-actions">
-          <button id="playAgainButton" class="primary-action">Play Again</button>
-          <button id="menuButton" class="secondary-action">Main Menu</button>
-          <button id="exitButton" class="secondary-action">Exit Game</button>
+
+        <div class="results-wrap">
+          <div class="results-header-plaque">
+            <p class="kicker">✦ MathQuest Complete ✦</p>
+            <h1 id="resultTitle">Village Champion</h1>
+          </div>
+          <div class="result-grid">
+            <div><span>Total Score</span><strong id="finalScore">0</strong></div>
+            <div><span>Correct</span><strong id="finalCorrect">0</strong></div>
+            <div><span>Incorrect</span><strong id="finalIncorrect">0</strong></div>
+            <div><span>Hints Used</span><strong id="finalHints">0</strong></div>
+            <div><span>Levels Complete</span><strong id="finalQuests">0 / 5</strong></div>
+            <div><span>Achievement</span><strong id="finalAchievement">Ready Learner</strong></div>
+          </div>
+
+          <div class="result-actions">
+            <button id="playAgainButton" class="primary-action">⚔ Play Again</button>
+            <button id="menuButton" class="secondary-action">🏠 Main Menu</button>
+          </div>
         </div>
       </div>
     </section>

@@ -150,9 +150,9 @@ const levelTemplates = [
     icon: "!",
     color: "#ffdd57",
     x: 390,
-    y: 235,
-    labelX: 320,
-    labelY: 240,
+    y: 420,
+    labelX: 300,
+    labelY: 420,
     levelName: "Easy Road",
     difficulty: "easy",
     goal: "Easy Road: Find Lina",
@@ -163,10 +163,10 @@ const levelTemplates = [
     npc: "Bo",
     icon: "!",
     color: "#65d6ff",
-    x: 780,
-    y: 315,
-    labelX: 710,
-    labelY: 325,
+    x: 790,
+    y: 370,
+    labelX: 700,
+    labelY: 370,
     levelName: "Medium Road",
     difficulty: "medium",
     goal: "Medium Road: Find Bo",
@@ -177,10 +177,10 @@ const levelTemplates = [
     npc: "Mira",
     icon: "!",
     color: "#ff9ab3",
-    x: 1160,
-    y: 650,
-    labelX: 1085,
-    labelY: 660,
+    x: 1180,
+    y: 470,
+    labelX: 1090,
+    labelY: 470,
     levelName: "Intermediate Road",
     difficulty: "intermediate",
     goal: "Intermediate Road: Find Mira",
@@ -191,10 +191,10 @@ const levelTemplates = [
     npc: "Orin",
     icon: "!",
     color: "#ff8c42",
-    x: 1635,
-    y: 285,
-    labelX: 1555,
-    labelY: 295,
+    x: 1650,
+    y: 650,
+    labelX: 1560,
+    labelY: 650,
     levelName: "Hard Road",
     difficulty: "hard",
     goal: "Hard Road: Find Orin",
@@ -205,17 +205,18 @@ const levelTemplates = [
     npc: "Zara",
     icon: "!",
     color: "#70e4ad",
-    x: 2150,
-    y: 395,
-    labelX: 2070,
-    labelY: 405,
+    x: 2180,
+    y: 430,
+    labelX: 2090,
+    labelY: 430,
     levelName: "Advanced Road",
     difficulty: "advanced",
     goal: "Advanced Road: Find Zara",
-    dialogue: "This is the final advanced road. Solve my challenge to earn the cape and crown.",
+    dialogue: "This is the final advanced road. Solve my challenge to complete MathQuest Village.",
     assetIndex: 4,
   },
 ];
+
 
 let quests = [];
 
@@ -684,8 +685,8 @@ const world = {
 };
 
 const player = {
-  x: 220,
-  y: 410,
+  x: 180,
+  y: 590,
   r: 18,
   speed: 190,
   dirX: 0,
@@ -715,26 +716,34 @@ let feedbackTimer = 0;
 let pendingFeedback = null;
 
 const objects = [
-  { type: "house", x: 170, y: 140, w: 130, h: 110, roof: "#dd6553", wall: "#ffe08a" },
-  { type: "house", x: 610, y: 95, w: 145, h: 118, roof: "#7a61d1", wall: "#e7d5ff" },
-  { type: "house", x: 1110, y: 105, w: 150, h: 120, roof: "#ef8a45", wall: "#ffd7a1" },
-  { type: "house", x: 1540, y: 700, w: 150, h: 118, roof: "#3584cf", wall: "#bee7ff" },
-  { type: "house", x: 2200, y: 660, w: 150, h: 118, roof: "#24a36b", wall: "#c7f7d8" },
-  { type: "tree", x: 90, y: 540 }, { type: "tree", x: 330, y: 660 }, { type: "tree", x: 560, y: 505 },
-  { type: "tree", x: 920, y: 660 }, { type: "tree", x: 1390, y: 120 }, { type: "tree", x: 1710, y: 115 },
-  { type: "tree", x: 1930, y: 620 }, { type: "tree", x: 1310, y: 735 }, { type: "tree", x: 810, y: 180 },
-  { type: "tree", x: 2340, y: 210 },
-  { type: "well", x: 920, y: 390 }, { type: "crate", x: 500, y: 390 }, { type: "crate", x: 1460, y: 500 },
-  { type: "pond", x: 500, y: 760, w: 230, h: 92 },
-  { type: "pond", x: 2010, y: 735, w: 250, h: 88 },
-  { type: "fountain", x: 1160, y: 690 },
-  { type: "playground", x: 760, y: 690 },
-  { type: "park", x: 1450, y: 150, w: 200, h: 120 },
-  { type: "shop", x: 1880, y: 610, color: "#ff9c55" },
-  { type: "shop", x: 2070, y: 170, color: "#d98bff" },
-  { type: "bridge", x: 1970, y: 380, w: 160 },
-  { type: "bench", x: 590, y: 650 }, { type: "bench", x: 1810, y: 700 },
-  { type: "sign", x: 1030, y: 220, label: "PLAY" }, { type: "sign", x: 2320, y: 580, label: "MATH" },
+  // Houses — far above the road, nestled in the upper grass
+  // Houses — on the grass hills, away from the road
+  // Solid bottom = y+28+(h-20). Road top edges at these x positions: ~593, ~475, ~530, ~479, ~514
+  // All house bottoms land at y≈415-430, giving 45–175px clearance from road top
+  { type: "house", x: 55,   y: 305, w: 130, h: 110, roof: "#dd6553", wall: "#ffe08a" },
+  { type: "house", x: 560,  y: 295, w: 145, h: 118, roof: "#7a61d1", wall: "#e7d5ff" },
+  { type: "house", x: 1090, y: 310, w: 150, h: 120, roof: "#ef8a45", wall: "#ffd7a1" },
+  { type: "house", x: 1600, y: 295, w: 150, h: 118, roof: "#3584cf", wall: "#bee7ff" },
+  { type: "house", x: 2270, y: 305, w: 150, h: 118, roof: "#24a36b", wall: "#c7f7d8" },
+  // Trees — in upper grass and deep lower grass, never near the road
+  { type: "tree", x: 50,   y: 420 }, { type: "tree", x: 240,  y: 390 }, { type: "tree", x: 480,  y: 410 },
+  { type: "tree", x: 700,  y: 380 }, { type: "tree", x: 960,  y: 400 }, { type: "tree", x: 1260, y: 385 },
+  { type: "tree", x: 1420, y: 415 }, { type: "tree", x: 1760, y: 390 }, { type: "tree", x: 2040, y: 405 },
+  { type: "tree", x: 2390, y: 395 },
+  { type: "tree", x: 130,  y: 760 }, { type: "tree", x: 440,  y: 755 }, { type: "tree", x: 870,  y: 750 },
+  { type: "tree", x: 1380, y: 770 }, { type: "tree", x: 1920, y: 755 }, { type: "tree", x: 2460, y: 745 },
+  // Decorations — all in the deep lower grass (y ≥ 700), well clear of the road
+  { type: "well",       x: 290,  y: 720 },
+  { type: "pond",       x: 680,  y: 800, w: 200, h: 80 },
+  { type: "pond",       x: 2090, y: 790, w: 220, h: 80 },
+  { type: "fountain",   x: 1200, y: 790 },
+  { type: "playground", x: 1690, y: 770 },
+  { type: "park",       x: 200,  y: 305, w: 180, h: 100 },
+  { type: "shop",       x: 2310, y: 300, color: "#ff9c55" },
+  { type: "shop",       x: 1820, y: 300, color: "#d98bff" },
+  { type: "bench",      x: 560,  y: 730 }, { type: "bench", x: 1860, y: 730 },
+  { type: "sign",       x: 80,   y: 700, label: "EASY" },
+  { type: "sign",       x: 2410, y: 575, label: "MATH" },
 ];
 
 function getSolidBounds() {
@@ -845,8 +854,8 @@ document.addEventListener("pointerdown", () => {
 
 function resetGame() {
   quests = createQuestRun();
-  player.x = 220;
-  player.y = 410;
+  player.x = 180;
+  player.y = 590;
   state.questIndex = 0;
   state.correct = 0;
   state.incorrect = 0;
@@ -868,7 +877,7 @@ function startGame() {
   state.started = true;
   showScreen("game");
   syncTownTheme();
-  showToast(state.rewardUnlocked ? "Cape and crown equipped. Start on the Easy Road!" : "Start on the Easy Road. NPCs with ! have quests.");
+  showToast("Start on the Easy Road. NPCs with ! have quests.");
 }
 
 function getCamera() {
@@ -955,14 +964,24 @@ function updateAudioToggle() {
   const settingsAudioButton = document.getElementById("settingsAudioButton");
   if (!toggle) return;
 
-  toggle.textContent = audioOn ? "Sound On" : "Sound Off";
+  // Update only the label span to preserve the speaker icon element
+  const labelEl = toggle.querySelector(".audio-label");
+  const labelText = audioOn ? "Audio ON" : "Audio OFF";
+  if (labelEl) {
+    labelEl.textContent = labelText;
+    // Update icon for muted state
+    const iconEl = toggle.querySelector(".audio-icon");
+    if (iconEl) iconEl.textContent = audioOn ? "🔊" : "🔇";
+  } else {
+    toggle.textContent = labelText;
+  }
   toggle.setAttribute("aria-pressed", audioOn ? "true" : "false");
   toggle.setAttribute(
     "aria-label",
     audioOn ? "Turn audio off" : "Turn audio on"
   );
   if (settingsAudioButton) {
-    settingsAudioButton.textContent = audioOn ? "Sound On" : "Sound Off";
+    settingsAudioButton.textContent = audioOn ? "Audio ON" : "Audio OFF";
     settingsAudioButton.setAttribute("aria-pressed", audioOn ? "true" : "false");
   }
 }
@@ -1011,7 +1030,7 @@ function resetSavedProgress() {
   state.rewardUnlocked = false;
   player.character = null;
   updateHud();
-  showToast("Saved points, hints, and reward were reset.");
+  showToast("Saved points and hints were reset.");
   closeSettings();
 }
 
@@ -1176,112 +1195,117 @@ function drawAssetLayer() {
 }
 
 function drawBackdrop() {
-  const sunGlow = ctx.createRadialGradient(340, 105, 12, 340, 105, 150);
-  sunGlow.addColorStop(0, "rgba(255, 251, 208, 0.92)");
-  sunGlow.addColorStop(0.35, "rgba(255, 226, 125, 0.36)");
+  // Sun glow top-left
+  const sunGlow = ctx.createRadialGradient(220, 80, 10, 220, 80, 160);
+  sunGlow.addColorStop(0, "rgba(255, 251, 208, 0.95)");
+  sunGlow.addColorStop(0.35, "rgba(255, 226, 125, 0.38)");
   sunGlow.addColorStop(1, "rgba(255, 226, 125, 0)");
   ctx.fillStyle = sunGlow;
   ctx.beginPath();
-  ctx.arc(340, 105, 150, 0, Math.PI * 2);
+  ctx.arc(220, 80, 160, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
-  ctx.beginPath();
-  ctx.moveTo(0, 205);
-  ctx.lineTo(265, 145);
-  ctx.lineTo(500, 205);
-  ctx.lineTo(780, 138);
-  ctx.lineTo(1040, 205);
-  ctx.lineTo(1040, 226);
-  ctx.lineTo(0, 226);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.fillStyle = "rgba(255,255,255,0.82)";
+  // Fluffy white clouds
+  ctx.fillStyle = "rgba(255,255,255,0.88)";
   [
-    [130, 90, 90, 32],
-    [205, 82, 64, 26],
-    [780, 110, 120, 38],
-    [890, 106, 86, 31],
-    [1670, 94, 130, 40],
-    [1780, 104, 96, 34],
+    [120, 75, 100, 36],
+    [205, 66, 70, 28],
+    [700, 90, 130, 42],
+    [820, 82, 90, 33],
+    [1380, 75, 120, 38],
+    [1490, 88, 84, 30],
+    [1940, 70, 110, 36],
+    [2060, 82, 78, 28],
   ].forEach(([x, y, w, h]) => {
     ctx.beginPath();
     ctx.ellipse(x, y, w, h, 0, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  ctx.fillStyle = "rgba(95, 182, 226, 0.55)";
+  // Sky-to-horizon gradient band
+  ctx.fillStyle = "rgba(95, 182, 226, 0.48)";
   ctx.beginPath();
-  ctx.moveTo(0, 285);
-  ctx.bezierCurveTo(240, 160, 330, 265, 540, 185);
-  ctx.bezierCurveTo(710, 120, 830, 265, 1040, 190);
-  ctx.bezierCurveTo(1260, 110, 1450, 250, 1660, 180);
-  ctx.bezierCurveTo(1890, 105, 2070, 235, 2550, 165);
-  ctx.lineTo(world.width, 380);
-  ctx.lineTo(0, 380);
+  ctx.moveTo(0, 320);
+  ctx.bezierCurveTo(300, 200, 500, 310, 700, 240);
+  ctx.bezierCurveTo(900, 170, 1100, 295, 1350, 220);
+  ctx.bezierCurveTo(1600, 145, 1850, 270, 2100, 200);
+  ctx.bezierCurveTo(2300, 140, 2430, 240, 2550, 190);
+  ctx.lineTo(world.width, 430);
+  ctx.lineTo(0, 430);
   ctx.closePath();
   ctx.fill();
 
+  // First rolling hill — upper green band (sky backdrop)
   ctx.fillStyle = "#7ddf66";
   ctx.beginPath();
-  ctx.moveTo(0, 315);
-  ctx.bezierCurveTo(250, 255, 460, 325, 710, 282);
-  ctx.bezierCurveTo(1000, 230, 1180, 332, 1480, 275);
-  ctx.bezierCurveTo(1790, 216, 2100, 325, 2550, 252);
+  ctx.moveTo(0, 350);
+  ctx.bezierCurveTo(280, 290, 520, 370, 800, 320);
+  ctx.bezierCurveTo(1080, 265, 1320, 375, 1600, 310);
+  ctx.bezierCurveTo(1880, 248, 2150, 360, 2550, 288);
   ctx.lineTo(world.width, world.height);
   ctx.lineTo(0, world.height);
   ctx.closePath();
   ctx.fill();
 
+  // Second rolling hill — mid green (road level)
   ctx.fillStyle = "#51c756";
   ctx.beginPath();
-  ctx.moveTo(0, 560);
-  ctx.bezierCurveTo(440, 500, 780, 590, 1210, 535);
-  ctx.bezierCurveTo(1660, 476, 2050, 575, 2550, 500);
+  ctx.moveTo(0, 460);
+  ctx.bezierCurveTo(300, 420, 600, 475, 900, 450);
+  ctx.bezierCurveTo(1200, 425, 1550, 480, 1850, 455);
+  ctx.bezierCurveTo(2150, 430, 2380, 470, 2550, 450);
   ctx.lineTo(world.width, world.height);
   ctx.lineTo(0, world.height);
   ctx.closePath();
   ctx.fill();
 
-  const lake = ctx.createLinearGradient(0, 250, 0, 455);
-  lake.addColorStop(0, "rgba(59, 194, 239, 0.76)");
-  lake.addColorStop(1, "rgba(27, 143, 218, 0.62)");
+  // Deep grass band at the bottom
+  ctx.fillStyle = "#3cb84a";
+  ctx.beginPath();
+  ctx.moveTo(0, 680);
+  ctx.bezierCurveTo(400, 650, 800, 690, 1200, 665);
+  ctx.bezierCurveTo(1600, 638, 2000, 678, 2550, 655);
+  ctx.lineTo(world.width, world.height);
+  ctx.lineTo(0, world.height);
+  ctx.closePath();
+  ctx.fill();
+
+  // Lake / pond — moved far to the right edge, well below the road zone
+  const lake = ctx.createLinearGradient(0, 700, 0, 810);
+  lake.addColorStop(0, "rgba(59, 194, 239, 0.72)");
+  lake.addColorStop(1, "rgba(27, 143, 218, 0.56)");
   ctx.fillStyle = lake;
   ctx.beginPath();
-  ctx.ellipse(1980, 380, 380, 86, -0.08, 0, Math.PI * 2);
+  ctx.ellipse(2380, 760, 160, 48, -0.06, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = "rgba(255,255,255,0.62)";
-  ctx.lineWidth = 5;
-  for (let i = 0; i < 4; i += 1) {
+  ctx.strokeStyle = "rgba(255,255,255,0.50)";
+  ctx.lineWidth = 4;
+  for (let i = 0; i < 3; i += 1) {
     ctx.beginPath();
-    ctx.moveTo(1670 + i * 150, 360 + i * 11);
-    ctx.quadraticCurveTo(1740 + i * 150, 345 + i * 10, 1820 + i * 150, 360 + i * 9);
+    ctx.moveTo(2250 + i * 60, 748 + i * 6);
+    ctx.quadraticCurveTo(2300 + i * 60, 738 + i * 5, 2360 + i * 60, 748 + i * 5);
     ctx.stroke();
   }
 }
 
 function drawPaths() {
+  // Road path now runs through the grass zone (y ~500-650)
+  // The road goes left-to-right winding gently through the lower grass
   const roads = [
-    { label: "Easy", points: [[70, 455], [180, 420], [315, 335], [470, 285]] },
-    { label: "Medium", points: [[470, 285], [620, 230], [790, 245], [960, 335]] },
-    { label: "Intermediate", points: [[960, 335], [1070, 420], [1190, 520], [1340, 540]] },
-    { label: "Hard", points: [[1340, 540], [1480, 505], [1600, 390], [1740, 300]] },
-    { label: "Advanced", points: [[1740, 300], [1900, 245], [2080, 290], [2290, 405]] },
-    { label: "Garden Walk", points: [[620, 230], [700, 150], [820, 120], [980, 145]], side: true },
-    { label: "Pond Walk", points: [[1070, 420], [1060, 555], [1140, 690], [1320, 760]], side: true },
-    { label: "Market Walk", points: [[1600, 390], [1710, 500], [1840, 590], [1970, 650]], side: true },
+    { label: "Easy",         points: [[50, 640], [180, 590], [310, 555], [460, 540]] },
+    { label: "Medium",       points: [[460, 540], [610, 510], [720, 490], [870, 490]] },
+    { label: "Intermediate", points: [[870, 490], [1000, 530], [1100, 580], [1260, 615]] },
+    { label: "Hard",         points: [[1260, 615], [1410, 575], [1550, 530], [1730, 510]] },
+    { label: "Advanced",     points: [[1730, 510], [1900, 530], [2070, 555], [2300, 560]] },
   ];
 
-  const sideRoads = roads.filter((road) => road.side);
-  const mainRoads = roads.filter((road) => !road.side);
-  strokeRoadNetwork([...sideRoads, ...mainRoads], 84, "rgba(94, 67, 36, 0.28)");
-  strokeRoadNetwork([...sideRoads, ...mainRoads], 70, "#b8783f");
-  strokeRoadNetwork([...sideRoads, ...mainRoads], 56, "#f0b966");
-  strokeRoadNetwork([...sideRoads, ...mainRoads], 48, "#ffe5a0");
-  strokeRoadNetwork([...sideRoads, ...mainRoads], 7, "rgba(255, 255, 255, 0.36)");
-  strokeRoadNetwork(mainRoads, 4, "rgba(255,255,255,0.8)", [22, 18]);
-
+  const mainRoads = roads;
+  strokeRoadNetwork(mainRoads, 90, "rgba(94, 67, 36, 0.22)");
+  strokeRoadNetwork(mainRoads, 74, "#b8783f");
+  strokeRoadNetwork(mainRoads, 58, "#f0b966");
+  strokeRoadNetwork(mainRoads, 50, "#ffe5a0");
+  strokeRoadNetwork(mainRoads,  7, "rgba(255, 255, 255, 0.32)");
+  strokeRoadNetwork(mainRoads,  4, "rgba(255,255,255,0.8)", [22, 18]);
 }
 
 function drawFlowers() {
@@ -1708,19 +1732,6 @@ function drawPlayer() {
   ctx.ellipse(player.x, player.y + 22, 22, 8, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  if (state.rewardUnlocked) {
-    ctx.fillStyle = "#f6bd2f";
-    ctx.beginPath();
-    ctx.moveTo(player.x - 14, player.y + 5);
-    ctx.lineTo(player.x + 14, player.y + 5);
-    ctx.lineTo(player.x + 23, player.y + 43);
-    ctx.lineTo(player.x - 23, player.y + 43);
-    ctx.closePath();
-    ctx.fill();
-    ctx.strokeStyle = "#b97700";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-  }
 
   ctx.fillStyle = "#2f80ed";
   ctx.fillRect(player.x - 14, player.y + 1, 28, 33);
@@ -1731,20 +1742,6 @@ function drawPlayer() {
   ctx.fillStyle = "#51331e";
   ctx.fillRect(player.x - 16, player.y - 24, 32, 10);
 
-  if (state.rewardUnlocked) {
-    ctx.fillStyle = "#f6bd2f";
-    ctx.beginPath();
-    ctx.moveTo(player.x - 16, player.y - 30);
-    ctx.lineTo(player.x - 7, player.y - 43);
-    ctx.lineTo(player.x, player.y - 31);
-    ctx.lineTo(player.x + 7, player.y - 43);
-    ctx.lineTo(player.x + 16, player.y - 30);
-    ctx.closePath();
-    ctx.fill();
-    ctx.strokeStyle = "#9b6500";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  }
 
   ctx.fillStyle = "#fff";
   ctx.beginPath();
@@ -1894,14 +1891,17 @@ function drawSelectedCharacterSprite() {
 
   const isGirl = character === "girl";
   const readabilityScale = Math.min(1.25, Math.max(1, 0.4 / currentMapZoom));
-  const width = (isGirl ? 92 : 96) * readabilityScale;
-  const height = (isGirl ? 103 : 96) * readabilityScale;
+  const width = (isGirl ? 94 : 152) * readabilityScale;
+  const height = (isGirl ? 103 : 122) * readabilityScale;
+  const offsetX = (isGirl ? 0 : 25) * readabilityScale;
+  const offsetY = (isGirl ? 0 : 13) * readabilityScale;
+
   ctx.fillStyle = "rgba(17,54,63,0.2)";
   ctx.beginPath();
-  ctx.ellipse(player.x, player.y + 24, (isGirl ? 27 : 29) * readabilityScale, 9 * readabilityScale, 0, 0, Math.PI * 2);
+  ctx.ellipse(player.x, player.y + 24, (isGirl ? 28 : 32) * readabilityScale, (isGirl ? 9 : 10) * readabilityScale, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(sprite, player.x - width / 2, player.y - height + 45, width, height);
+  ctx.drawImage(sprite, player.x - width / 2 + offsetX, player.y - height + 45 + offsetY, width, height);
   return true;
 }
 
@@ -1946,13 +1946,6 @@ function drawPlayerPolished() {
   ctx.lineTo(heroX + 12, heroY + 47 - step);
   ctx.stroke();
 
-  if (state.rewardUnlocked) {
-    drawFacet([
-      [heroX - 19, heroY + 3], [heroX + 17, heroY + 3],
-      [heroX + 26, heroY + 44], [heroX - 25, heroY + 44]
-    ], "#ffd33d", "#b97700");
-    drawFacet([[heroX - 19, heroY + 3], [heroX - 4, heroY + 10], [heroX - 25, heroY + 44]], "#fff083");
-  }
 
   const shirt = ctx.createLinearGradient(heroX - 16, heroY, heroX + 18, heroY + 38);
   shirt.addColorStop(0, isGirl ? "#ff9dcb" : "#55e2f5");
@@ -2055,9 +2048,7 @@ function drawPlayerPolished() {
     ctx.stroke();
   }
 
-  if (state.rewardUnlocked) {
-    drawFacet([[heroX - 18, heroY - 29], [heroX - 8, heroY - 43], [heroX, heroY - 31], [heroX + 8, heroY - 43], [heroX + 17, heroY - 29]], "#ffd33d", "#9b6500");
-  }
+
 }
 
 function drawPlayerPointerPolished() {
@@ -2290,11 +2281,23 @@ function showHint() {
   }
 }
 
+const VICTORY_IMAGES = {
+  boy: "Images/victory-boy.jpg",
+  girl: "Images/victory-girl.jpg",
+};
+
 function showResults() {
   state.paused = true;
-  state.rewardUnlocked = true;
-  saveReward();
   showScreen("results");
+  playConfetti();
+
+  const chosenCharacter = player.character === "girl" ? "girl" : "boy";
+  const victoryImg = document.getElementById("victoryImage");
+  if (victoryImg) {
+    victoryImg.src = VICTORY_IMAGES[chosenCharacter];
+    victoryImg.alt = `Job Well Done! ${chosenCharacter === "girl" ? "Girl" : "Boy"} Adventurer`;
+  }
+
   const accuracy = state.correct + state.incorrect === 0 ? 0 : Math.round((state.correct / (state.correct + state.incorrect)) * 100);
   const achievement = accuracy >= 90 ? "Math Champion" : accuracy >= 75 ? "Quest Solver" : "Brave Learner";
   document.getElementById("resultTitle").textContent = achievement;
@@ -2304,7 +2307,6 @@ function showResults() {
   document.getElementById("finalHints").textContent = state.hintsUsed;
   document.getElementById("finalQuests").textContent = `${state.completed} / ${quests.length}`;
   document.getElementById("finalAchievement").textContent = `${accuracy}% Accuracy`;
-  document.getElementById("rewardCard").classList.remove("hidden");
 }
 
 function closeChallenge() {
@@ -2392,7 +2394,7 @@ document.querySelectorAll(".character-option").forEach((option) => {
 });
 document.getElementById("beginAdventureButton").addEventListener("click", startGame);
 document.getElementById("characterBackButton").addEventListener("click", () => showScreen("menu"));
-document.getElementById("settingsButton").addEventListener("click", openSettings);
+document.getElementById("settingsButton")?.addEventListener("click", openSettings);
 document.getElementById("settingsCloseButton").addEventListener("click", closeSettings);
 document.getElementById("settingsAudioButton").addEventListener("click", toggleAudio);
 document.getElementById("settingsResetButton").addEventListener("click", resetSavedProgress);
@@ -2403,10 +2405,6 @@ document.getElementById("backToMenuButton").addEventListener("click", () => {
   showToast("Returned to the main menu.");
 });
 document.getElementById("menuButton").addEventListener("click", () => showScreen("menu"));
-document.getElementById("exitButton").addEventListener("click", () => {
-  showScreen("menu");
-  showToast("Adventure closed. Start again whenever you are ready.");
-});
 talkButton.addEventListener("click", openDialogue);
 document.getElementById("laterButton").addEventListener("click", closeDialogue);
 document.getElementById("helpButton").addEventListener("click", openChallenge);
