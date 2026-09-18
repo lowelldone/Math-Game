@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -14,6 +15,7 @@
   <link rel="apple-touch-icon" href="icon.svg" />
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
   <main id="app" class="app">
     <section id="loadingScreen" class="screen screen-loading" aria-label="Loading MathQuest Village">
@@ -50,12 +52,15 @@
           <div class="wooden-sign" aria-label="Game welcome message">
             <div class="wooden-sign-inner">
               <span class="sign-deco" aria-hidden="true">✦</span>
-              <p>Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math challenges&nbsp; from easy to advanced.</p>
+              <p>Welcome, brave problem solver! Travel five magical roads, help friendly villagers, and crack math
+                challenges from easy to advanced.</p>
+
               <span class="sign-deco" aria-hidden="true">✦</span>
             </div>
           </div>
           <div class="parchment-scroll" aria-label="Game instructions">
-            <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road. Finish all challenges to complete your MathQuest adventure!</p>
+            <p>Talk to each villager, choose the best answer, use hints when you need a clue, and unlock the next road.
+              Finish all challenges to complete your MathQuest adventure!</p>
           </div>
         </div>
         <button id="startButton" class="start-adventure-btn" type="button">⚔ Start Adventure</button>
@@ -71,20 +76,29 @@
         </div>
         <p class="character-subtitle">Pick a brave problem solver to lead the journey through MathQuest Village.</p>
         <div class="character-options" role="radiogroup" aria-label="Character choices">
-          <button class="character-option character-girl" type="button" data-character="girl" role="radio" aria-checked="false">
-            <span class="character-stage" aria-hidden="true"><span class="character-shadow"></span><span class="hero-preview"><img class="character-sprite-preview" alt="" /><i class="hero-hair"></i><i class="hero-face"></i><i class="hero-features"></i><i class="hero-body"></i><i class="hero-book"></i></span></span>
+          <button class="character-option character-girl" type="button" data-character="girl" role="radio"
+            aria-checked="false">
+            <span class="character-stage" aria-hidden="true"><span class="character-shadow"></span><span
+                class="hero-preview"><img class="character-sprite-preview" alt="" /><i class="hero-hair"></i><i
+                  class="hero-face"></i><i class="hero-features"></i><i class="hero-body"></i><i
+                  class="hero-book"></i></span></span>
             <strong>GIRL</strong>
             <small>Bright thinker</small>
           </button>
-          <button class="character-option character-boy" type="button" data-character="boy" role="radio" aria-checked="false">
-            <span class="character-stage" aria-hidden="true"><span class="character-shadow"></span><span class="hero-preview"><img class="character-sprite-preview" alt="" /><i class="hero-hair"></i><i class="hero-face"></i><i class="hero-features"></i><i class="hero-body"></i><i class="hero-book"></i></span></span>
+          <button class="character-option character-boy" type="button" data-character="boy" role="radio"
+            aria-checked="false">
+            <span class="character-stage" aria-hidden="true"><span class="character-shadow"></span><span
+                class="hero-preview"><img class="character-sprite-preview" alt="" /><i class="hero-hair"></i><i
+                  class="hero-face"></i><i class="hero-features"></i><i class="hero-body"></i><i
+                  class="hero-book"></i></span></span>
             <strong>BOY</strong>
             <small>Bold explorer</small>
           </button>
         </div>
         <div class="char-action-row">
           <button id="characterBackButton" class="char-back-btn" type="button">← Back</button>
-          <button id="beginAdventureButton" class="start-adventure-btn begin-adventure" type="button" disabled>Choose a Hero</button>
+          <button id="beginAdventureButton" class="start-adventure-btn begin-adventure" type="button" disabled>Choose a
+            Hero</button>
         </div>
       </div>
     </section>
@@ -106,7 +120,9 @@
       <button id="talkButton" class="talk-button hidden">Talk</button>
       <div id="toast" class="toast hidden" role="status"></div>
       <div class="controls">
-        <div id="joystick" class="joystick" aria-label="Movement joystick"><div id="stick" class="stick"></div></div>
+        <div id="joystick" class="joystick" aria-label="Movement joystick">
+          <div id="stick" class="stick"></div>
+        </div>
       </div>
     </section>
 
@@ -187,7 +203,8 @@
       <div class="results-container">
         <div class="victory-showcase">
           <div class="victory-frame">
-            <img id="victoryImage" src="Images/victory-boy.jpg" alt="Job Well Done! Victory celebration" class="victory-image" />
+            <img id="victoryImage" src="Images/victory-boy.jpg" alt="Job Well Done! Victory celebration"
+              class="victory-image" />
             <div class="victory-sparkles" aria-hidden="true">
               <span class="v-sparkle s1">✦</span>
               <span class="v-sparkle s2">★</span>
@@ -222,4 +239,5 @@
   </main>
   <script src="game.js"></script>
 </body>
+
 </html>
