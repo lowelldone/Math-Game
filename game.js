@@ -885,7 +885,7 @@ function getCamera() {
   const vh = window.innerHeight;
   const isLandscape = vw >= vh;
   const fitZoom = Math.min(vw / world.width, vh / world.height) * 0.94;
-  const zoom = isLandscape ? Math.min(0.74, Math.max(0.58, vh / world.height * 0.9)) : Math.min(1.05, vh / world.height * 0.94);
+  const zoom = isLandscape ? Math.min(0.68, Math.max(0.44, vh / world.height * 0.95)) : Math.min(1.05, vh / world.height * 0.94);
   const viewWidth = vw / zoom;
   const viewHeight = vh / zoom;
   const cameraX = clamp(player.x - viewWidth / 2, 0, Math.max(0, world.width - viewWidth));

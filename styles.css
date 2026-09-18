@@ -716,7 +716,7 @@ button:focus-visible {
 .character-stage {
   position: relative;
   display: block;
-  height: clamp(142px, 24vh, 210px);
+  height: clamp(120px, 26vh, 180px);
   overflow: hidden;
   border-radius: 18px;
   background:
@@ -733,21 +733,23 @@ button:focus-visible {
 .character-shadow {
   position: absolute;
   left: 50%;
-  bottom: 14px;
-  width: 112px;
-  height: 18px;
+  bottom: 8px;
+  width: min(80px, 50%);
+  height: 12px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: rgba(32, 89, 111, 0.2);
+  background: rgba(32, 89, 111, 0.28);
+  z-index: 1;
 }
 
 .hero-preview {
   position: absolute;
-  left: 50%;
-  bottom: 18px;
-  width: 96px;
-  height: 150px;
-  transform: translateX(-50%);
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .hero-preview i {
@@ -759,13 +761,14 @@ button:focus-visible {
   position: absolute;
   z-index: 6;
   left: 50%;
-  bottom: 0;
-  width: 152px;
-  height: 178px;
+  bottom: 8px;
+  height: 82%;
+  width: auto;
+  max-width: 90%;
   transform: translateX(-50%);
   object-fit: contain;
   object-position: center bottom;
-  filter: drop-shadow(0 7px 4px rgba(27, 71, 85, 0.22));
+  filter: drop-shadow(0 5px 6px rgba(27, 71, 85, 0.22));
 }
 
 .character-sprite-preview ~ i {
@@ -773,10 +776,10 @@ button:focus-visible {
 }
 
 .character-boy .character-sprite-preview {
-  width: 215px;
-  height: 198px;
-  bottom: -22px;
-  transform: translateX(calc(-50% + 36px));
+  height: 94%;
+  bottom: calc(8px - 10%);
+  max-width: 105%;
+  transform: translateX(calc(-50% + 17%));
 }
 
 .hero-face {
@@ -1022,8 +1025,8 @@ button:focus-visible {
   flex-direction: column;
   align-items: center;
   gap: 0;
-  padding: max(10px, env(safe-area-inset-top)) 12px max(80px, env(safe-area-inset-bottom));
-  margin-top: -4vh;
+  padding: max(8px, env(safe-area-inset-top)) 12px max(24px, env(safe-area-inset-bottom));
+  margin-top: 0;
 }
 
 /* ── Title Block ── */
@@ -1075,7 +1078,7 @@ button:focus-visible {
 .wooden-sign {
   position: relative;
   width: min(520px, 92vw);
-  margin: 0 auto 6px;
+  margin: 16px auto 12px;
   padding: 5px 8px;
   border-radius: 12px;
   background: linear-gradient(180deg, #c8944a 0%, #a0662a 40%, #7d4e1a 100%);
@@ -1152,7 +1155,7 @@ button:focus-visible {
 .parchment-scroll {
   position: relative;
   width: min(500px, 88vw);
-  margin: 0 auto 16px;
+  margin: 0 auto 20px;
   padding: 14px 30px;
   border-radius: 4px;
   background: linear-gradient(170deg, #faf0d0 0%, #f0dba0 40%, #e8cc80 100%);
@@ -2839,143 +2842,348 @@ h1 {
   }
 }
 
-@media (max-height: 480px) and (orientation: landscape) {
+@media (max-height: 520px) and (orientation: landscape) {
   .screen-loading {
     padding: 6px 8px;
   }
 
   .loading-card {
-    width: min(92vw, 520px);
+    width: min(90vw, 480px);
     margin-top: 0;
-    transform: scale(clamp(0.62, calc(100dvh / 520), 0.82));
+    transform: scale(clamp(0.58, calc(100dvh / 520), 0.78));
     transform-origin: center;
   }
 
   .loading-portal {
-    top: 38%;
-    width: min(30vw, 160px);
-    height: min(30vw, 160px);
+    top: 36%;
+    width: min(28vw, 140px);
+    height: min(28vw, 140px);
   }
 
   .screen-loading h1 {
-    font-size: clamp(28px, 7.5vw, 52px);
+    font-size: clamp(24px, 7vw, 42px);
   }
 
   .screen-loading p {
-    margin: 10px 0 8px;
-    font-size: clamp(15px, 3.2vw, 24px);
+    margin: 6px 0 6px;
+    font-size: clamp(13px, 2.8vw, 20px);
   }
 
   .loading-bar {
-    width: min(68vw, 360px) !important;
-    height: 22px !important;
-    margin-top: 8px !important;
+    width: min(65vw, 340px) !important;
+    height: 20px !important;
+    margin-top: 6px !important;
   }
 
+  /* ── Main Menu Screen (Zoomed out for phones) ── */
   .screen-menu {
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .menu-content,
-  .title-block {
-    width: 92vw;
+  .screen-menu .menu-content {
+    width: min(560px, 94vw);
+    min-height: auto;
+    padding: max(4px, env(safe-area-inset-top)) 10px max(8px, env(safe-area-inset-bottom));
+    margin-top: clamp(6px, 1.8vh, 12px);
+    gap: 0;
   }
 
-  .screen-menu h1 {
-    font-size: clamp(30px, 10vh, 48px);
+  .screen-menu .title-block {
+    width: 100%;
   }
 
   .screen-menu .kicker {
-    margin-bottom: 3px;
-    font-size: 10px;
+    margin: 0 0 1px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
   }
 
-  .subtitle {
-    margin: 5px auto;
-    font-size: 12px;
+  .screen-menu h1 {
+    margin: 0 0 2px;
+    line-height: 0.9;
+    filter: drop-shadow(0 3px 8px rgba(20,70,130,0.35));
   }
 
-  .intro-panel {
-    display: none;
+  .screen-menu h1 span {
+    font-size: clamp(22px, 6.8vh, 34px) !important;
+    line-height: 0.92;
+    -webkit-text-stroke: 1.5px #2b6cb0;
+    text-shadow: 0 2px 0 #1e4e8c, 0 4px 0 #163d6e, 0 8px 16px rgba(14, 42, 90, 0.35);
   }
 
-  .start-action {
-    min-height: 44px;
-    font-size: 26px;
+  .wooden-sign {
+    width: min(440px, 86vw);
+    padding: 4px 10px;
+    margin: clamp(14px, 4vh, 22px) auto clamp(7px, 2vh, 11px);
+    border-radius: 9px;
+    border-width: 2px;
   }
 
-  .settings-action {
-    min-height: 32px;
-    margin-top: 5px;
-    font-size: 12px;
+  .wooden-sign p {
+    font-size: 10.5px;
+    line-height: 1.3;
   }
 
-  .menu-orb {
-    opacity: 0.5;
-    transform: scale(0.62);
-  }
-
-  .character-content h1 {
-    font-size: clamp(30px, 8vh, 48px);
-  }
-
-  .character-subtitle {
-    margin: 4px auto 8px;
-    font-size: 12px;
-  }
-
-  .character-options {
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-
-  .character-option {
-    padding: 6px 8px 8px;
-    border-width: 3px;
-  }
-
-  .character-stage {
-    height: 130px;
-  }
-
-  .hero-preview {
-    transform: translateX(-50%) scale(0.84);
-    transform-origin: bottom center;
-  }
-
-  .character-option > strong {
-    margin-top: 3px;
-    font-size: 20px;
-  }
-
-  .character-option small {
+  .sign-deco {
     font-size: 11px;
   }
 
-  .begin-adventure {
-    min-height: 42px;
+  .parchment-scroll {
+    width: min(420px, 82vw);
+    padding: 4px 12px;
+    margin: 0 auto clamp(11px, 3.2vh, 16px);
+    border-radius: 7px;
+    border-width: 2px;
   }
 
-  .character-back {
-    min-height: 34px;
+  .parchment-scroll p {
+    font-size: 10px;
+    line-height: 1.3;
   }
-}
 
+  .start-adventure-btn {
+    min-height: 38px;
+    padding: 0 24px;
+    font-size: 15px;
+    border-radius: 999px;
+    box-shadow: 0 4px 0 #945300, 0 8px 16px rgba(100,50,0,0.3);
+  }
 
-/* ── Character screen responsive tweaks ── */
-@media (max-width: 620px) {
+  /* ── Character Selection Screen (Full body visible) ── */
+  .screen-character {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .character-content {
+    width: min(580px, 94vw);
+    padding: max(4px, env(safe-area-inset-top)) 10px max(6px, env(safe-area-inset-bottom));
+    margin: 0 auto;
+    gap: 0;
+  }
+
   .char-header-plaque {
-    padding: 10px 18px 12px;
+    width: min(340px, 80vw);
+    padding: 3px 14px 4px;
+    margin: 0 auto 2px;
+    border-radius: 9px;
+    border-width: 2px;
+  }
+
+  .char-kicker {
+    margin: 0 0 1px;
+    font-size: 8px;
+    letter-spacing: 0.12em;
   }
 
   .character-content h1 {
-    font-size: clamp(26px, 8vw, 42px);
+    font-size: clamp(15px, 4.2vh, 20px) !important;
+    -webkit-text-stroke: 1px #6b3a10;
   }
 
   .character-subtitle {
+    margin: 1px auto 4px;
+    font-size: 9.5px;
+    line-height: 1.2;
+  }
+
+  .character-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 auto 4px;
+    width: min(480px, 90vw);
+  }
+
+  .character-option {
+    padding: 4px 6px 5px;
+    border-radius: 14px;
+    border-width: 2px;
+  }
+
+  .character-stage {
+    height: clamp(90px, 25vh, 118px);
+    border-radius: 12px;
+  }
+
+  .character-shadow {
+    bottom: 5px;
+    width: 60px;
+    height: 10px;
+  }
+
+  .hero-preview {
+    inset: 0;
+    transform: none;
+  }
+
+  .character-sprite-preview {
+    bottom: 5px;
+    height: 84%;
+    max-width: 90%;
+  }
+
+  .character-boy .character-sprite-preview {
+    height: 95%;
+    bottom: calc(5px - 9.5%);
+    max-width: 105%;
+  }
+
+  .character-option > strong {
+    margin-top: 1px;
+    font-size: 13.5px;
+  }
+
+  .character-option small {
+    font-size: 9px;
+  }
+
+  .char-action-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 2px;
+  }
+
+  .char-back-btn {
+    min-height: 32px;
+    padding: 0 14px;
+    font-size: 11.5px;
+  }
+
+  .start-adventure-btn.begin-adventure {
+    min-height: 32px;
+    padding: 0 20px;
+    font-size: 12.5px;
+  }
+
+  /* ── In-Game HUD & Controls ── */
+  .hud {
+    top: max(4px, env(safe-area-inset-top));
+    left: max(6px, env(safe-area-inset-left));
+    right: max(6px, env(safe-area-inset-right));
+    gap: 6px;
+  }
+
+  .hud > div {
+    padding: 3px 6px;
+    border-radius: 10px;
+    border-width: 2px;
+  }
+
+  .hud-label {
+    font-size: 8px;
+  }
+
+  .hud strong {
+    font-size: 12px;
+  }
+
+  .hud-back-button {
+    top: max(42px, calc(env(safe-area-inset-top) + 42px));
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+
+  .controls {
+    bottom: max(6px, env(safe-area-inset-bottom));
+    left: max(8px, env(safe-area-inset-left));
+  }
+
+  .joystick {
+    width: 96px;
+    height: 96px;
+    border-width: 3.5px;
+  }
+
+  .stick {
+    width: 40px;
+    height: 40px;
+    left: 24.5px;
+    top: 24.5px;
+  }
+
+  .talk-button {
+    min-width: 90px;
+    min-height: 38px;
     font-size: 13px;
-    margin-bottom: 10px;
+    bottom: calc(52px + env(safe-area-inset-bottom));
+  }
+
+  /* ── Audio Button (Compact corner position) ── */
+  .audio-toggle {
+    right: max(6px, env(safe-area-inset-right));
+    bottom: max(6px, env(safe-area-inset-bottom));
+    min-width: 80px;
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 10px;
+    gap: 5px;
+  }
+
+  /* ── Modals (Dialogue & Challenge) ── */
+  .modal {
+    padding: 4px 6px;
+  }
+
+  .panel {
+    padding: 8px 12px;
+    border-radius: 14px;
+    max-height: 96dvh;
+    overflow-y: auto;
+  }
+
+  .challenge-panel h2 {
+    font-size: 16px;
+  }
+
+  .question-image {
+    max-height: min(22vh, 110px);
+    margin-bottom: 6px;
+  }
+
+  .answer-grid {
+    gap: 6px;
+  }
+
+  .answer-grid button {
+    min-height: 36px;
+    font-size: 13px;
+    border-radius: 12px;
+  }
+
+  .dialogue-panel {
+    grid-template-columns: 48px 1fr;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+
+  .npc-portrait {
+    width: 44px;
+    height: 44px;
+  }
+
+  .dialogue-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 620px) and (orientation: portrait) {
+  .char-header-plaque {
+    padding: 8px 16px 10px;
+  }
+
+  .character-content h1 {
+    font-size: clamp(24px, 7vw, 36px);
+  }
+
+  .character-subtitle {
+    font-size: 12px;
+    margin-bottom: 8px;
   }
 
   .character-options {
@@ -2983,46 +3191,16 @@ h1 {
   }
 
   .character-option {
-    padding: 8px 8px 10px;
-    border-radius: 18px;
+    padding: 6px 6px 8px;
+    border-radius: 16px;
   }
 
   .character-stage {
-    height: clamp(130px, 24dvh, 180px);
+    height: clamp(120px, 22dvh, 160px);
   }
 
   .begin-adventure {
-    min-height: 50px;
-    font-size: 16px;
-  }
-}
-
-@media (max-height: 480px) and (orientation: landscape) {
-  .character-content {
-    padding-top: 6px;
-    padding-bottom: 50px;
-  }
-
-  .char-header-plaque {
-    padding: 8px 20px 10px;
-    margin-bottom: 6px;
-  }
-
-  .character-content h1 {
-    font-size: clamp(22px, 6vh, 36px);
-  }
-
-  .character-subtitle {
-    margin: 4px auto 8px;
-    font-size: 12px;
-  }
-
-  .character-stage {
-    height: clamp(120px, 28vh, 170px);
-  }
-
-  .begin-adventure {
-    min-height: 44px;
+    min-height: 46px;
     font-size: 15px;
   }
 }
